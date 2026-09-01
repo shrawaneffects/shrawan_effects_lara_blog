@@ -49,6 +49,8 @@ class BlogWebsiteTest extends TestCase
 
     public function test_contact_page_and_submission(): void
     {
+        \Illuminate\Support\Facades\Mail::fake();
+
         $response = $this->get('/contact');
         $response->assertStatus(200);
 
@@ -63,6 +65,10 @@ class BlogWebsiteTest extends TestCase
         $this->assertDatabaseHas('contacts', [
             'email' => 'tester@example.com',
         ]);
+
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\ContactFormMail::class, function ($mail) {
+            return $mail->hasTo('shrawaneffects@gmail.com') && $mail->contact->email === 'tester@example.com';
+        });
     }
 
     public function test_newsletter_subscription(): void
@@ -172,14 +178,43 @@ class BlogWebsiteTest extends TestCase
 
     public function test_user_can_login_and_logout(): void
     {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@blog.com'],
+            [
+                'name' => 'Admin User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'admin',
+                'is_active' => true,
+            ]
+        );
+
+        // Step 1: Submit credentials -> Redirects to OTP verification screen
         $response = $this->post('/login', [
             'email' => 'admin@blog.com',
             'password' => 'password',
         ]);
 
-        $response->assertRedirect('/admin/dashboard');
-        $this->assertAuthenticated();
+        $response->assertRedirect('/login/verify');
+        $this->assertGuest(); // User is NOT authenticated until OTP is verified!
 
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\LoginVerificationMail::class, function ($mail) use ($admin) {
+            return $mail->hasTo($admin->email);
+        });
+
+        $verification = \App\Models\LoginVerification::where('user_id', $admin->id)->first();
+        $this->assertNotNull($verification);
+
+        // Step 2: Submit 6-digit OTP code -> User is now logged in!
+        $verifyResponse = $this->post('/login/verify', [
+            'code' => $verification->code,
+        ]);
+
+        $verifyResponse->assertRedirect('/admin/dashboard');
+        $this->assertAuthenticatedAs($admin);
+
+        // Step 3: Logout
         $logoutResponse = $this->post('/logout');
         $logoutResponse->assertRedirect('/');
         $this->assertGuest();
@@ -790,5 +825,206 @@ class BlogWebsiteTest extends TestCase
 
         $homeDefaultResponse = $this->get('/');
         $homeDefaultResponse->assertStatus(200);
+    }
+
+    public function test_admin_can_update_homepage_meta_title_and_description(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+        if (!$admin) {
+            $admin = User::factory()->create(['role' => 'admin']);
+        }
+
+        // 1. Visit settings page as Admin
+        $settingsPageResponse = $this->actingAs($admin)->get('/admin/settings');
+        $settingsPageResponse->assertStatus(200);
+        $settingsPageResponse->assertSee('Homepage Meta Title');
+        $settingsPageResponse->assertSee('Homepage Meta Description');
+        $settingsPageResponse->assertSee('Live Google Search Result (SERP) Preview');
+
+        // 2. Submit new homepage meta title & description
+        $customTitle = 'Custom Awesome Tech Blog - Ultimate 2026 Developer Guides';
+        $customDesc = 'Join 50k+ developers discovering high performance Laravel architectures, PHP tips, and modern UI engineering guides.';
+        $customKeywords = 'laravel, php, webdev, tutorials, engineering';
+
+        $updateResponse = $this->actingAs($admin)->post('/admin/settings', [
+            'site_name' => 'Custom Awesome Tech Blog',
+            'site_tagline' => 'Ultimate 2026 Developer Guides',
+            'homepage_meta_title' => $customTitle,
+            'homepage_meta_description' => $customDesc,
+            'homepage_meta_keywords' => $customKeywords,
+            'homepage_type' => 'default',
+        ]);
+
+        $updateResponse->assertRedirect();
+        $this->assertEquals($customTitle, \App\Models\Setting::get('homepage_meta_title'));
+        $this->assertEquals($customDesc, \App\Models\Setting::get('homepage_meta_description'));
+        $this->assertEquals($customKeywords, \App\Models\Setting::get('homepage_meta_keywords'));
+
+        // 3. Visit homepage and verify meta tags in HTML
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertSee('<title>' . $customTitle . '</title>', false);
+        $homeResponse->assertSee('<meta name="description" content="' . $customDesc . '">', false);
+        $homeResponse->assertSee('<meta name="keywords" content="' . $customKeywords . '">', false);
+        $homeResponse->assertSee('<meta property="og:title" content="' . $customTitle . '">', false);
+        $homeResponse->assertSee('<meta property="og:description" content="' . $customDesc . '">', false);
+    }
+
+    public function test_login_page_does_not_contain_demo_credentials_and_has_forgot_password_link(): void
+    {
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+        $response->assertDontSee('Demo Credentials');
+        $response->assertDontSee('fillCredentials');
+        $response->assertSee('Forgot Password?');
+        $response->assertSee(route('password.request'));
+    }
+
+    public function test_user_can_request_forgot_password_and_reset_it(): void
+    {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $user = User::firstOrCreate(
+            ['email' => 'reset_tester@example.com'],
+            [
+                'name' => 'Reset Tester',
+                'password' => \Illuminate\Support\Facades\Hash::make('old_password123'),
+                'role' => 'user',
+                'is_active' => true,
+            ]
+        );
+
+        // 1. Visit Forgot Password Page
+        $forgotPageResponse = $this->get('/forgot-password');
+        $forgotPageResponse->assertStatus(200);
+        $forgotPageResponse->assertSee('Forgot Password?');
+        $forgotPageResponse->assertSee('Send Password Reset Link');
+
+        // 2. Submit Forgot Password Request
+        $sendLinkResponse = $this->post('/forgot-password', [
+            'email' => 'reset_tester@example.com',
+        ]);
+        $sendLinkResponse->assertRedirect();
+        $sendLinkResponse->assertSessionHas('status');
+
+        // Verify token saved in DB
+        $resetRecord = \Illuminate\Support\Facades\DB::table('password_reset_tokens')
+            ->where('email', 'reset_tester@example.com')
+            ->first();
+        $this->assertNotNull($resetRecord);
+        $token = $resetRecord->token;
+
+        // Verify Mail sent
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\ResetPasswordMail::class, function ($mail) use ($user) {
+            return $mail->hasTo('reset_tester@example.com');
+        });
+
+        // 3. Visit Reset Password Form
+        $resetFormResponse = $this->get('/reset-password/' . $token . '?email=reset_tester@example.com');
+        $resetFormResponse->assertStatus(200);
+        $resetFormResponse->assertSee('Set New Password');
+        $resetFormResponse->assertSee('reset_tester@example.com');
+
+        // 4. Submit New Password
+        $resetSubmitResponse = $this->post('/reset-password', [
+            'token' => $token,
+            'email' => 'reset_tester@example.com',
+            'password' => 'new_secure_password_123',
+            'password_confirmation' => 'new_secure_password_123',
+        ]);
+
+        $resetSubmitResponse->assertRedirect('/login');
+        $resetSubmitResponse->assertSessionHas('success');
+
+        // Verify token removed
+        $this->assertDatabaseMissing('password_reset_tokens', [
+            'email' => 'reset_tester@example.com',
+        ]);
+
+        // 5. Verify user can login with new password (and completes OTP verification)
+        $loginResponse = $this->post('/login', [
+            'email' => 'reset_tester@example.com',
+            'password' => 'new_secure_password_123',
+        ]);
+        $loginResponse->assertRedirect('/login/verify');
+
+        $verification = \App\Models\LoginVerification::where('user_id', $user->id)->first();
+        $this->assertNotNull($verification);
+
+        $otpResponse = $this->post('/login/verify', [
+            'code' => $verification->code,
+        ]);
+        $otpResponse->assertRedirect('/');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_login_page_renders_all_social_oauth_buttons(): void
+    {
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+        $response->assertSee('Google');
+        $response->assertSee('Facebook');
+        $response->assertSee('Twitter (X)');
+        $response->assertSee('LinkedIn');
+        $response->assertSee(route('social.redirect', 'google'));
+        $response->assertSee(route('social.redirect', 'facebook'));
+        $response->assertSee(route('social.redirect', 'twitter'));
+        $response->assertSee(route('social.redirect', 'linkedin'));
+    }
+
+    public function test_user_can_login_via_email_magic_link(): void
+    {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $user = User::firstOrCreate(
+            ['email' => 'magic_link_user@example.com'],
+            [
+                'name' => 'Magic Link User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                'role' => 'user',
+                'is_active' => true,
+            ]
+        );
+
+        $this->post('/login', [
+            'email' => 'magic_link_user@example.com',
+            'password' => 'password123',
+        ]);
+
+        $verification = \App\Models\LoginVerification::where('user_id', $user->id)->first();
+        $this->assertNotNull($verification);
+
+        // Click the 1-click magic link from email
+        $magicResponse = $this->get('/login/verify/' . $verification->token);
+        $magicResponse->assertRedirect('/');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_user_cannot_login_with_invalid_otp_code(): void
+    {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $user = User::firstOrCreate(
+            ['email' => 'otp_fail_user@example.com'],
+            [
+                'name' => 'OTP Fail User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                'role' => 'user',
+                'is_active' => true,
+            ]
+        );
+
+        $this->post('/login', [
+            'email' => 'otp_fail_user@example.com',
+            'password' => 'password123',
+        ]);
+
+        // Submit wrong OTP code
+        $failResponse = $this->post('/login/verify', [
+            'code' => '000000',
+        ]);
+
+        $failResponse->assertSessionHasErrors('code');
+        $this->assertGuest();
     }
 }

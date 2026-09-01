@@ -204,6 +204,106 @@
                     </div>
                 </div>
 
+                <!-- Homepage SEO & Metadata Card -->
+                <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-body mb-4 border-start border-4 border-primary">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="fw-bold mb-0 text-primary">
+                            <i class="bi bi-search me-2"></i> Homepage SEO & Search Metadata
+                        </h5>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5 small">
+                            <i class="bi bi-google me-1"></i> Google SERP & Social Sharing
+                        </span>
+                    </div>
+                    <p class="text-body-secondary small mb-4">
+                        Optimize how your homepage appears on Google Search results, Bing, social media previews (OpenGraph & Twitter Cards), and browser title bar.
+                    </p>
+
+                    <div class="row g-4 mb-4">
+                        <!-- Homepage Meta Title -->
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label fw-bold small mb-0" for="hpMetaTitleInput">
+                                    Homepage Meta Title (SEO Title)
+                                </label>
+                                <span class="badge bg-secondary-subtle text-secondary small" id="hpTitleCounter">
+                                    <span id="hpTitleCount">0</span>/60 chars (Recommended: 50–60)
+                                </span>
+                            </div>
+                            <input type="text" name="homepage_meta_title" id="hpMetaTitleInput" class="form-control" 
+                                   value="{{ old('homepage_meta_title', $settings['homepage_meta_title'] ?? '') }}" 
+                                   placeholder="e.g. {{ $settings['site_name'] }} - {{ $settings['site_tagline'] ?: 'Modern Tech Publications & Guides' }}">
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-info-circle me-1"></i> Replaces the <kbd>&lt;title&gt;</kbd> and <kbd>og:title</kbd> on the homepage. If left empty, system defaults to <strong>{{ $settings['site_name'] }} - {{ $settings['site_tagline'] }}</strong>.
+                            </small>
+                        </div>
+
+                        <!-- Homepage Meta Description -->
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label fw-bold small mb-0" for="hpMetaDescInput">
+                                    Homepage Meta Description
+                                </label>
+                                <span class="badge bg-secondary-subtle text-secondary small" id="hpDescCounter">
+                                    <span id="hpDescCount">0</span>/160 chars (Recommended: 150–160)
+                                </span>
+                            </div>
+                            <textarea name="homepage_meta_description" id="hpMetaDescInput" class="form-control" rows="3" 
+                                      placeholder="e.g. Discover in-depth programming tutorials, clean architecture guides, Laravel tips, and high-performance engineering insights.">{{ old('homepage_meta_description', $settings['homepage_meta_description'] ?? '') }}</textarea>
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-info-circle me-1"></i> Appears in search engine result snippets and social shares. If left empty, system uses site tagline/footer description.
+                            </small>
+                        </div>
+
+                        <!-- Homepage Meta Keywords -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold small mb-1" for="hpMetaKeywordsInput">
+                                Homepage Meta Keywords (Optional)
+                            </label>
+                            <input type="text" name="homepage_meta_keywords" id="hpMetaKeywordsInput" class="form-control" 
+                                   value="{{ old('homepage_meta_keywords', $settings['homepage_meta_keywords'] ?? '') }}" 
+                                   placeholder="e.g. laravel, php, web development, bootstrap 5, tech blog, tutorials">
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-tags me-1"></i> Comma-separated list of target topics for meta keywords header tag.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Live Google Search SERP Preview Box -->
+                    <div class="p-3.5 p-md-4 rounded-4 bg-body-tertiary border">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="fw-bold small text-body d-flex align-items-center gap-1.5">
+                                <i class="bi bi-google text-primary"></i> Live Google Search Result (SERP) Preview
+                            </div>
+                            <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 small">
+                                Live Simulation
+                            </span>
+                        </div>
+                        <p class="text-muted small mb-3">This is an approximate preview of how your homepage snippet will render in Google search results.</p>
+
+                        <div class="p-3 bg-body rounded-3 border shadow-xs" style="max-width: 650px;">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 26px; height: 26px; font-size: 13px;">
+                                    @if($settings['site_favicon'])
+                                        <img src="{{ $settings['site_favicon'] }}" alt="Favicon" style="width: 16px; height: 16px; object-fit: contain;">
+                                    @else
+                                        <i class="bi bi-globe text-primary"></i>
+                                    @endif
+                                </div>
+                                <div>
+                                    <div class="text-body fw-semibold text-truncate" id="serpPreviewSiteName" style="font-size: 0.85rem; line-height: 1.1;">{{ $settings['site_name'] }}</div>
+                                    <div class="text-muted text-truncate" style="font-size: 0.72rem; line-height: 1.1;">{{ url('/') }}</div>
+                                </div>
+                            </div>
+                            <h6 class="mb-1 fw-medium" style="color: #1a0dab; font-size: 1.15rem; line-height: 1.3;">
+                                <span id="serpPreviewTitle" class="text-decoration-underline-hover cursor-pointer">{{ $settings['homepage_meta_title'] ?: ($settings['site_name'] . ' - ' . ($settings['site_tagline'] ?: 'Modern Tech Publications')) }}</span>
+                            </h6>
+                            <p class="mb-0 text-secondary" id="serpPreviewDesc" style="font-size: 0.86rem; line-height: 1.45;">
+                                {{ $settings['homepage_meta_description'] ?: ($settings['footer_text'] ?: 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Site Information Card -->
                 <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-body mb-4">
                     <h5 class="fw-bold mb-4 text-primary"><i class="bi bi-info-circle me-2"></i> Website Information</h5>
@@ -488,6 +588,79 @@
                 reader.readAsDataURL(file);
             }
         });
+
+        // Homepage SEO Live Character Counters & Google SERP Preview
+        (function() {
+            const titleInput = document.getElementById('hpMetaTitleInput');
+            const descInput = document.getElementById('hpMetaDescInput');
+            const siteNameInput = document.querySelector('input[name="site_name"]');
+            const taglineInput = document.querySelector('input[name="site_tagline"]');
+
+            const titleCount = document.getElementById('hpTitleCount');
+            const descCount = document.getElementById('hpDescCount');
+            const titleCounterBadge = document.getElementById('hpTitleCounter');
+            const descCounterBadge = document.getElementById('hpDescCounter');
+
+            const serpTitle = document.getElementById('serpPreviewTitle');
+            const serpDesc = document.getElementById('serpPreviewDesc');
+            const serpSiteName = document.getElementById('serpPreviewSiteName');
+
+            function updateHpSeoPreview() {
+                const siteNameVal = siteNameInput?.value.trim() || 'LaravelBlog';
+                const taglineVal = taglineInput?.value.trim() || '';
+                const fallbackTitle = taglineVal ? `${siteNameVal} - ${taglineVal}` : siteNameVal;
+
+                const customTitle = titleInput?.value.trim();
+                const customDesc = descInput?.value.trim();
+
+                const tLen = customTitle ? customTitle.length : 0;
+                const dLen = customDesc ? customDesc.length : 0;
+
+                if (titleCount) titleCount.textContent = tLen;
+                if (descCount) descCount.textContent = dLen;
+
+                // Title Counter Badge styling
+                if (titleCounterBadge) {
+                    if (tLen === 0) {
+                        titleCounterBadge.className = 'badge bg-secondary-subtle text-secondary small';
+                    } else if (tLen >= 45 && tLen <= 65) {
+                        titleCounterBadge.className = 'badge bg-success-subtle text-success small';
+                    } else if (tLen > 65) {
+                        titleCounterBadge.className = 'badge bg-warning-subtle text-warning small';
+                    } else {
+                        titleCounterBadge.className = 'badge bg-info-subtle text-info small';
+                    }
+                }
+
+                // Desc Counter Badge styling
+                if (descCounterBadge) {
+                    if (dLen === 0) {
+                        descCounterBadge.className = 'badge bg-secondary-subtle text-secondary small';
+                    } else if (dLen >= 130 && dLen <= 165) {
+                        descCounterBadge.className = 'badge bg-success-subtle text-success small';
+                    } else if (dLen > 165) {
+                        descCounterBadge.className = 'badge bg-warning-subtle text-warning small';
+                    } else {
+                        descCounterBadge.className = 'badge bg-info-subtle text-info small';
+                    }
+                }
+
+                // Update SERP preview elements
+                if (serpSiteName) serpSiteName.textContent = siteNameVal;
+                if (serpTitle) serpTitle.textContent = customTitle || fallbackTitle;
+                if (serpDesc) {
+                    serpDesc.textContent = customDesc || (taglineVal || 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.');
+                }
+            }
+
+            titleInput?.addEventListener('input', updateHpSeoPreview);
+            descInput?.addEventListener('input', updateHpSeoPreview);
+            siteNameInput?.addEventListener('input', updateHpSeoPreview);
+            taglineInput?.addEventListener('input', updateHpSeoPreview);
+
+            // Initial trigger
+            updateHpSeoPreview();
+        })();
     </script>
     @endpush
 @endsection

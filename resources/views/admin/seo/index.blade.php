@@ -10,7 +10,9 @@
             <h4 class="fw-bold mb-1">2026 On-Page SEO Management</h4>
             <p class="text-body-secondary small mb-0">Audit search intent, keyword placement, SERP previews, orphan pages, structured data, and content freshness.</p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ route('admin.settings.index') }}" class="btn btn-outline-primary rounded-pill px-3">
+                <i class="bi bi-gear-wide-connected me-1"></i> Homepage SEO
+            </a>
             <a href="{{ route('admin.seo.grader') }}" class="btn btn-outline-primary rounded-pill px-3">
                 <i class="bi bi-award-fill me-1"></i> SEO Grader
             </a>

@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\SecurityController as AdminSecurityController;
 use App\Http\Controllers\Admin\SeoDashboardController as AdminSeoDashboardController;
 use App\Http\Controllers\Admin\SeoAnalysisController as AdminSeoAnalysisController;
+use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,12 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Forgot & Reset Password Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated User Profile & GDPR Privacy Routes
@@ -86,6 +93,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Dynamic Pages Management
     Route::resource('pages', AdminPageController::class)->except(['show']);
     Route::post('/pages/{id}/toggle-status', [AdminPageController::class, 'toggleStatus'])->name('pages.toggle-status');
+
+    // Centralized Media Library (Images, Videos, Audios, Documents)
+    Route::resource('media', AdminMediaController::class)->except(['create', 'edit']);
+    Route::get('/media-picker-api', [AdminMediaController::class, 'apiPicker'])->name('media.picker-api');
 
     // Categories Management
     Route::resource('categories', AdminCategoryController::class)->except(['create', 'show', 'edit']);

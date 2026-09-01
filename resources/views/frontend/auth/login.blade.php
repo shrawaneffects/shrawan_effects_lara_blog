@@ -12,17 +12,6 @@
                             <i class="bi bi-shield-lock-fill fs-3"></i>
                         </div>
                         <h3 class="fw-bold"><span class="text-gradient">Welcome Back</span></h3>
-                        <p class="text-body-secondary small">Access your account or administrative portal</p>
-                    </div>
-
-                    <!-- Quick Demo Credentials Helper -->
-                    <div class="alert alert-info border-0 rounded-4 p-3 mb-4 small bg-primary-subtle">
-                        <div class="fw-bold mb-1"><i class="bi bi-info-circle me-1 text-primary"></i> Demo Credentials (Click to auto-fill):</div>
-                        <div class="d-flex flex-wrap gap-2 mt-2">
-                            <button type="button" class="btn btn-primary btn-sm py-1 px-3 rounded-pill" onclick="fillCredentials('admin@blog.com', 'password')">Admin</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm py-1 px-3 rounded-pill" onclick="fillCredentials('author@blog.com', 'password')">Author</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm py-1 px-3 rounded-pill" onclick="fillCredentials('user@blog.com', 'password')">User</button>
-                        </div>
                     </div>
 
                     <form action="{{ route('login') }}" method="POST">
@@ -48,9 +37,12 @@
                                 <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
                                 <label class="form-check-label small" for="rememberMe">Remember me</label>
                             </div>
+                            <a href="{{ route('password.request') }}" class="small text-decoration-none text-primary fw-semibold">
+                                Forgot Password?
+                            </a>
                         </div>
 
-                        <button type="submit" class="btn btn-gradient w-100 py-2 fw-semibold rounded-pill shadow-sm">
+                        <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm">
                             <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
                         </button>
                     </form>
@@ -62,13 +54,4 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-    <script>
-        function fillCredentials(email, password) {
-            document.getElementById('loginEmail').value = email;
-            document.getElementById('loginPassword').value = password;
-        }
-    </script>
-    @endpush
 @endsection

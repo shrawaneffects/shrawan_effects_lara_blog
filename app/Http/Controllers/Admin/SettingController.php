@@ -16,7 +16,7 @@ class SettingController extends Controller
             'site_tagline' => Setting::get('site_tagline', 'Modern Tech Publications & Guides'),
             'site_logo' => Setting::getLogoUrl(),
             'site_favicon' => Setting::getFaviconUrl(),
-            'contact_email' => Setting::get('contact_email', 'contact@laravelblog.example'),
+            'contact_email' => Setting::get('contact_email', 'shrawaneffects@gmail.com'),
             'footer_text' => Setting::get('footer_text', 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.'),
             'twitter_url' => Setting::get('twitter_url', 'https://twitter.com'),
             'github_url' => Setting::get('github_url', 'https://github.com'),
@@ -29,6 +29,9 @@ class SettingController extends Controller
             'homepage_category_id' => Setting::get('homepage_category_id'),
             'homepage_post_id' => Setting::get('homepage_post_id'),
             'homepage_page_id' => Setting::get('homepage_page_id'),
+            'homepage_meta_title' => Setting::get('homepage_meta_title', ''),
+            'homepage_meta_description' => Setting::get('homepage_meta_description', ''),
+            'homepage_meta_keywords' => Setting::get('homepage_meta_keywords', ''),
             'ads_enabled' => Setting::get('ads_enabled', '1') === '1',
             'ads_placeholders' => Setting::get('ads_placeholders', '1') === '1',
             'adsense_publisher_id' => Setting::get('adsense_publisher_id', ''),
@@ -58,6 +61,9 @@ class SettingController extends Controller
             'homepage_category_id' => 'nullable|exists:categories,id',
             'homepage_post_id' => 'nullable|exists:posts,id',
             'homepage_page_id' => 'nullable|exists:pages,id',
+            'homepage_meta_title' => 'nullable|string|max:255',
+            'homepage_meta_description' => 'nullable|string|max:500',
+            'homepage_meta_keywords' => 'nullable|string|max:255',
             'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:3072',
             'site_favicon' => 'nullable|file|mimes:ico,png,jpg,jpeg,svg,webp|max:1024',
             'contact_email' => 'nullable|email|max:150',
@@ -89,6 +95,9 @@ class SettingController extends Controller
         Setting::set('homepage_category_id', $validated['homepage_category_id'] ?? null);
         Setting::set('homepage_post_id', $validated['homepage_post_id'] ?? null);
         Setting::set('homepage_page_id', $validated['homepage_page_id'] ?? null);
+        Setting::set('homepage_meta_title', $validated['homepage_meta_title'] ?? '');
+        Setting::set('homepage_meta_description', $validated['homepage_meta_description'] ?? '');
+        Setting::set('homepage_meta_keywords', $validated['homepage_meta_keywords'] ?? '');
         Setting::set('contact_email', $validated['contact_email'] ?? '');
         Setting::set('footer_text', $validated['footer_text'] ?? '');
         Setting::set('twitter_url', $validated['twitter_url'] ?? '');

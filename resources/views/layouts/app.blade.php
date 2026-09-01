@@ -2,7 +2,7 @@
     $siteName = \App\Models\Setting::get('site_name', 'LaravelBlog');
     $siteLogo = \App\Models\Setting::getLogoUrl();
     $siteFavicon = \App\Models\Setting::getFaviconUrl();
-    $contactEmail = \App\Models\Setting::get('contact_email', 'contact@laravelblog.example');
+    $contactEmail = \App\Models\Setting::get('contact_email', 'shrawaneffects@gmail.com');
     $footerText = \App\Models\Setting::get('footer_text', 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.');
     $twitterUrl = \App\Models\Setting::get('twitter_url', 'https://twitter.com');
     $githubUrl = \App\Models\Setting::get('github_url', 'https://github.com');
@@ -10,6 +10,8 @@
     $disableRightClick = \App\Models\Setting::get('disable_right_click', '1') === '1';
     $disableInspect = \App\Models\Setting::get('disable_inspect', '1') === '1';
     $disableScreenshot = \App\Models\Setting::get('disable_screenshot', '1') === '1';
+    $defaultMetaDesc = \App\Models\Setting::get('homepage_meta_description') ?: \App\Models\Setting::get('footer_text', 'A modern tech publication built on Laravel 12 & Bootstrap 5');
+    $defaultMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'laravel, php, web development, bootstrap 5, tech');
 @endphp
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
@@ -23,14 +25,14 @@
         <link rel="shortcut icon" href="{{ $siteFavicon }}">
         <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
     @endif
-    <meta name="description" content="@yield('meta_description', 'A modern tech publication built on Laravel 12 & Bootstrap 5')">
-    <meta name="keywords" content="@yield('meta_keywords', 'laravel, php, web development, bootstrap 5, tech')">
+    <meta name="description" content="@yield('meta_description', $defaultMetaDesc)">
+    <meta name="keywords" content="@yield('meta_keywords', $defaultMetaKeywords)">
     <meta name="robots" content="@yield('robots_meta', 'index, follow')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
 
     <!-- OpenGraph Social Metadata -->
-    <meta property="og:title" content="@yield('og_title', $siteName)">
-    <meta property="og:description" content="@yield('og_description', 'A modern tech publication built on Laravel 12 & Bootstrap 5')">
+    <meta property="og:title" content="@yield('og_title', View::getSection('title', $siteName))">
+    <meta property="og:description" content="@yield('og_description', View::getSection('meta_description', $defaultMetaDesc))">
     <meta property="og:image" content="@yield('og_image', asset('storage/default.jpg'))">
     <meta property="og:url" content="@yield('og_url', url()->current())">
     <meta property="og:type" content="@yield('og_type', 'website')">

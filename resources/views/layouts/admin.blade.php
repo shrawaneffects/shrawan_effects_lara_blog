@@ -256,6 +256,11 @@
 
             <li class="nav-item-header">Content Management</li>
             <li>
+                <a href="{{ route('admin.media.index') }}" class="sidebar-link {{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
+                    <i class="bi bi-collection-play-fill text-gradient"></i> Media Library
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.posts.index') }}" class="sidebar-link {{ request()->routeIs('admin.posts.index') ? 'active' : '' }}">
                     <i class="bi bi-file-earmark-text"></i> Articles / Posts
                 </a>

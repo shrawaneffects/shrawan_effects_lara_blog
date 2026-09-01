@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Home - ' . config('app.name', 'Laravel 12 Blog'))
+@php
+    $hpCustomTitle = \App\Models\Setting::get('homepage_meta_title');
+    $siteName = \App\Models\Setting::get('site_name', config('app.name', 'LaravelBlog'));
+    $siteTagline = \App\Models\Setting::get('site_tagline', 'Modern Tech Publications & Guides');
+    $hpMetaTitle = $hpCustomTitle ?: ($siteTagline ? ($siteName . ' - ' . $siteTagline) : ('Home - ' . $siteName));
+
+    $hpCustomDesc = \App\Models\Setting::get('homepage_meta_description');
+    $hpMetaDesc = $hpCustomDesc ?: \App\Models\Setting::get('footer_text', 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.');
+
+    $hpMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'laravel, php, web development, bootstrap 5, tech');
+@endphp
+
+@section('title', $hpMetaTitle)
+@section('meta_description', $hpMetaDesc)
+@section('meta_keywords', $hpMetaKeywords)
+@section('og_title', $hpMetaTitle)
+@section('og_description', $hpMetaDesc)
+@section('twitter_title', $hpMetaTitle)
+@section('twitter_description', $hpMetaDesc)
 @section('canonical_url', route('home'))
 
 @section('content')

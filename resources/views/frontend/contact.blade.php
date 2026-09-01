@@ -42,7 +42,7 @@
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-0">Email Inquiries</h6>
-                                <p class="text-muted small mb-0">{{ \App\Models\Setting::get('contact_email', 'contact@laravelblog.example') }}</p>
+                                <p class="text-muted small mb-0">{{ \App\Models\Setting::get('contact_email', 'shrawaneffects@gmail.com') }}</p>
                             </div>
                         </div>
                         <p class="text-body-secondary small mb-0">We typically respond to editorial and partnership inquiries within 24-48 business hours.</p>

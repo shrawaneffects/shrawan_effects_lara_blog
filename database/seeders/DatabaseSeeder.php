@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Users
         $admin = User::create([
-            'name' => 'Alex Morgan',
-            'email' => 'admin@blog.com',
+            'name' => 'Shrawan Choudhary',
+            'email' => 'shrawaneffects@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
-            'bio' => 'Senior Full-Stack Architect & Tech Evangelist with over 10 years of experience building high-scale web platforms.',
+            'bio' => 'Senior Full-Stack Architect & Founder at Shrawan Effects with extensive experience building modern web platforms.',
             'is_active' => true,
         ]);
 

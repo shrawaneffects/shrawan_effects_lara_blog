@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactFormMail;
 use App\Models\Contact;
+use App\Models\Setting;
 use App\Services\SecurityService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -31,8 +35,17 @@ class ContactController extends Controller
         $validated['subject'] = isset($validated['subject']) ? strip_tags($validated['subject']) : null;
         $validated['message'] = SecurityService::sanitizeHtml($validated['message']);
 
-        Contact::create($validated);
+        $contact = Contact::create($validated);
 
-        return redirect()->back()->with('success', 'Thank you for reaching out! We will get back to you shortly.');
+        // Send email notification to admin
+        $recipient = Setting::get('contact_email', 'shrawaneffects@gmail.com') ?: 'shrawaneffects@gmail.com';
+
+        try {
+            Mail::to($recipient)->send(new ContactFormMail($contact));
+        } catch (\Throwable $e) {
+            Log::error("Failed to send contact notification email to {$recipient}: " . $e->getMessage());
+        }
+
+        return redirect()->route('contact.index')->with('success', 'Thank you for reaching out! We will get back to you shortly.');
     }
 }
