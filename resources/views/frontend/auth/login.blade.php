@@ -6,12 +6,15 @@
     <div class="container py-5 my-3">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
-                <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift">
+                <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.2) !important;">
                     <div class="text-center mb-4">
-                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow" style="width: 60px; height: 60px; background: var(--gradient-primary);">
-                            <i class="bi bi-shield-lock-fill fs-3"></i>
+                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow" style="width: 60px; height: 60px; background: var(--gradient-primary); box-shadow: 0 0 20px rgba(0,255,102,0.4) !important;">
+                            <i class="bi bi-shield-lock-fill fs-3 text-dark"></i>
                         </div>
-                        <h3 class="fw-bold"><span class="text-gradient">Welcome Back</span></h3>
+                        <h3 class="fw-bold mb-2"><span class="text-gradient font-cyber">TERMINAL LOGIN</span></h3>
+                        <span class="badge rounded-pill px-2.5 py-1 font-mono" style="font-size: 0.72rem; background: rgba(33,54,8,0.5); border: 1px solid rgba(0,255,102,0.3); color: #00ff66;">
+                            <i class="bi bi-shield-check me-1"></i> OTP PROTECTED &bull; 5 ATTEMPTS / DAY
+                        </span>
                     </div>
 
                     <form action="{{ route('login') }}" method="POST">

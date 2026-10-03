@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Enter Verification Code (2FA) - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')))
+@section('title', 'Verify Registration Email - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')))
 
 @section('content')
     <div class="container py-5 my-3">
@@ -9,12 +9,12 @@
                 <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.2) !important;">
                     <div class="text-center mb-4">
                         <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow" style="width: 65px; height: 65px; background: var(--gradient-primary); box-shadow: 0 0 20px rgba(0,255,102,0.4) !important;">
-                            <i class="bi bi-shield-lock-fill fs-2 text-dark"></i>
+                            <i class="bi bi-envelope-check-fill fs-2 text-dark"></i>
                         </div>
-                        <h3 class="fw-bold mb-1"><span class="text-gradient font-cyber">2FA HANDSHAKE</span></h3>
+                        <h3 class="fw-bold mb-1"><span class="text-gradient font-cyber">AUTHENTICATE EMAIL</span></h3>
                         <p class="text-body-secondary small mb-0 font-mono">
-                            6-digit telemetry key dispatched to:
-                            <br><strong class="text-success">{{ $maskedEmail }}</strong>
+                            Validation packet transmitted to:
+                            <br><strong class="text-success">{{ $email }}</strong>
                         </p>
                     </div>
 
@@ -43,7 +43,7 @@
                             </div>
                             <div class="p-2 bg-body rounded border text-center">
                                 <span class="text-muted small d-block mb-1">Your Temporary Verification Code:</span>
-                                <span class="fs-4 fw-bold font-monospace text-primary" style="letter-spacing: 4px;">{{ session('fallback_otp') }}</span>
+                                <span class="fs-4 fw-bold font-monospace text-success" style="letter-spacing: 4px;">{{ session('fallback_otp') }}</span>
                             </div>
                         </div>
                     @endif
@@ -54,13 +54,13 @@
                         SESSION ATTEMPTS REMAINING: <strong>{{ $remainingAttempts ?? 5 }} OF 5</strong>
                     </div>
 
-                    <form action="{{ route('login.verify-otp.post') }}" method="POST" id="otpForm">
+                    <form action="{{ route('register.verify-otp.post') }}" method="POST" id="registerOtpForm">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token ?? '' }}">
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-center w-100 mb-2">Enter 6-Digit OTP Code</label>
+                            <label class="form-label fw-bold small text-center w-100 mb-2">Enter 6-Digit Verification Code</label>
                             <div class="d-flex justify-content-center">
-                                <input type="text" name="code" id="otpCodeInput" 
+                                <input type="text" name="code" id="regOtpInput" 
                                        class="form-control text-center font-monospace fs-2 fw-bold tracking-widest rounded-4 border-2 @error('code') is-invalid @enderror" 
                                        style="letter-spacing: 12px; max-width: 280px; height: 65px;" 
                                        maxlength="6" inputmode="numeric" pattern="[0-9]*" 
@@ -74,24 +74,24 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm mb-3" id="verifyBtn">
-                            <i class="bi bi-lock-fill me-1"></i> Verify & Sign In
+                        <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm mb-3">
+                            <i class="bi bi-check-circle-fill me-1"></i> Complete Registration
                         </button>
                     </form>
 
                     <!-- Resend OTP Action -->
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top small text-body-secondary">
-                        <form action="{{ route('login.resend-otp') }}" method="POST" id="resendForm">
+                        <form action="{{ route('register.resend-otp') }}" method="POST">
                             @csrf
                             <input type="hidden" name="token" value="{{ $token ?? '' }}">
-                            <button type="submit" class="btn btn-link btn-sm text-decoration-none p-0 text-primary fw-semibold" id="resendBtn">
+                            <button type="submit" class="btn btn-link btn-sm text-decoration-none p-0 text-primary fw-semibold" id="resendRegBtn">
                                 <i class="bi bi-arrow-repeat me-1"></i> Resend Code
                             </button>
-                            <span id="countdownText" class="text-muted d-none ms-1">(wait <span id="timerSeconds">60</span>s)</span>
+                            <span id="countdownRegText" class="text-muted d-none ms-1">(wait <span id="timerRegSeconds">60</span>s)</span>
                         </form>
 
-                        <a href="{{ route('login') }}" class="text-decoration-none text-muted">
-                            <i class="bi bi-arrow-left me-1"></i> Back to Login
+                        <a href="{{ route('register') }}" class="text-decoration-none text-muted">
+                            <i class="bi bi-arrow-left me-1"></i> Change Details
                         </a>
                     </div>
                 </div>
@@ -103,21 +103,19 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const input = document.getElementById('otpCodeInput');
+        const input = document.getElementById('regOtpInput');
         if (input) {
-            // Only allow numbers
             input.addEventListener('input', function(e) {
                 this.value = this.value.replace(/[^0-9]/g, '');
                 if (this.value.length === 6) {
-                    document.getElementById('otpForm').submit();
+                    document.getElementById('registerOtpForm').submit();
                 }
             });
         }
 
-        // Resend Timer logic
-        const resendBtn = document.getElementById('resendBtn');
-        const countdownText = document.getElementById('countdownText');
-        const timerSeconds = document.getElementById('timerSeconds');
+        const resendBtn = document.getElementById('resendRegBtn');
+        const countdownText = document.getElementById('countdownRegText');
+        const timerSeconds = document.getElementById('timerRegSeconds');
 
         if (resendBtn && countdownText) {
             let timeLeft = 60;

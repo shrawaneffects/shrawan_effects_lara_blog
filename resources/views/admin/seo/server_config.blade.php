@@ -40,6 +40,12 @@
             <p class="text-body-secondary small mb-0">Directly modify your search engine crawling instructions (<kbd>robots.txt</kbd>) and Apache web server directives (<kbd>.htaccess</kbd>) with automated backups.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
+            <form action="{{ route('admin.seo.server-config.storage-link') }}" method="POST" class="d-inline" onsubmit="return confirm('Create / refresh public storage link?');">
+                @csrf
+                <button type="submit" class="btn btn-outline-success rounded-pill px-3 shadow-sm" title="Create or repair public storage symbolic link">
+                    <i class="bi bi-link-45deg me-1"></i> Storage Link
+                </button>
+            </form>
             <a href="{{ route('admin.seo.clear-cache') }}" onclick="return confirm('Clear all system and SEO caches?');" class="btn btn-outline-danger rounded-pill px-3 shadow-sm" title="Clear all temporary caches">
                 <i class="bi bi-trash3-fill me-1"></i> Clear Cache
             </a>

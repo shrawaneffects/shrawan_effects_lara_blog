@@ -54,6 +54,17 @@ class ProfileController extends Controller
             }
             $user->password = Hash::make($validated['password']);
 
+            try {
+                \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\SecurityAlertMail(
+                    $user,
+                    'Password Changed from Profile Settings',
+                    'Your account password was updated from the profile management panel.',
+                    $request->ip()
+                ));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Failed to send profile password update alert: ' . $e->getMessage());
+            }
+
             AuditLog::record(
                 'password_changed',
                 "User '{$user->name}' updated their account password",

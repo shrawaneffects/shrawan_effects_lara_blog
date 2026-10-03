@@ -69,10 +69,10 @@
                                         {{ $post->author->name }}
                                     </a>
                                 </h6>
-                                <small class="text-body-secondary">
-                                    {{ $post->published_at ? $post->published_at->format('F d, Y') : 'Draft' }} &bull;
-                                    <i class="bi bi-clock me-1 text-primary"></i>{{ $post->reading_time }} min read &bull;
-                                    <i class="bi bi-eye me-1 text-primary"></i>{{ number_format($post->views_count) }} views
+                                <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
+                                    {{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }} &bull;
+                                    <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m read &bull;
+                                    <i class="bi bi-eye me-1 text-success"></i>{{ number_format($post->views_count) }} views
                                 </small>
                             </div>
                         </div>
@@ -201,9 +201,9 @@
                     <!-- Next & Previous Navigation -->
                     <div class="row g-3 mb-5">
                         <div class="col-sm-6">
-                            @if($previousPost)
-                                <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
-                                    <small class="text-muted"><i class="bi bi-arrow-left me-1"></i> Previous Article</small>
+                            @if(isset($previousPost) && $previousPost)
+                                <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
+                                    <small class="text-success font-mono"><i class="bi bi-arrow-left me-1"></i> // PREV TRANSMISSION</small>
                                     <h6 class="fw-bold mt-1 mb-0">
                                         <a href="{{ route('blog.show', $previousPost->slug) }}" class="text-decoration-none text-body">
                                             {{ Str::limit($previousPost->title, 45) }}
@@ -213,9 +213,9 @@
                             @endif
                         </div>
                         <div class="col-sm-6 text-sm-end">
-                            @if($nextPost)
-                                <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
-                                    <small class="text-muted">Next Article <i class="bi bi-arrow-right ms-1"></i></small>
+                            @if(isset($nextPost) && $nextPost)
+                                <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
+                                    <small class="text-success font-mono">// NEXT TRANSMISSION <i class="bi bi-arrow-right ms-1"></i></small>
                                     <h6 class="fw-bold mt-1 mb-0">
                                         <a href="{{ route('blog.show', $nextPost->slug) }}" class="text-decoration-none text-body">
                                             {{ Str::limit($nextPost->title, 45) }}

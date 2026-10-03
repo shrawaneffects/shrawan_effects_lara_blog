@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Prevent infinite redirect loops across subrequests
+    RewriteCond %{ENV:REDIRECT_STATUS} 200
+    RewriteRule ^ - [L]
+
+    # 2. Block direct web access to sensitive files & logs
+    RewriteRule ^(\.git|\.env|composer\.(json|lock)|package\.(json|lock)|\.cpanel\.yml) - [F,L,NC]
+    RewriteRule ^storage/logs/ - [F,L,NC]
+
+    # 3. Forward all requests to public/ directory for shared hosting environments
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

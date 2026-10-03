@@ -148,11 +148,12 @@
                     @include('components.ad-slot', ['slotName' => 'sidebar', 'label' => 'Sidebar Display Ad (300x250)', 'minHeight' => '250px', 'class' => 'my-0'])
 
                     <!-- Popular Tags Widget -->
-                    @if($tags->count() > 0)
-                        <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift">
-                            <h5 class="fw-bold mb-3"><i class="bi bi-tags me-2 text-primary"></i> Popular Tags</h5>
+                    @php $displayTags = isset($tags) ? $tags : (isset($popularTags) ? $popularTags : collect()); @endphp
+                    @if($displayTags->count() > 0)
+                        <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
+                            <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-tags me-2 text-success"></i> Intel Tags</h5>
                             <div class="d-flex flex-wrap gap-1">
-                                @foreach($tags as $tag)
+                                @foreach($displayTags as $tag)
                                     <a href="{{ route('blog.tag', $tag->slug) }}" class="tag-pill">
                                         #{{ $tag->name }}
                                     </a>

@@ -2,32 +2,29 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LoginVerificationMail extends Mailable
+class RegistrationOtpMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public User $user;
+    public string $name;
     public string $code;
-    public string $ipAddress;
-    public string $userAgent;
+    public string $email;
     public int $expiryMinutes;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, string $code, ?string $ipAddress = null, ?string $userAgent = null, int $expiryMinutes = 10)
+    public function __construct(string $name, string $code, string $email, int $expiryMinutes = 10)
     {
-        $this->user = $user;
+        $this->name = $name;
         $this->code = $code;
-        $this->ipAddress = $ipAddress ?: request()->ip();
-        $this->userAgent = $userAgent ?: request()->userAgent();
+        $this->email = $email;
         $this->expiryMinutes = $expiryMinutes;
     }
 
@@ -37,7 +34,7 @@ class LoginVerificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Login Verification Code (2FA): ' . $this->code . ' - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')),
+            subject: 'Your Registration Verification Code: ' . $this->code . ' - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')),
         );
     }
 
@@ -47,7 +44,7 @@ class LoginVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.login_verification',
+            view: 'emails.register_otp',
         );
     }
 

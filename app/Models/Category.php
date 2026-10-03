@@ -38,7 +38,7 @@ class Category extends Model
             if (str_starts_with($this->image, 'http')) {
                 return $this->image;
             }
-            if (file_exists(public_path('storage/' . $this->image))) {
+            if (file_exists(public_path('storage/' . $this->image)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($this->image)) {
                 return asset('storage/' . $this->image);
             }
         }

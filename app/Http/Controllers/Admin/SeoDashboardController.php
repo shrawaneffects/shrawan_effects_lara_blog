@@ -554,4 +554,32 @@ class SeoDashboardController extends Controller
             return back()->with('error', 'Optimization error: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Create or repair public/storage symlink for shared hosting / cPanel
+     */
+    public function linkStorage(Request $request)
+    {
+        try {
+            $linkPath = public_path('storage');
+            $targetPath = storage_path('app/public');
+
+            if (!file_exists($targetPath)) {
+                @mkdir($targetPath, 0755, true);
+            }
+
+            if (file_exists($linkPath) || is_link($linkPath)) {
+                if (is_link($linkPath)) {
+                    @unlink($linkPath);
+                }
+            }
+
+            Artisan::call('storage:link');
+            $output = Artisan::output();
+
+            return back()->with('success', 'Storage link processed: ' . (trim($output) ?: 'Done'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Storage link error: ' . $e->getMessage());
+        }
+    }
 }

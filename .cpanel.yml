@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/sites/25b/c/c4cef84f1f/public_html
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -a .htaccess $DEPLOYPATH/
+    - /bin/cp -a public/.htaccess $DEPLOYPATH/public/

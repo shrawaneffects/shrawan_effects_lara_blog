@@ -9,26 +9,26 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LoginVerificationMail extends Mailable
+class SecurityAlertMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public User $user;
-    public string $code;
+    public string $actionTitle;
+    public string $actionDescription;
     public string $ipAddress;
-    public string $userAgent;
-    public int $expiryMinutes;
+    public string $timestamp;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, string $code, ?string $ipAddress = null, ?string $userAgent = null, int $expiryMinutes = 10)
+    public function __construct(User $user, string $actionTitle, string $actionDescription, ?string $ipAddress = null)
     {
         $this->user = $user;
-        $this->code = $code;
+        $this->actionTitle = $actionTitle;
+        $this->actionDescription = $actionDescription;
         $this->ipAddress = $ipAddress ?: request()->ip();
-        $this->userAgent = $userAgent ?: request()->userAgent();
-        $this->expiryMinutes = $expiryMinutes;
+        $this->timestamp = now()->timezone(config('app.timezone', 'Asia/Kolkata'))->format('d M Y, h:i A T');
     }
 
     /**
@@ -37,7 +37,7 @@ class LoginVerificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Login Verification Code (2FA): ' . $this->code . ' - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')),
+            subject: 'Security Alert: ' . $this->actionTitle . ' - ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')),
         );
     }
 
@@ -47,7 +47,7 @@ class LoginVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.login_verification',
+            view: 'emails.security_alert',
         );
     }
 

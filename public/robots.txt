@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /reset-password/
+Disallow: /forgot-password/
+Allow: /
+
+Sitemap: https://shrawaneffects.com/sitemap.xml

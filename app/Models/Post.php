@@ -144,7 +144,7 @@ class Post extends Model
             if (str_starts_with($this->featured_image, 'http')) {
                 return $this->featured_image;
             }
-            if (file_exists(public_path('storage/' . $this->featured_image))) {
+            if (file_exists(public_path('storage/' . $this->featured_image)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($this->featured_image)) {
                 return asset('storage/' . $this->featured_image);
             }
         }

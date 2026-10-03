@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Verification Code (2FA)</title>
+    <title>Verify Your Email Address</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -22,7 +22,7 @@
             border: 1px solid #e2e8f0;
         }
         .header {
-            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
             padding: 32px 24px;
             text-align: center;
             color: #ffffff;
@@ -54,10 +54,10 @@
             margin-bottom: 24px;
         }
         .otp-box {
-            background: #f0fdf4;
-            border: 2px dashed #10b981;
+            background: #f1f5f9;
+            border: 2px dashed #6366f1;
             border-radius: 14px;
-            padding: 22px;
+            padding: 20px;
             text-align: center;
             margin: 28px 0;
         }
@@ -65,42 +65,25 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            color: #059669;
+            color: #6366f1;
             letter-spacing: 1.5px;
             margin-bottom: 8px;
         }
         .otp-code {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 800;
             letter-spacing: 8px;
-            color: #064e3b;
+            color: #1e1b4b;
             user-select: all;
         }
-        .info-card {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 16px;
-            font-size: 13px;
-            color: #64748b;
-            margin: 20px 0;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-        .info-row:last-child {
-            margin-bottom: 0;
-        }
         .security-notice {
-            background-color: #fffbeb;
-            border-left: 4px solid #f59e0b;
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
             border-radius: 8px;
             padding: 14px 16px;
             font-size: 13px;
-            color: #b45309;
+            color: #991b1b;
             line-height: 1.5;
             margin-top: 24px;
         }
@@ -118,34 +101,26 @@
     <div class="email-container">
         <div class="header">
             <h2>{{ \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')) }}</h2>
-            <p>Two-Factor Authentication (2FA)</p>
+            <p>Welcome to our community!</p>
         </div>
 
         <div class="content">
-            <div class="greeting">Hello {{ $user->name }},</div>
+            <div class="greeting">Hello {{ $name }},</div>
             <div class="text">
-                A sign-in attempt was initiated for your account. To complete your login securely, please enter this 6-digit verification code:
+                Thank you for starting your registration. To verify your email address and activate your account, please enter the following verification code on the registration page:
             </div>
 
             <div class="otp-box">
-                <div class="otp-label">Your One-Time Login Code</div>
+                <div class="otp-label">Registration Verification Code</div>
                 <div class="otp-code">{{ $code }}</div>
             </div>
 
-            <div class="info-card">
-                <div style="font-weight: 600; color: #334155; margin-bottom: 8px;">Login Attempt Details:</div>
-                <div class="info-row">
-                    <span>IP Address:</span>
-                    <strong>{{ $ipAddress }}</strong>
-                </div>
-                <div class="info-row">
-                    <span>Valid For:</span>
-                    <strong>{{ $expiryMinutes }} Minutes</strong>
-                </div>
+            <div class="text" style="font-size: 14px; text-align: center; color: #64748b;">
+                This OTP code is valid for <strong>{{ $expiryMinutes }} minutes</strong>.
             </div>
 
             <div class="security-notice">
-                <strong>Didn't try to log in?</strong> If you did not make this request, someone may know your password. We strongly recommend changing your password immediately.
+                <strong>Security Reminder:</strong> Never share this OTP with anyone. Our support team will never ask for your verification code. If you did not attempt to register, please ignore this email.
             </div>
         </div>
 

@@ -54,8 +54,20 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 */
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+// 2FA Login Email OTP Routes
+Route::get('/login/verify-otp', [AuthController::class, 'showLoginOtpForm'])->name('login.verify-otp');
+Route::post('/login/verify-otp', [AuthController::class, 'verifyLoginOtp'])->name('login.verify-otp.post');
+Route::post('/login/resend-otp', [AuthController::class, 'resendLoginOtp'])->name('login.resend-otp');
+
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+
+// Registration Email OTP Routes
+Route::get('/register/verify-otp', [AuthController::class, 'showRegisterOtpForm'])->name('register.verify-otp');
+Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp'])->name('register.verify-otp.post');
+Route::post('/register/resend-otp', [AuthController::class, 'resendRegisterOtp'])->name('register.resend-otp');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Forgot & Reset Password Routes
@@ -163,6 +175,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/seo/clear-cache', [AdminSeoDashboardController::class, 'clearCache'])->name('seo.clear-cache.post');
     Route::get('/seo/optimize', [AdminSeoDashboardController::class, 'optimizeSystem'])->name('seo.optimize');
     Route::post('/seo/optimize', [AdminSeoDashboardController::class, 'optimizeSystem'])->name('seo.optimize.post');
+    Route::post('/seo/server-config/storage-link', [AdminSeoDashboardController::class, 'linkStorage'])->name('seo.server-config.storage-link');
     Route::post('/seo/analyze', [AdminSeoAnalysisController::class, 'analyze'])->name('seo.analyze');
 });
+
+// --------------------------------------------------------------------------
+// Storage Fallback Route (ensures images/avatars/media load seamlessly even if symlink is missing on shared hosting)
+// --------------------------------------------------------------------------
+Route::get('storage/{path}', function (string $path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*')->name('storage.fallback');
 

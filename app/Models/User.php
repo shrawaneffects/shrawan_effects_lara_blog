@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'password',
         'role',
         'avatar',
@@ -73,7 +74,7 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): string
     {
-        if ($this->avatar && file_exists(public_path('storage/' . $this->avatar))) {
+        if ($this->avatar && (file_exists(public_path('storage/' . $this->avatar)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($this->avatar))) {
             return asset('storage/' . $this->avatar);
         }
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0d6efd&color=ffffff&size=150';

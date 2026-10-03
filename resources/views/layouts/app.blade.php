@@ -14,7 +14,7 @@
     $defaultMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'laravel, php, web development, bootstrap 5, tech');
 @endphp
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,10 +56,10 @@
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $adsensePublisherId }}" crossorigin="anonymous"></script>
     @endif
 
-    <!-- Fonts -->
+    <!-- Fonts: Orbitron, JetBrains Mono, Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5.3 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -67,13 +67,51 @@
 
     <style>
         :root {
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-            --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
-            --gradient-sunset: linear-gradient(135deg, #f43f5e 0%, #fb7185 45%, #fb923c 100%);
-            --gradient-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
-            --gradient-mesh-light: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(217, 70, 239, 0.12) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.10) 0px, transparent 50%);
-            --gradient-mesh-dark: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(217, 70, 239, 0.18) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-cyber: 'Orbitron', monospace, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            /* Futuristic HUD Color System (Neon Lime Green, Tactical Olive, Pitch Black, Holographic White) */
+            --neon-green: #00ff66;
+            --neon-green-dim: #00cc52;
+            --neon-green-glow: rgba(0, 255, 102, 0.45);
+            --neon-green-subtle: rgba(0, 255, 102, 0.12);
+
+            --neon-cyan: #00f0ff;
+            --neon-cyan-glow: rgba(0, 240, 255, 0.45);
+
+            --tactical-olive: #213608;
+            --tactical-olive-dark: #121e05;
+            --tactical-olive-border: rgba(0, 255, 102, 0.28);
+            --tactical-olive-glow: rgba(33, 54, 8, 0.6);
+
+            --cyber-dark: #050804;
+            --cyber-dark-card: #091206;
+            --cyber-dark-elevated: #0f1c09;
+
+            --gradient-primary: linear-gradient(135deg, #00ff66 0%, #00f0ff 100%);
+            --gradient-secondary: linear-gradient(135deg, #00f0ff 0%, #3b82f6 100%);
+            --gradient-sunset: linear-gradient(135deg, #ff3366 0%, #ff9900 100%);
+            --gradient-emerald: linear-gradient(135deg, #00ff66 0%, #10b981 100%);
+            --gradient-tactical: linear-gradient(135deg, #213608 0%, #0e1a05 100%);
+        }
+
+        /* Custom Futuristic Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050804;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #213608;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff66;
+            box-shadow: 0 0 10px #00ff66;
         }
 
         body {
@@ -86,27 +124,56 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        /* Dark Mode: Futuristic Cyberpunk HUD */
         [data-bs-theme="dark"] body {
-            background-image: var(--gradient-mesh-dark);
+            background-color: #050804;
+            background-image: 
+                radial-gradient(circle at 15% 10%, rgba(0, 255, 102, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 240, 255, 0.05) 0%, transparent 45%),
+                linear-gradient(rgba(0, 255, 102, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.035) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
             background-attachment: fixed;
+            color: #e4f5e7;
         }
 
+        /* Light Mode: High-Tech Tactical Tech Lab */
         [data-bs-theme="light"] body {
-            background-image: var(--gradient-mesh-light);
+            background-color: #f6faf5;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(33, 54, 8, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 255, 102, 0.04) 0%, transparent 50%),
+                linear-gradient(rgba(33, 54, 8, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(33, 54, 8, 0.025) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
             background-attachment: fixed;
+            color: #0d1a08;
         }
 
-        /* Top Rainbow Accent Line */
+        /* Top High-Tech Laser Beam Accent Line */
         .top-gradient-bar {
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f43f5e, #fb923c, #10b981, #06b6d4, #6366f1);
+            height: 3px;
+            background: linear-gradient(90deg, #00ff66, #00f0ff, #213608, #00ff66);
             background-size: 200% 100%;
-            animation: gradientMove 6s linear infinite;
+            animation: laserScan 4s linear infinite;
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.6);
+            position: relative;
+            z-index: 1050;
         }
 
-        @keyframes gradientMove {
+        @keyframes laserScan {
             0% { background-position: 0% 0%; }
             100% { background-position: 200% 0%; }
+        }
+
+        /* Cyberpunk Font Classes */
+        .font-cyber {
+            font-family: var(--font-cyber);
+            letter-spacing: 0.5px;
+        }
+
+        .font-mono {
+            font-family: var(--font-mono);
         }
 
         /* Text Gradients */
@@ -138,56 +205,101 @@
             display: inline-block;
         }
 
-        /* Navbar & Glassmorphism */
+        /* Cyber Beacon Pulse Dot */
+        .cyber-beacon {
+            width: 8px;
+            height: 8px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00ff66;
+            animation: beaconPulse 2s infinite ease-in-out;
+            vertical-align: middle;
+        }
+
+        @keyframes beaconPulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px #00ff66; }
+            50% { opacity: 0.35; transform: scale(0.75); box-shadow: 0 0 3px #00ff66; }
+        }
+
+        /* Telemetry Chip & Monospace Metadata */
+        .telemetry-tag {
+            font-family: var(--font-mono);
+            font-size: 0.73rem;
+            letter-spacing: 0.6px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(33, 54, 8, 0.45);
+            border: 1px solid rgba(0, 255, 102, 0.35);
+            color: #00ff66;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Navbar & Glassmorphic HUD Bar */
         .navbar-glass {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            background-color: rgba(var(--bs-body-bg-rgb), 0.85) !important;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.12);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            background-color: rgba(5, 8, 4, 0.88) !important;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.22);
             transition: all 0.3s ease;
         }
 
+        [data-bs-theme="light"] .navbar-glass {
+            background-color: rgba(255, 255, 255, 0.92) !important;
+            border-bottom: 1px solid rgba(33, 54, 8, 0.15);
+        }
+
         .navbar-brand {
+            font-family: var(--font-cyber);
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: 0.5px;
             transition: transform 0.3s ease;
         }
 
         .navbar-brand:hover {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
 
         .brand-badge {
-            background: var(--gradient-primary);
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-left: 6px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+            background: rgba(33, 54, 8, 0.85);
+            border: 1px solid rgba(0, 255, 102, 0.4);
+            color: #00ff66;
+            font-family: var(--font-mono);
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            letter-spacing: 0.8px;
+            margin-left: 8px;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
             transition: all 0.3s ease;
         }
 
         .brand-badge:hover {
-            transform: translateY(-2px) rotate(-3deg);
-            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+            border-color: #00ff66;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
         }
 
-        /* Nav links hover glow */
+        /* Nav links hover cyber glow */
         .nav-link {
             position: relative;
             font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 0.3px;
             transition: color 0.3s ease;
         }
 
         .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: -3px;
             left: 50%;
             width: 0;
             height: 2px;
             background: var(--gradient-primary);
+            box-shadow: 0 0 8px #00ff66;
             transition: width 0.3s ease, left 0.3s ease;
             border-radius: 2px;
         }
@@ -197,12 +309,12 @@
             left: 0;
         }
 
-        /* Hero Banner with Aurora Mesh */
+        /* Hero Banner with Futuristic Cyber Mesh */
         .hero-banner {
             position: relative;
             padding: 3.5rem 0;
             overflow: hidden;
-            border-bottom: 1px solid var(--bs-border-color-translucent);
+            border-bottom: 1px solid rgba(0, 255, 102, 0.15);
         }
 
         .hero-banner::before {
@@ -212,8 +324,8 @@
             left: -20%;
             width: 140%;
             height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
-                        radial-gradient(circle at 70% 60%, rgba(217, 70, 239, 0.12) 0%, transparent 50%);
+            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 102, 0.12) 0%, transparent 60%),
+                        radial-gradient(circle at 75% 65%, rgba(0, 240, 255, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
             animation: pulseAura 12s ease-in-out infinite alternate;
@@ -221,18 +333,24 @@
 
         @keyframes pulseAura {
             0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.1) rotate(4deg); }
+            100% { transform: scale(1.08) rotate(3deg); }
         }
 
-        /* Post Cards & 3D Mouse Hover Effects */
+        /* Cyber Cards & High-Tech HUD Container */
         .card-post {
-            border: 1px solid var(--bs-border-color-translucent);
-            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 102, 0.16) !important;
+            border-radius: 18px;
             overflow: hidden;
-            background-color: var(--bs-body-bg);
+            background: rgba(9, 18, 6, 0.85);
+            backdrop-filter: blur(10px);
             transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease;
             position: relative;
             z-index: 1;
+        }
+
+        [data-bs-theme="light"] .card-post {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(33, 54, 8, 0.15) !important;
         }
 
         .card-post::before {
@@ -242,9 +360,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 1.5px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(217, 70, 239, 0.6), rgba(6, 182, 212, 0.6));
+            background: linear-gradient(135deg, rgba(0, 255, 102, 0.6), rgba(0, 240, 255, 0.6), rgba(33, 54, 8, 0.4));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -254,9 +372,9 @@
         }
 
         .card-post:hover {
-            transform: translateY(-8px) scale(1.015);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.25), 0 0 25px rgba(217, 70, 239, 0.15);
-            border-color: transparent;
+            transform: translateY(-7px) scale(1.012);
+            box-shadow: 0 18px 36px -12px rgba(0, 255, 102, 0.22), 0 0 22px rgba(0, 240, 255, 0.12);
+            border-color: rgba(0, 255, 102, 0.5) !important;
         }
 
         .card-post:hover::before {
@@ -276,8 +394,8 @@
         }
 
         .card-post:hover .post-thumb {
-            transform: scale(1.08) rotate(0.4deg);
-            filter: brightness(1.05);
+            transform: scale(1.07);
+            filter: brightness(1.08) contrast(1.05);
         }
 
         .featured-thumb {
@@ -289,29 +407,33 @@
         }
 
         .card-post:hover .featured-thumb {
-            transform: scale(1.05);
-            filter: brightness(1.05);
+            transform: scale(1.04);
+            filter: brightness(1.08);
         }
 
         .card-post .card-title a {
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         .card-post:hover .card-title a {
-            color: #6366f1 !important;
+            color: var(--neon-green) !important;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.35);
         }
 
-        /* Gradient Animated Buttons */
+        /* Neon & Cyber Buttons */
         .btn-gradient {
-            background: var(--gradient-primary);
-            background-size: 200% auto;
-            color: #fff !important;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            background: linear-gradient(135deg, #00ff66 0%, #00d255 100%);
+            color: #050804 !important;
+            font-family: var(--font-cyber);
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            border: 1px solid #00ff66;
+            border-radius: 10px;
             padding: 0.6rem 1.4rem;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: all 0.35s ease;
+            box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
             position: relative;
             overflow: hidden;
             display: inline-flex;
@@ -320,23 +442,50 @@
         }
 
         .btn-gradient:hover {
-            background-position: right center;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
-            color: #fff !important;
+            box-shadow: 0 0 28px rgba(0, 255, 102, 0.65);
+            transform: translateY(-2px) scale(1.02);
+            color: #050804 !important;
         }
 
         .btn-gradient:active {
             transform: translateY(0) scale(0.98);
         }
 
+        .btn-tactical {
+            background: rgba(33, 54, 8, 0.75);
+            color: #00ff66 !important;
+            border: 1px solid rgba(0, 255, 102, 0.4);
+            font-family: var(--font-cyber);
+            font-size: 0.82rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            border-radius: 10px;
+            padding: 0.6rem 1.4rem;
+            transition: all 0.35s ease;
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.12);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-tactical:hover {
+            background: #213608;
+            border-color: #00ff66;
+            box-shadow: 0 0 18px rgba(0, 255, 102, 0.35), inset 0 0 12px rgba(0, 255, 102, 0.2);
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
         .btn-gradient-sunset {
             background: var(--gradient-sunset);
-            background-size: 200% auto;
             color: #fff !important;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-family: var(--font-cyber);
+            font-size: 0.82rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            font-weight: 700;
             padding: 0.6rem 1.4rem;
             transition: all 0.4s ease;
             box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
@@ -346,32 +495,33 @@
         }
 
         .btn-gradient-sunset:hover {
-            background-position: right center;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.55);
             color: #fff !important;
         }
 
         .btn-gradient-cyan {
-            background: var(--gradient-secondary);
-            background-size: 200% auto;
-            color: #fff !important;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            background: linear-gradient(135deg, #00f0ff 0%, #0099ff 100%);
+            color: #050804 !important;
+            border: 1px solid #00f0ff;
+            border-radius: 10px;
+            font-family: var(--font-cyber);
+            font-size: 0.82rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            font-weight: 700;
             padding: 0.6rem 1.4rem;
             transition: all 0.4s ease;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn-gradient-cyan:hover {
-            background-position: right center;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.5);
-            color: #fff !important;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.65);
+            color: #050804 !important;
         }
 
         /* Hover Lift Utility */
@@ -380,24 +530,30 @@
         }
 
         .hover-lift:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12) !important;
+            transform: translateY(-5px) scale(1.015);
+            box-shadow: 0 12px 28px rgba(0, 255, 102, 0.15) !important;
         }
 
-        /* Category Card Hover & Gradient */
+        /* Category Tactical Cyber Cards */
         .category-card {
-            border: 1px solid var(--bs-border-color-translucent);
-            border-radius: 16px;
-            background: var(--bs-body-bg);
+            border: 1px solid rgba(0, 255, 102, 0.18);
+            border-radius: 14px;
+            background: rgba(9, 18, 6, 0.7);
+            backdrop-filter: blur(8px);
             transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
             overflow: hidden;
         }
 
+        [data-bs-theme="light"] .category-card {
+            background: #ffffff;
+            border-color: rgba(33, 54, 8, 0.12);
+        }
+
         .category-card:hover {
-            transform: translateY(-8px) scale(1.04);
-            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
-            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 12px 24px rgba(0, 255, 102, 0.2);
+            border-color: rgba(0, 255, 102, 0.55);
         }
 
         .category-card .category-icon {
@@ -405,44 +561,52 @@
         }
 
         .category-card:hover .category-icon {
-            transform: scale(1.2) rotate(8deg);
+            transform: scale(1.18) rotate(6deg);
         }
 
         /* Trending Cards Hover */
         .trending-card {
-            padding: 1rem;
+            padding: 1.1rem;
             border-radius: 16px;
             transition: all 0.3s ease;
-            border: 1px solid transparent;
+            border: 1px solid rgba(0, 255, 102, 0.12);
+            background: rgba(9, 18, 6, 0.55);
+        }
+
+        [data-bs-theme="light"] .trending-card {
+            background: #ffffff;
+            border-color: rgba(33, 54, 8, 0.1);
         }
 
         .trending-card:hover {
-            background: var(--bs-tertiary-bg);
-            border-color: var(--bs-border-color-translucent);
+            background: rgba(33, 54, 8, 0.35);
+            border-color: rgba(0, 255, 102, 0.45);
             transform: translateX(6px);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
         }
 
         .trending-card .trend-number {
-            background: var(--gradient-sunset);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: var(--font-cyber);
+            color: #00ff66;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
             transition: transform 0.3s ease;
             display: inline-block;
         }
 
         .trending-card:hover .trend-number {
-            transform: scale(1.15) rotate(-5deg);
+            transform: scale(1.15);
         }
 
         /* Tag Pills */
         .tag-pill {
-            font-size: 0.82rem;
-            padding: 0.4rem 0.9rem;
-            border-radius: 24px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 0.38rem 0.85rem;
+            border-radius: 6px;
             text-decoration: none;
-            background-color: var(--bs-tertiary-bg);
-            color: var(--bs-body-color);
-            border: 1px solid var(--bs-border-color-translucent);
+            background-color: rgba(33, 54, 8, 0.4);
+            color: #00ff66;
+            border: 1px solid rgba(0, 255, 102, 0.25);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: inline-flex;
             align-items: center;
@@ -450,30 +614,31 @@
         }
 
         .tag-pill:hover {
-            background: var(--gradient-primary);
-            color: #fff !important;
-            border-color: transparent;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+            background: #00ff66;
+            color: #050804 !important;
+            border-color: #00ff66;
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
         }
 
         .tag-pill:hover .badge {
-            background-color: rgba(255, 255, 255, 0.25) !important;
-            color: #fff !important;
+            background-color: rgba(5, 8, 4, 0.35) !important;
+            color: #050804 !important;
         }
 
-        /* Avatars with Gradient Ring on Hover */
+        /* Avatars with Neon Ring on Hover */
         .author-avatar {
             width: 42px;
             height: 42px;
             border-radius: 50%;
             object-fit: cover;
+            border: 1px solid rgba(0, 255, 102, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .author-avatar:hover {
-            transform: scale(1.15);
-            box-shadow: 0 0 0 3px #6366f1, 0 0 15px rgba(99, 102, 241, 0.5);
+            transform: scale(1.12);
+            box-shadow: 0 0 0 2px #00ff66, 0 0 15px rgba(0, 255, 102, 0.5);
         }
 
         .author-avatar-lg {
@@ -481,21 +646,23 @@
             height: 84px;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.35);
             transition: all 0.3s ease;
         }
 
         .author-avatar-lg:hover {
-            transform: scale(1.08) rotate(3deg);
-            box-shadow: 0 0 0 5px #8b5cf6, 0 10px 25px rgba(139, 92, 246, 0.4);
+            transform: scale(1.06) rotate(3deg);
+            box-shadow: 0 0 0 4px #00ff66, 0 0 25px rgba(0, 255, 102, 0.45);
         }
 
-        /* Newsletter Gradient Card */
+        /* Newsletter Cyber Gradient Card */
         .card-newsletter-gradient {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+            background: linear-gradient(135deg, #142807 0%, #213608 50%, #081404 100%);
+            border: 1px solid rgba(0, 255, 102, 0.3) !important;
             position: relative;
             overflow: hidden;
-            border-radius: 24px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.15);
         }
 
         .card-newsletter-gradient::before {
@@ -503,28 +670,30 @@
             position: absolute;
             top: -50%;
             right: -30%;
-            width: 250px;
-            height: 250px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.15) 0%, transparent 70%);
             animation: pulseAura 8s infinite alternate;
         }
 
         /* Badges */
         .badge-category {
+            font-family: var(--font-cyber);
             text-transform: uppercase;
-            font-size: 0.72rem;
-            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+            letter-spacing: 0.6px;
             font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            padding: 5px 11px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .badge-category:hover {
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 14px rgba(0, 255, 102, 0.4);
             color: #fff !important;
         }
 
@@ -537,9 +706,10 @@
         .post-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 16px;
+            border-radius: 14px;
             margin: 1.75rem 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
             transition: transform 0.3s ease;
         }
 
@@ -548,28 +718,34 @@
         }
 
         .post-content pre {
-            background: #181825;
-            color: #cdd6f4;
+            background: #080d05;
+            color: #00ff66;
+            font-family: var(--font-mono);
             padding: 1.4rem;
-            border-radius: 14px;
+            border-radius: 12px;
             overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(0, 255, 102, 0.05);
         }
 
         .post-content blockquote {
-            border-left: 4px solid #8b5cf6;
+            border-left: 4px solid #00ff66;
             padding: 1.2rem 1.8rem;
-            background: var(--bs-tertiary-bg);
-            border-radius: 0 14px 14px 0;
+            background: rgba(33, 54, 8, 0.35);
+            border-radius: 0 12px 12px 0;
             font-style: italic;
             position: relative;
         }
 
         .footer {
             margin-top: auto;
-            border-top: 1px solid var(--bs-border-color);
-            background-color: var(--bs-tertiary-bg);
+            border-top: 1px solid rgba(0, 255, 102, 0.2);
+            background-color: #050804;
+        }
+
+        [data-bs-theme="light"] .footer {
+            background-color: #f1f7f0;
+            border-top-color: rgba(33, 54, 8, 0.15);
         }
 
         .btn-theme-toggle {
@@ -580,12 +756,16 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            background: rgba(33, 54, 8, 0.35);
+            color: #00ff66;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .btn-theme-toggle:hover {
             transform: rotate(30deg) scale(1.1);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            border-color: #00ff66;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
         }
 
         .sticky-top-widget {
@@ -593,7 +773,7 @@
             top: 5.5rem;
         }
 
-        /* Spotlight Mouse Glow for cards */
+        /* High-Tech Spotlight Mouse Glow for cards */
         .spotlight-card {
             position: relative;
             overflow: hidden;
@@ -604,9 +784,9 @@
             position: absolute;
             top: var(--mouse-y, -1000px);
             left: var(--mouse-x, -1000px);
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.12) 0%, transparent 70%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             opacity: 0;
@@ -672,14 +852,14 @@
                 @if($siteLogo)
                     <img src="{{ $siteLogo }}" alt="{{ $siteName }}" style="max-height: 40px; width: auto; object-fit: contain;">
                 @else
-                    <i class="bi bi-journal-richtext fs-3 me-2 text-gradient"></i>
-                    <span class="text-gradient">{{ $siteName }}</span>
-                    <span class="brand-badge">v12</span>
+                    <i class="bi bi-cpu fs-3 me-2 text-gradient"></i>
+                    <span class="text-gradient font-cyber">{{ $siteName }}</span>
+                    <span class="brand-badge"><span class="cyber-beacon me-1"></span>SYS ONLINE</span>
                 @endif
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-2"></i>
+                <i class="bi bi-list fs-2 text-success"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarMain">
@@ -736,11 +916,11 @@
                     @endif
                 </ul>
 
-                <!-- Search form in navbar -->
+                <!-- Search form in navbar with telemetry styling -->
                 <form class="d-flex me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-body-tertiary border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input class="form-control bg-body-tertiary border-start-0" type="search" name="search" placeholder="Search posts..." value="{{ request('search') }}" aria-label="Search">
+                        <span class="input-group-text border-end-0" style="background: rgba(33,54,8,0.45); border-color: rgba(0,255,102,0.25); color: #00ff66;"><i class="bi bi-search"></i></span>
+                        <input class="form-control border-start-0" type="search" name="search" placeholder="Search telemetry..." value="{{ request('search') }}" aria-label="Search" style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.25); font-family: var(--font-mono); font-size: 0.8rem;">
                     </div>
                 </form>
 
@@ -752,11 +932,11 @@
                     </button>
 
                     @guest
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
+                        <a href="{{ route('login') }}" class="btn btn-tactical btn-sm px-3 rounded-pill">
                             <i class="bi bi-box-arrow-in-right me-1"></i> Login
                         </a>
                         <a href="{{ route('register') }}" class="btn btn-gradient btn-sm px-3 rounded-pill">
-                            <i class="bi bi-person-plus me-1"></i> Register
+                            <i class="bi bi-shield-lock me-1"></i> Register
                         </a>
                     @else
                         <div class="dropdown">
@@ -828,7 +1008,7 @@
             </div>
         @endif
 
-        @if($errors->any())
+        @if(isset($errors) && $errors->any())
             <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-4 border-0" role="alert">
                 <div class="fw-bold mb-1"><i class="bi bi-x-circle me-1"></i> Please check the following errors:</div>
                 <ul class="mb-0 ps-3">
@@ -850,18 +1030,20 @@
     <footer class="footer py-5 mt-5">
         <div class="container">
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
                     <a class="d-flex align-items-center text-decoration-none mb-3" href="{{ route('home') }}">
                         @if($siteLogo)
                             <img src="{{ $siteLogo }}" alt="{{ $siteName }}" style="max-height: 38px; width: auto; object-fit: contain;">
                         @else
-                            <i class="bi bi-journal-richtext fs-3 me-2 text-gradient"></i>
-                            <span class="fs-4 fw-bold text-gradient">{{ $siteName }}</span>
+                            <i class="bi bi-cpu fs-3 me-2 text-gradient"></i>
+                            <span class="fs-4 fw-bold text-gradient font-cyber">{{ $siteName }}</span>
                         @endif
                     </a>
                     <p class="text-body-secondary small">
                         {{ $footerText }}
                     </p>
+                    <div class="mb-3">
+                        <span class="telemetry-tag"><span class="cyber-beacon"></span> CORE NODE: ONLINE</span>
+                    </div>
                     <div class="d-flex gap-3 fs-5 mt-3">
                         @if($githubUrl)
                             <a href="{{ $githubUrl }}" target="_blank" class="text-body-secondary hover-lift"><i class="bi bi-github"></i></a>
@@ -924,9 +1106,9 @@
 
             <hr class="my-4 border-secondary opacity-25">
 
-            <div class="d-flex flex-wrap justify-content-between align-items-center small text-body-secondary">
-                <p class="mb-0">&copy; {{ date('Y') }} Copyright by Shrawan Effects</p>
-                <p class="mb-0">All rights reserved.</p>
+            <div class="d-flex flex-wrap justify-content-between align-items-center small text-body-secondary font-mono">
+                <p class="mb-0">&copy; {{ date('Y') }} SHRAWAN EFFECTS // ALL RIGHTS RESERVED.</p>
+                <p class="mb-0 text-success"><i class="bi bi-shield-lock-fill me-1"></i> PROTOCOL v2.6 // SECURE</p>
             </div>
         </div>
     </footer>
