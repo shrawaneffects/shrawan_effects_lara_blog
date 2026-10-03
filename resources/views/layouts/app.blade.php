@@ -1030,6 +1030,8 @@
     <footer class="footer py-5 mt-5">
         <div class="container">
             <div class="row g-4">
+                <!-- Section 1: Brand & Telemetry -->
+                <div class="col-lg-4 col-md-12">
                     <a class="d-flex align-items-center text-decoration-none mb-3" href="{{ route('home') }}">
                         @if($siteLogo)
                             <img src="{{ $siteLogo }}" alt="{{ $siteName }}" style="max-height: 38px; width: auto; object-fit: contain;">
@@ -1038,69 +1040,76 @@
                             <span class="fs-4 fw-bold text-gradient font-cyber">{{ $siteName }}</span>
                         @endif
                     </a>
-                    <p class="text-body-secondary small">
+                    <p class="text-body-secondary small mb-3">
                         {{ $footerText }}
                     </p>
                     <div class="mb-3">
                         <span class="telemetry-tag"><span class="cyber-beacon"></span> CORE NODE: ONLINE</span>
                     </div>
-                    <div class="d-flex gap-3 fs-5 mt-3">
+                    <div class="d-flex gap-3 fs-5 mt-2">
                         @if($githubUrl)
-                            <a href="{{ $githubUrl }}" target="_blank" class="text-body-secondary hover-lift"><i class="bi bi-github"></i></a>
+                            <a href="{{ $githubUrl }}" target="_blank" class="text-body-secondary hover-lift" title="GitHub"><i class="bi bi-github"></i></a>
                         @endif
                         @if($twitterUrl)
-                            <a href="{{ $twitterUrl }}" target="_blank" class="text-body-secondary hover-lift"><i class="bi bi-twitter-x"></i></a>
+                            <a href="{{ $twitterUrl }}" target="_blank" class="text-body-secondary hover-lift" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
                         @endif
                         @if($linkedinUrl)
-                            <a href="{{ $linkedinUrl }}" target="_blank" class="text-body-secondary hover-lift"><i class="bi bi-linkedin"></i></a>
+                            <a href="{{ $linkedinUrl }}" target="_blank" class="text-body-secondary hover-lift" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                         @endif
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="fw-bold mb-3 text-gradient">Navigation</h6>
-                    <ul class="list-unstyled text-small small">
-                        @php
-                            $footerMenuItems = \App\Models\MenuItem::getMenuTree('footer');
-                        @endphp
-                        @if($footerMenuItems->count() > 0)
-                            @foreach($footerMenuItems as $fItem)
-                                <li class="mb-2">
-                                    <a class="link-secondary text-decoration-none" href="{{ $fItem->url }}" target="{{ $fItem->target }}">
-                                        @if($fItem->icon) <i class="{{ $fItem->icon }} me-1"></i> @endif {{ $fItem->title }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        @else
-                            <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('home') }}">Home</a></li>
-                            <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.index') }}">All Articles</a></li>
-                            <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('faq') }}">FAQ</a></li>
-                            <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('contact.index') }}">Contact Us</a></li>
-                            <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('login') }}">Author Portal</a></li>
-                        @endif
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="fw-bold mb-3 text-gradient">Popular Topics</h6>
-                    <ul class="list-unstyled text-small small">
-                        <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'laravel-php') }}">Laravel & PHP</a></li>
-                        <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'web-development') }}">Web Development</a></li>
-                        <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'ui-ux-design') }}">UI/UX Design</a></li>
-                        <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'ai-machine-learning') }}">AI & Agents</a></li>
-                    </ul>
-                </div>
-
+                <!-- Section 2: Quick Protocols & Sectors -->
                 <div class="col-lg-4 col-md-6">
-                    <h6 class="fw-bold mb-3 text-gradient">Subscribe to Newsletter</h6>
-                    <p class="text-body-secondary small mb-3">Receive weekly curations on architecture, Laravel tips, and frontend technologies.</p>
+                    <h6 class="fw-bold mb-3 text-gradient font-cyber">DIRECT PROTOCOLS</h6>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <ul class="list-unstyled text-small small mb-0">
+                                @php
+                                    $footerMenuItems = \App\Models\MenuItem::getMenuTree('footer');
+                                @endphp
+                                @if($footerMenuItems->count() > 0)
+                                    @foreach($footerMenuItems as $fItem)
+                                        <li class="mb-2">
+                                            <a class="link-secondary text-decoration-none" href="{{ $fItem->url }}" target="{{ $fItem->target }}">
+                                                @if($fItem->icon) <i class="{{ $fItem->icon }} me-1"></i> @endif {{ $fItem->title }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('home') }}"><i class="bi bi-chevron-right me-1 text-success small"></i>Home</a></li>
+                                    <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.index') }}"><i class="bi bi-chevron-right me-1 text-success small"></i>All Articles</a></li>
+                                    <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('faq') }}"><i class="bi bi-chevron-right me-1 text-success small"></i>FAQ</a></li>
+                                    <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('contact.index') }}"><i class="bi bi-chevron-right me-1 text-success small"></i>Contact Us</a></li>
+                                    <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('login') }}"><i class="bi bi-chevron-right me-1 text-success small"></i>Author Portal</a></li>
+                                @endif
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled text-small small mb-0">
+                                <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'laravel-php') }}"><i class="bi bi-terminal me-1 text-success small"></i>Laravel & PHP</a></li>
+                                <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'web-development') }}"><i class="bi bi-code-slash me-1 text-success small"></i>Web Dev</a></li>
+                                <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'ui-ux-design') }}"><i class="bi bi-palette me-1 text-success small"></i>UI/UX Design</a></li>
+                                <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'ai-machine-learning') }}"><i class="bi bi-robot me-1 text-success small"></i>AI & Agents</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Cipher Transmission / Newsletter -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="fw-bold mb-3 text-gradient font-cyber">CIPHER TRANSMISSION</h6>
+                    <p class="text-body-secondary small mb-3">Subscribe to receive weekly telemetry curations on architecture, Laravel innovations, and futuristic tech.</p>
                     <form action="{{ route('newsletter.store') }}" method="POST" id="footerNewsletterForm">
                         @csrf
                         <div class="input-group">
-                            <input type="email" name="email" class="form-control rounded-start-pill ps-3" placeholder="Enter your email" required>
-                            <button class="btn btn-gradient rounded-end-pill px-4" type="submit">Subscribe</button>
+                            <input type="email" name="email" class="form-control rounded-start-pill ps-3" placeholder="user@domain.com" required style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.3); font-family: var(--font-mono); font-size: 0.85rem;">
+                            <button class="btn btn-gradient rounded-end-pill px-4" type="submit">TRANSMIT</button>
                         </div>
                     </form>
+                    <small class="text-body-secondary font-mono d-block mt-2" style="font-size: 0.75rem;">
+                        <i class="bi bi-shield-check text-success me-1"></i> ZERO SPAM • ENCRYPTED DISPATCH
+                    </small>
                 </div>
             </div>
 
