@@ -24,7 +24,7 @@
 @section('content')
     <!-- Futuristic HUD Status Ticker -->
     <div class="container pt-3">
-        <div class="d-flex flex-wrap align-items-center justify-content-between p-2 px-3 rounded-3" style="background: rgba(33,54,8,0.35); border: 1px solid rgba(0,255,102,0.22); font-family: var(--font-mono); font-size: 0.76rem;">
+        <div class="d-flex flex-wrap align-items-center justify-content-between p-2 px-3 rounded-3 hud-ticker">
             <div class="d-flex align-items-center gap-2">
                 <span class="cyber-beacon"></span>
                 <span class="text-success fw-bold">// SYSTEM: ACTIVE</span>
@@ -53,7 +53,7 @@
                             <div class="post-thumb-container position-relative">
                                 <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}">
                                 <div class="position-absolute top-0 end-0 m-3">
-                                    <span class="badge" style="background: rgba(5,8,4,0.85); border: 1px solid #00ff66; color: #00ff66; font-family: var(--font-mono); font-size: 0.72rem;">
+                                    <span class="badge priority-intel-badge">
                                         <i class="bi bi-star-fill text-warning me-1"></i> PRIORITY INTEL
                                     </span>
                                 </div>
@@ -180,11 +180,11 @@
                     @foreach($categories as $category)
                         <div class="col-lg-2 col-md-4 col-6">
                             <a href="{{ route('blog.category', $category->slug) }}" class="category-card text-decoration-none text-center p-3 h-100 shadow-sm d-block">
-                                <div class="category-icon d-inline-flex align-items-center justify-content-center mx-auto mb-2 rounded-circle text-white shadow-sm" style="width: 50px; height: 50px; background: linear-gradient(135deg, {{ $category->color }}, #00ff66);">
+                                <div class="category-icon d-inline-flex align-items-center justify-content-center mx-auto mb-2 rounded-circle text-white shadow-sm" style="width: 50px; height: 50px; background: linear-gradient(135deg, {{ $category->color }}, var(--neon-green));">
                                     <i class="bi bi-bookmark-fill fs-5"></i>
                                 </div>
                                 <h6 class="fw-bold text-body mb-1 text-truncate">{{ $category->name }}</h6>
-                                <span class="badge font-mono rounded-pill px-2" style="background: rgba(33,54,8,0.5); border: 1px solid rgba(0,255,102,0.3); color: #00ff66;">
+                                <span class="badge font-mono rounded-pill px-2 category-docs-count">
                                     {{ $category->published_posts_count }} DOCS
                                 </span>
                             </a>
@@ -249,7 +249,7 @@
                             </div>
                         @empty
                             <div class="col-12">
-                                <div class="p-5 text-center rounded-4" style="background: rgba(9,18,6,0.5); border: 1px dashed rgba(0,255,102,0.3);">
+                                <div class="p-5 text-center rounded-4 empty-state-box">
                                     <i class="bi bi-cpu fs-1 text-success opacity-50"></i>
                                     <h5 class="mt-3 font-cyber">NO DATA PACKETS DETECTED</h5>
                                     <p class="text-body-secondary font-mono small">Telemetry stream will update once new intel is published.</p>
@@ -286,7 +286,7 @@
                                 <div class="d-flex flex-wrap gap-1">
                                     @foreach($popularTags as $tag)
                                         <a href="{{ route('blog.tag', $tag->slug) }}" class="tag-pill">
-                                            #{{ $tag->name }} <span class="badge ms-1 rounded-pill" style="background: rgba(0,255,102,0.15); color: #00ff66;">{{ $tag->published_posts_count }}</span>
+                                            #{{ $tag->name }} <span class="badge ms-1 rounded-pill">{{ $tag->published_posts_count }}</span>
                                         </a>
                                     @endforeach
                                 </div>
@@ -305,7 +305,7 @@
                                 <form action="{{ route('newsletter.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono" placeholder="agent@shrawaneffects.com" style="background: rgba(5,8,4,0.7); color: #00ff66; border: 1px solid rgba(0,255,102,0.3) !important;" required>
+                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="agent@shrawaneffects.com" required>
                                     </div>
                                     <button type="submit" class="btn btn-gradient w-100 rounded-pill py-2">
                                         <i class="bi bi-shield-check me-1"></i> INITIATE SUBSCRIPTION

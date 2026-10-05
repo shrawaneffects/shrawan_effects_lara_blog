@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\LoginVerificationMail;
+use App\Mail\MagicLinkMail;
 use App\Mail\RegistrationOtpMail;
 use App\Mail\ResetPasswordMail;
 use App\Mail\SecurityAlertMail;
@@ -10,6 +11,7 @@ use App\Models\AuditLog;
 use App\Models\EmailVerification;
 use App\Models\User;
 use App\Services\Security\AuthRateLimiterService;
+use App\Services\Security\CaptchaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,17 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     /**
+     * Get a fresh Captcha challenge (JSON endpoint for dynamic refresh).
+     */
+    public function getCaptchaChallenge()
+    {
+        return response()->json([
+            'success' => true,
+            'captcha' => CaptchaService::generate(),
+        ]);
+    }
+
+    /**
      * Show standard login form.
      */
     public function showLoginForm()
@@ -33,22 +46,37 @@ class AuthController extends Controller
                 : redirect()->route('home');
         }
 
-        return view('frontend.auth.login');
+        $captcha = CaptchaService::generate();
+        return view('frontend.auth.login', compact('captcha'));
     }
 
     /**
-     * Handle initial credential check (Step 1 of 2FA Login).
+     * Handle user credential check and sign in (with Math Captcha protection like Shyamo).
      */
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($credentials['email']));
 
-        // Check strict daily 5-attempt limit for this date
+        // 1. Verify Human Security Captcha
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp')
+        )) {
+            return back()->withErrors([
+                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+            ])->onlyInput('email');
+        }
+
+        // 2. Check strict daily attempt limit for this email
         if (AuthRateLimiterService::isDailyLockedOut($email, 'login')) {
             AuditLog::record(
                 'login_daily_locked',
@@ -74,7 +102,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        // Check if user exists and password is correct
+        // 3. Check if user exists and password is correct (Direct Login with Captcha like Shyamo)
         if ($user && Hash::check($credentials['password'], $user->password)) {
             if (!$user->is_active) {
                 AuditLog::record(
@@ -90,59 +118,37 @@ class AuthController extends Controller
             }
 
             RateLimiter::clear($throttleKey);
+            AuthRateLimiterService::clearDailyAttempts($email, 'login');
 
-            // Generate 6-digit OTP code & session token
-            $code = sprintf('%06d', random_int(100000, 999999));
-            $token = Str::random(64);
-
-            // Invalidate any previous login OTPs for this user
-            EmailVerification::where('email', $user->email)
-                ->where('type', 'login')
-                ->delete();
-
-            // Create new OTP record (valid for 20 minutes)
-            EmailVerification::create([
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'code' => $code,
-                'type' => 'login',
-                'token' => $token,
-                'attempts' => 0,
-                'expires_at' => Carbon::now()->addMinutes(20),
-            ]);
-
-            // Dispatch 2FA OTP Email from noreply@shrawaneffects.com
-            $mailSent = true;
-            $mailError = null;
-            try {
-                Mail::to($user->email)->send(new LoginVerificationMail($user, $code, $request->ip(), $request->userAgent()));
-            } catch (\Throwable $e) {
-                $mailSent = false;
-                $mailError = $e->getMessage();
-                Log::error("Failed to send 2FA OTP to {$user->email}: " . $mailError);
-            }
-
-            // Bind to session
-            $request->session()->put('pending_2fa_user_id', $user->id);
-            $request->session()->put('pending_2fa_email', $user->email);
-            $request->session()->put('pending_2fa_token', $token);
-            $request->session()->put('pending_2fa_remember', $request->boolean('remember'));
-
-            if (!$mailSent) {
-                session()->flash('fallback_otp', $code);
-                session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
-            }
+            // Sign in directly
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
 
             AuditLog::record(
-                'login_otp_dispatched',
-                "Login 2FA verification code sent to '{$user->email}'",
+                'login_success',
+                "User '{$user->name}' ({$user->email}) successfully authenticated with Password + Captcha",
                 $user->id,
-                ['email' => $user->email],
+                ['email' => $user->email, 'role' => $user->role],
                 'info',
                 $request
             );
 
-            return redirect()->route('login.verify-otp', ['token' => $token])->with('info', 'A 6-digit verification code was generated for your email. Please enter it below to complete sign-in.');
+            // Optional login notification email (failsafe)
+            try {
+                Mail::to($user->email)->send(new SecurityAlertMail(
+                    'Successful Sign-in Notice',
+                    "New login to Shrawan Effects from IP: {$request->ip()} on " . now()->toFormattedDateString(),
+                    $user
+                ));
+            } catch (\Throwable $e) {
+                Log::info("Login alert email skipped: " . $e->getMessage());
+            }
+
+            if ($user->isAdmin() || $user->isAuthor()) {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            return redirect()->intended(route('home'));
         }
 
         // Invalid credentials - increment daily attempts
@@ -166,6 +172,302 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => $errorMessage,
         ])->onlyInput('email');
+    }
+
+    /**
+     * Send passwordless Magic Sign-in Link to user email.
+     */
+    public function sendMagicLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security captcha question.',
+        ]);
+
+        $email = strtolower(trim($request->input('email')));
+
+        // 1. Verify Captcha
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp')
+        )) {
+            return back()->withErrors([
+                'captcha_answer' => 'Security Captcha verification failed. Please try again.',
+            ])->with('active_tab', 'magic-link')->onlyInput('email');
+        }
+
+        // 2. Rate limiting check
+        $throttleKey = 'magic_link_' . Str::transliterate($email . '|' . $request->ip());
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => "Too many magic link requests. Please wait {$seconds} seconds.",
+            ])->with('active_tab', 'magic-link')->onlyInput('email');
+        }
+        RateLimiter::hit($throttleKey, 60);
+
+        // 3. User check or create
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            $user = User::create([
+                'name' => explode('@', $email)[0],
+                'email' => $email,
+                'password' => Hash::make(Str::random(32)),
+                'role' => 'user',
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]);
+        }
+
+        if (!$user->is_active) {
+            return back()->withErrors([
+                'email' => 'Your account has been deactivated. Please contact support.',
+            ])->with('active_tab', 'magic-link');
+        }
+
+        // 4. Invalidate old magic links
+        EmailVerification::where('email', $email)->where('type', 'magic_link')->delete();
+
+        // 5. Generate secure 64-char token & record
+        $token = Str::random(64);
+        EmailVerification::create([
+            'user_id' => $user->id,
+            'email' => $email,
+            'code' => (string) mt_rand(100000, 999999),
+            'type' => 'magic_link',
+            'token' => $token,
+            'payload' => ['remember' => $request->boolean('remember')],
+            'expires_at' => now()->addMinutes(15),
+        ]);
+
+        // 6. Send MagicLink email
+        $loginUrl = route('login.magic-link.verify', ['token' => $token, 'email' => $email]);
+        try {
+            Mail::to($email)->send(new MagicLinkMail($user, $loginUrl));
+        } catch (\Throwable $e) {
+            Log::error("Failed to dispatch Magic Link email to {$email}: " . $e->getMessage());
+        }
+
+        AuditLog::record(
+            'magic_link_dispatched',
+            "Magic sign-in link sent to '{$email}'",
+            $user->id,
+            ['email' => $email],
+            'info',
+            $request
+        );
+
+        return back()->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')->with('active_tab', 'magic-link');
+    }
+
+    /**
+     * Authenticate user from Magic Sign-in Link token.
+     */
+    public function verifyMagicLink(Request $request, $token)
+    {
+        $email = $request->query('email');
+
+        $query = EmailVerification::where('token', $token)
+            ->where('type', 'magic_link');
+
+        if ($email) {
+            $query->where('email', strtolower(trim($email)));
+        }
+
+        $verification = $query->first();
+
+        if (!$verification || $verification->isExpired()) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'This magic sign-in link is invalid or has expired (valid for 15 minutes). Please request a new one.',
+            ]);
+        }
+
+        $user = $verification->user ?: User::where('email', $verification->email)->first();
+
+        if (!$user || !$user->is_active) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'User account not found or is currently deactivated.',
+            ]);
+        }
+
+        $remember = $verification->payload['remember'] ?? true;
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+
+        // Invalidate single-use token
+        $verification->delete();
+
+        AuditLog::record(
+            'magic_link_login_success',
+            "User '{$user->name}' ({$user->email}) successfully authenticated via Magic Link",
+            $user->id,
+            ['email' => $user->email],
+            'info',
+            $request
+        );
+
+        if ($user->isAdmin() || $user->isAuthor()) {
+            return redirect()->intended(route('admin.dashboard'))->with('success', '✨ Welcome back, ' . $user->name . '! Signed in via Magic Link.');
+        }
+
+        return redirect()->intended(route('home'))->with('success', '✨ Welcome back, ' . $user->name . '! Signed in via Magic Link.');
+    }
+
+    /**
+     * Send 6-digit Login OTP to user email.
+     */
+    public function sendLoginOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security captcha question.',
+        ]);
+
+        $email = strtolower(trim($request->input('email')));
+
+        // 1. Captcha verification
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp')
+        )) {
+            return back()->withErrors([
+                'captcha_answer' => 'Security Captcha verification failed. Please try again.',
+            ])->with('active_tab', 'email-otp')->onlyInput('email');
+        }
+
+        // 2. Rate limiting
+        $throttleKey = 'otp_' . Str::transliterate($email . '|' . $request->ip());
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => "Too many OTP requests. Please wait {$seconds} seconds.",
+            ])->with('active_tab', 'email-otp')->onlyInput('email');
+        }
+        RateLimiter::hit($throttleKey, 60);
+
+        // 3. User check or create
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            $user = User::create([
+                'name' => explode('@', $email)[0],
+                'email' => $email,
+                'password' => Hash::make(Str::random(32)),
+                'role' => 'user',
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]);
+        }
+
+        if (!$user->is_active) {
+            return back()->withErrors([
+                'email' => 'Your account has been deactivated. Please contact support.',
+            ])->with('active_tab', 'email-otp');
+        }
+
+        // 4. Invalidate old login_otp records
+        EmailVerification::where('email', $email)->where('type', 'login_otp')->delete();
+
+        // 5. Generate 6-digit OTP code & token
+        $code = (string) mt_rand(100000, 999999);
+        $token = Str::random(64);
+        EmailVerification::create([
+            'user_id' => $user->id,
+            'email' => $email,
+            'code' => $code,
+            'type' => 'login_otp',
+            'token' => $token,
+            'payload' => ['remember' => $request->boolean('remember')],
+            'expires_at' => now()->addMinutes(10),
+        ]);
+
+        // 6. Send email
+        try {
+            Mail::to($email)->send(new LoginVerificationMail($user, $code));
+        } catch (\Throwable $e) {
+            Log::error("Failed to dispatch Login OTP email to {$email}: " . $e->getMessage());
+        }
+
+        AuditLog::record(
+            'login_otp_dispatched',
+            "Login OTP code sent to '{$email}'",
+            $user->id,
+            ['email' => $email],
+            'info',
+            $request
+        );
+
+        return back()->with('otp_sent', true)
+            ->with('otp_email', $email)
+            ->with('active_tab', 'email-otp')
+            ->with('info', "6-digit OTP code sent to {$email}. Please enter it below.");
+    }
+
+    /**
+     * Verify the 6-digit OTP code submitted from Login tab and authenticate user.
+     */
+    public function verifyLoginOtpCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string|size:6',
+        ], [
+            'code.required' => 'Please enter the 6-digit OTP code.',
+            'code.size' => 'The OTP code must be exactly 6 digits.',
+        ]);
+
+        $email = strtolower(trim($request->input('email')));
+        $code = trim($request->input('code'));
+
+        $verification = EmailVerification::where('email', $email)
+            ->where('type', 'login_otp')
+            ->latest()
+            ->first();
+
+        if (!$verification || $verification->isExpired()) {
+            return back()->withErrors([
+                'otp_code' => 'The verification OTP code has expired or is invalid. Please request a new code.',
+            ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
+        }
+
+        if (!hash_equals((string) $verification->code, (string) $code)) {
+            $verification->increment('attempts');
+            return back()->withErrors([
+                'otp_code' => 'Incorrect verification code. Please check your email and try again.',
+            ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
+        }
+
+        $user = $verification->user ?: User::where('email', $email)->first();
+
+        if (!$user || !$user->is_active) {
+            return redirect()->route('login')->withErrors(['email' => 'Account is inactive.']);
+        }
+
+        $remember = $verification->payload['remember'] ?? true;
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+
+        $verification->delete();
+
+        AuditLog::record(
+            'login_otp_success',
+            "User '{$user->name}' ({$user->email}) successfully authenticated via Email OTP",
+            $user->id,
+            ['email' => $user->email],
+            'info',
+            $request
+        );
+
+        if ($user->isAdmin() || $user->isAuthor()) {
+            return redirect()->intended(route('admin.dashboard'))->with('success', '✨ Successfully signed in via Email OTP!');
+        }
+
+        return redirect()->intended(route('home'))->with('success', '✨ Successfully signed in via Email OTP!');
     }
 
     /**
@@ -382,11 +684,12 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.auth.register');
+        $captcha = CaptchaService::generate();
+        return view('frontend.auth.register', compact('captcha'));
     }
 
     /**
-     * Handle initial registration request and dispatch email OTP.
+     * Handle registration with Math Captcha protection (Shyamo pattern).
      */
     public function register(Request $request)
     {
@@ -394,59 +697,63 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($validated['email']));
 
-        // Check daily attempt limit
+        // 1. Verify Human Security Captcha
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp')
+        )) {
+            return back()->withErrors([
+                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+            ])->onlyInput('name', 'email');
+        }
+
+        // 2. Check daily attempt limit
         if (AuthRateLimiterService::isDailyLockedOut($email, 'register')) {
             return back()->withErrors([
                 'email' => AuthRateLimiterService::getLockoutMessage(),
             ])->onlyInput('name', 'email');
         }
 
-        // Generate 6-digit OTP code & token
-        $code = sprintf('%06d', random_int(100000, 999999));
-        $token = Str::random(64);
-
-        // Delete any prior registration OTPs for this email
-        EmailVerification::where('email', $email)
-            ->where('type', 'register')
-            ->delete();
-
-        EmailVerification::create([
+        // 3. Create user directly with verified status (Shyamo pattern)
+        $user = User::create([
+            'name' => trim($validated['name']),
             'email' => $email,
-            'code' => $code,
-            'type' => 'register',
-            'token' => $token,
-            'payload' => [
-                'name' => trim($validated['name']),
-                'password' => Hash::make($validated['password']),
-            ],
-            'attempts' => 0,
-            'expires_at' => Carbon::now()->addMinutes(10),
+            'password' => Hash::make($validated['password']),
+            'role' => 'user',
+            'email_verified_at' => Carbon::now(),
+            'is_active' => true,
         ]);
 
-        // Send confirmation email from noreply@shrawaneffects.com
-        $mailSent = true;
-        $mailError = null;
+        AuthRateLimiterService::clearDailyAttempts($email, 'register');
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        AuditLog::record(
+            'account_registered',
+            "New user account registered with Captcha: '{$user->name}' ({$user->email})",
+            $user->id,
+            ['email' => $user->email],
+            'info',
+            $request
+        );
+
+        // Optional welcome email (failsafe)
         try {
-            Mail::to($email)->send(new RegistrationOtpMail($validated['name'], $code, $email));
+            Mail::to($email)->send(new RegistrationOtpMail($validated['name'], 'SUCCESS', $email));
         } catch (\Throwable $e) {
-            $mailSent = false;
-            $mailError = $e->getMessage();
-            Log::error("Failed to send registration OTP to {$email}: " . $mailError);
+            Log::info("Welcome email notification skipped: " . $e->getMessage());
         }
 
-        $request->session()->put('pending_reg_email', $email);
-        $request->session()->put('pending_reg_token', $token);
-
-        if (!$mailSent) {
-            session()->flash('fallback_otp', $code);
-            session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
-        }
-
-        return redirect()->route('register.verify-otp', ['token' => $token])->with('info', "A 6-digit confirmation code was generated for {$email}. Please verify to complete your registration.");
+        return redirect()->route('home')->with('success', 'Account registered successfully! Welcome to ' . \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects')) . '.');
     }
 
     /**
@@ -654,7 +961,8 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.auth.forgot-password');
+        $captcha = CaptchaService::generate();
+        return view('frontend.auth.forgot-password', compact('captcha'));
     }
 
     /**
@@ -664,9 +972,23 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'email' => 'required|email',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($validated['email']));
+
+        // 1. Verify Human Security Captcha
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp')
+        )) {
+            return back()->withErrors([
+                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+            ])->onlyInput('email');
+        }
 
         // Check daily rate limit
         if (AuthRateLimiterService::isDailyLockedOut($email, 'password_reset')) {

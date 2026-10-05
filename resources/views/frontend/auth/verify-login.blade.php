@@ -49,7 +49,7 @@
                     @endif
 
                     <!-- Remaining Daily Attempts Counter -->
-                    <div class="alert text-center py-2 px-3 rounded-pill small mb-4 font-mono" style="background: rgba(33,54,8,0.4); border: 1px solid rgba(0,255,102,0.25); color: #00ff66;">
+                    <div class="telemetry-tag text-center py-2 px-3 rounded-pill small mb-4 font-mono w-100 justify-content-center">
                         <i class="bi bi-shield-lock me-1 text-success"></i>
                         SESSION ATTEMPTS REMAINING: <strong>{{ $remainingAttempts ?? 5 }} OF 5</strong>
                     </div>

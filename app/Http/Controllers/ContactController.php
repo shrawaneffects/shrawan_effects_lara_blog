@@ -33,7 +33,19 @@ class ContactController extends Controller
 
         $validated['name'] = strip_tags($validated['name']);
         $validated['subject'] = isset($validated['subject']) ? strip_tags($validated['subject']) : null;
-        $validated['message'] = SecurityService::sanitizeHtml($validated['message']);
+        $cleanMessage = SecurityService::sanitizeHtml($validated['message']);
+
+        $extra = [];
+        if ($request->filled('phone')) {
+            $extra[] = "Phone/WhatsApp: " . strip_tags($request->input('phone'));
+        }
+        if ($request->filled('service')) {
+            $extra[] = "Service: " . strip_tags($request->input('service'));
+        }
+        if (!empty($extra)) {
+            $cleanMessage = implode(" | ", $extra) . "\n\n" . $cleanMessage;
+        }
+        $validated['message'] = $cleanMessage;
 
         $contact = Contact::create($validated);
 

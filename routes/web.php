@@ -10,10 +10,12 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
@@ -43,6 +45,8 @@ Route::post('/blog/{post}/comments', [CommentController::class, 'store'])->name(
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -52,8 +56,17 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/captcha', [AuthController::class, 'getCaptchaChallenge'])->name('captcha.refresh');
+Route::get('/api/captcha', [AuthController::class, 'getCaptchaChallenge']);
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+// Magic Link & Email OTP Direct Login Routes
+Route::post('/login/magic-link', [AuthController::class, 'sendMagicLink'])->name('login.magic-link');
+Route::get('/login/magic-link/{token}', [AuthController::class, 'verifyMagicLink'])->name('login.magic-link.verify');
+Route::post('/login/email-otp', [AuthController::class, 'sendLoginOtp'])->name('login.email-otp');
+Route::post('/login/email-otp/verify', [AuthController::class, 'verifyLoginOtpCode'])->name('login.email-otp.verify');
 
 // 2FA Login Email OTP Routes
 Route::get('/login/verify-otp', [AuthController::class, 'showLoginOtpForm'])->name('login.verify-otp');
@@ -105,6 +118,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Dynamic Pages Management
     Route::resource('pages', AdminPageController::class)->except(['show']);
     Route::post('/pages/{id}/toggle-status', [AdminPageController::class, 'toggleStatus'])->name('pages.toggle-status');
+
+    // Services Management
+    Route::resource('services', AdminServiceController::class)->except(['show']);
+    Route::post('/services/{id}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
 
     // Centralized Media Library (Images, Videos, Audios, Documents)
     Route::resource('media', AdminMediaController::class)->except(['create', 'edit']);

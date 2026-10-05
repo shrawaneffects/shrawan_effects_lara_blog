@@ -286,6 +286,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.services.index') }}" class="sidebar-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
+                    <i class="bi bi-briefcase-fill text-warning"></i> Services & Offerings
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.comments.index') }}" class="sidebar-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
                     <i class="bi bi-chat-left-dots"></i> Comments Moderation
                 </a>

@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Forgot Password - ' . config('app.name', 'Laravel 12 Blog'))
+@section('title', 'Forgot Password - ' . config('app.name', 'Shrawan Effects'))
 
 @section('content')
     <div class="container py-5 my-3">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
-                <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift">
+                <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift auth-card">
                     <div class="text-center mb-4">
-                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow" style="width: 60px; height: 60px; background: var(--gradient-primary);">
-                            <i class="bi bi-key-fill fs-3"></i>
+                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow auth-icon-wrap" style="width: 60px; height: 60px; background: var(--gradient-primary);">
+                            <i class="bi bi-key-fill fs-3 text-white"></i>
                         </div>
-                        <h3 class="fw-bold"><span class="text-gradient">Forgot Password?</span></h3>
-                        <p class="text-body-secondary small">Enter your registered email and we'll send you instructions to reset your password.</p>
+                        <h3 class="fw-bold mb-2"><span class="text-gradient font-cyber">RESET CIPHER KEY</span></h3>
+                        <p class="text-body-secondary small">Enter your registered email and solve the security challenge to receive recovery instructions.</p>
                     </div>
 
                     @if(session('status'))
@@ -24,10 +24,10 @@
 
                     <form action="{{ route('password.email') }}" method="POST">
                         @csrf
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label class="form-label fw-semibold small" for="resetEmail">Email Address</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-body-tertiary rounded-start-pill ps-3"><i class="bi bi-envelope text-primary"></i></span>
+                                <span class="input-group-text rounded-start-pill ps-3"><i class="bi bi-envelope text-success"></i></span>
                                 <input type="email" name="email" id="resetEmail" class="form-control rounded-end-pill @error('email') is-invalid @enderror" placeholder="name@example.com" value="{{ old('email') }}" required autofocus>
                             </div>
                             @error('email')
@@ -35,17 +35,19 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm">
+                        <!-- Shyamo-style Math Captcha -->
+                        @include('components.captcha')
+
+                        <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm mt-3">
                             <i class="bi bi-send-fill me-2"></i> Send Password Reset Link
                         </button>
                     </form>
 
                     <div class="text-center mt-4 pt-3 border-top small text-body-secondary">
-                        Remember your password? <a href="{{ route('login') }}" class="text-gradient fw-bold text-decoration-none"><i class="bi bi-arrow-left me-1"></i> Back to Sign In</a>
+                        Remember your password? <a href="{{ route('login') }}" class="text-success fw-bold text-decoration-none ms-1"><i class="bi bi-arrow-left me-1"></i> Back to Sign In</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-

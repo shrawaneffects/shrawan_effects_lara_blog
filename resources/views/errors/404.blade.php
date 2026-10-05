@@ -18,9 +18,9 @@
 
                 <!-- In-page Search Box -->
                 <form action="{{ route('blog.index') }}" method="GET" class="mb-4">
-                    <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden" style="border: 1px solid rgba(0,255,102,0.25);">
-                        <span class="input-group-text border-0 ps-4" style="background: rgba(33,54,8,0.3); color: #00ff66;"><i class="bi bi-search"></i></span>
-                        <input type="text" name="search" class="form-control border-0 font-mono" placeholder="Query datastream by keyword..." style="background: rgba(33,54,8,0.15); font-size: 0.95rem;">
+                    <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
+                        <span class="input-group-text border-0 ps-4 nav-search-addon"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" class="form-control border-0 font-mono nav-search-input" placeholder="Query datastream by keyword..." style="font-size: 0.95rem;">
                         <button class="btn btn-gradient px-4" type="submit">SEARCH</button>
                     </div>
                 </form>
