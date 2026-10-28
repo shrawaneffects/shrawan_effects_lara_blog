@@ -1313,30 +1313,6 @@
                                 <i class="bi bi-briefcase me-1"></i> Services
                             </a>
                         </li>
-                        <!-- Useful Tools Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ request()->routeIs('useful-tools.*') ? 'active text-gradient fw-bold' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-tools me-1"></i> Useful Tools
-                            </a>
-                            <ul class="dropdown-menu shadow border-0 rounded-3">
-                                <li>
-                                    <a class="dropdown-item py-2 {{ request()->routeIs('useful-tools.business-scraper.*') ? 'active' : '' }}" href="{{ route('useful-tools.business-scraper.index') }}">
-                                        <i class="bi bi-building me-2 text-primary"></i> Business Data Scraper
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item py-2 {{ request()->routeIs('useful-tools.seo-traffic.*') ? 'active' : '' }}" href="{{ route('useful-tools.seo-traffic.index') }}">
-                                        <i class="bi bi-graph-up-arrow me-2 text-success"></i> Website SEO & Traffic Analyzer
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item py-1.5 small text-muted {{ request()->routeIs('useful-tools.exports.*') ? 'active' : '' }}" href="{{ route('useful-tools.exports.index') }}">
-                                        <i class="bi bi-cloud-arrow-down me-2"></i> Export Center
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contact.*') ? 'active text-gradient fw-bold' : '' }}" href="{{ route('contact.index') }}">
                                 <i class="bi bi-envelope me-1"></i> Contact
