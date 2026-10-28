@@ -29,6 +29,10 @@ use App\Http\Controllers\Admin\SeoDashboardController as AdminSeoDashboardContro
 use App\Http\Controllers\Admin\SeoAnalysisController as AdminSeoAnalysisController;
 use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 
+use App\Http\Controllers\UsefulTools\BusinessScraperController;
+use App\Http\Controllers\UsefulTools\SeoTrafficAnalyzerController;
+use App\Http\Controllers\UsefulTools\ExportController as UsefulToolExportController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Frontend Routes
@@ -50,6 +54,38 @@ Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('servic
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+/*
+|--------------------------------------------------------------------------
+| Useful Tools Suite Routes (Business Scraper & SEO Traffic Analyzer)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->prefix('useful-tools')->name('useful-tools.')->group(function () {
+    // 1. Business Data Scraper
+    Route::get('/business-data-scraper', [BusinessScraperController::class, 'index'])->name('business-scraper.index');
+    Route::post('/business-data-scraper', [BusinessScraperController::class, 'store'])->name('business-scraper.store');
+    Route::get('/business-data-scraper/job/{id}', [BusinessScraperController::class, 'showJob'])->name('business-scraper.job-status');
+    Route::post('/business-data-scraper/job/{id}/cancel', [BusinessScraperController::class, 'cancelJob'])->name('business-scraper.job-cancel');
+    Route::delete('/business-data-scraper/{id}', [BusinessScraperController::class, 'destroy'])->name('business-scraper.destroy');
+    Route::post('/business-data-scraper/export', [BusinessScraperController::class, 'export'])->name('business-scraper.export');
+
+    // 2. Website SEO & Traffic Analyzer
+    Route::get('/seo-traffic-analyzer', [SeoTrafficAnalyzerController::class, 'index'])->name('seo-traffic.index');
+    Route::get('/seo-traffic-analyzer/domain/{domain}', [SeoTrafficAnalyzerController::class, 'domainDetail'])->name('seo-traffic.domain-detail');
+    Route::post('/seo-traffic-analyzer/keywords', [SeoTrafficAnalyzerController::class, 'addKeyword'])->name('seo-traffic.add-keyword');
+    Route::post('/seo-traffic-analyzer/keywords/{id}/check-rank', [SeoTrafficAnalyzerController::class, 'checkRank'])->name('seo-traffic.check-rank');
+    Route::post('/seo-traffic-analyzer/discover-keywords', [SeoTrafficAnalyzerController::class, 'discoverKeywords'])->name('seo-traffic.discover-keywords');
+    Route::post('/seo-traffic-analyzer/competitors', [SeoTrafficAnalyzerController::class, 'addCompetitor'])->name('seo-traffic.add-competitor');
+    Route::post('/seo-traffic-analyzer/fetch-traffic', [SeoTrafficAnalyzerController::class, 'fetchTraffic'])->name('seo-traffic.fetch-traffic');
+    Route::get('/seo-traffic-analyzer/export-keywords/{domain}', [SeoTrafficAnalyzerController::class, 'exportKeywords'])->name('seo-traffic.export-keywords');
+
+    // 3. Centralized Exports Center
+    Route::get('/exports', [UsefulToolExportController::class, 'index'])->name('exports.index');
+    Route::delete('/exports/{id}', [UsefulToolExportController::class, 'destroy'])->name('exports.destroy');
+});
+
+// Secure Download Route
+Route::get('/useful-tools/exports/download/{token}', [UsefulToolExportController::class, 'download'])->name('useful-tools.exports.download');
 
 /*
 |--------------------------------------------------------------------------
