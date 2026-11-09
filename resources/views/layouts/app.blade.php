@@ -36,7 +36,7 @@
     @endif
     <meta name="description" content="@yield('meta_description', $defaultMetaDesc)">
     <meta name="keywords" content="@yield('meta_keywords', $defaultMetaKeywords)">
-    <meta name="robots" content="@yield('robots_meta', 'index, follow')">
+    <meta name="robots" content="@yield('robots_meta', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
 
     <!-- OpenGraph Social Metadata -->
@@ -47,11 +47,24 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:site_name" content="{{ $siteName }}">
 
+    <!-- Google SERP Thumbnails & Rich Media Discovery -->
+    @php
+        $metaThumbImage = View::getSection('og_image') ?: asset('storage/default.jpg');
+    @endphp
+    <meta name="thumbnail" content="{{ $metaThumbImage }}">
+    <link rel="image_src" href="{{ $metaThumbImage }}">
+    <meta property="og:image:secure_url" content="{{ $metaThumbImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="@yield('og_title', View::getSection('title', $siteName))">
+
     <!-- Twitter / X Card Metadata -->
     <meta name="twitter:card" content="@yield('twitter_card', 'summary_large_image')">
     <meta name="twitter:title" content="@yield('twitter_title', View::getSection('og_title', $siteName))">
     <meta name="twitter:description" content="@yield('twitter_description', View::getSection('og_description', ''))">
     <meta name="twitter:image" content="@yield('twitter_image', View::getSection('og_image', asset('storage/default.jpg')))">
+    <meta name="twitter:image:alt" content="@yield('twitter_title', View::getSection('og_title', $siteName))">
 
     <!-- Schema.org JSON-LD Structured Data -->
     @stack('schema')

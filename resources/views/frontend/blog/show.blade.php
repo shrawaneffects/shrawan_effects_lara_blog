@@ -100,7 +100,7 @@
 
                     <!-- Featured Image -->
                     <div class="mb-5 text-center post-thumb-container">
-                        <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover hover-lift" style="max-height: 480px;">
+                        <img src="{{ $post->image_url }}" alt="{{ $post->title }}" itemprop="image" fetchpriority="high" loading="eager" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover hover-lift" style="max-height: 480px;">
                     </div>
 
                     <!-- Table of Contents (TOC) Component -->

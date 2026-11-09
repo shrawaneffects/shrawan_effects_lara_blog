@@ -245,6 +245,30 @@ class Post extends Model
     {
         if (!empty($this->custom_schema)) {
             $trimmed = trim($this->custom_schema);
+
+            // Dynamically replace any template placeholder tokens
+            $siteName = \App\Models\Setting::get('site_name', 'Shrawan Effects');
+            $siteLogo = \App\Models\Setting::getLogoUrl() ?? asset('storage/default.jpg');
+            $authorName = $this->author ? $this->author->name : 'Shrawan Choudhary';
+            $authorUrl = $this->author ? route('blog.author', $this->author->id) : route('home');
+            $postUrl = route('blog.show', $this->slug);
+            $publishDate = $this->published_at ? $this->published_at->format('Y-m-d') : $this->created_at->format('Y-m-d');
+            $modifiedDate = $this->updated_at ? $this->updated_at->format('Y-m-d') : $publishDate;
+
+            $replacements = [
+                'REPLACE_SITE_URL' => config('app.url'),
+                'REPLACE_SITE_NAME' => $siteName,
+                'REPLACE_LOGO_URL' => $siteLogo,
+                'REPLACE_AUTHOR_NAME' => $authorName,
+                'REPLACE_AUTHOR_PAGE_URL' => $authorUrl,
+                'REPLACE_FULL_POST_URL' => $postUrl,
+                'REPLACE_FEATURED_IMAGE_URL' => $this->image_url,
+                'REPLACE_PUBLISH_DATE_YYYY-MM-DD' => $publishDate,
+                'REPLACE_PUBLISH_DATE' => $publishDate,
+                'REPLACE_MODIFIED_DATE' => $modifiedDate,
+            ];
+            $trimmed = str_replace(array_keys($replacements), array_values($replacements), $trimmed);
+
             if (str_starts_with($trimmed, '<script')) {
                 return $trimmed;
             }
@@ -254,74 +278,7 @@ class Post extends Model
             }
         }
 
-        $siteName = \App\Models\Setting::get('site_name', 'LaravelBlog');
-        $siteLogo = \App\Models\Setting::getLogoUrl() ?? asset('storage/default.jpg');
-
-        $schema = [
-            '@context' => 'https://schema.org',
-            '@type' => $this->schema_type ?: 'BlogPosting',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => route('blog.show', $this->slug),
-            ],
-            'headline' => $this->title,
-            'description' => $this->meta_description ?: $this->excerpt,
-            'image' => [
-                $this->image_url,
-            ],
-            'datePublished' => $this->published_at ? $this->published_at->toIso8601String() : $this->created_at->toIso8601String(),
-            'dateModified' => $this->updated_at ? $this->updated_at->toIso8601String() : $this->created_at->toIso8601String(),
-            'author' => [
-                '@type' => 'Person',
-                'name' => $this->author ? $this->author->name : 'Editorial Staff',
-                'url' => $this->author ? route('blog.author', $this->author->id) : route('home'),
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => $siteName,
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => $siteLogo,
-                ],
-            ],
-            'articleSection' => $this->category ? $this->category->name : 'General',
-            'keywords' => $this->meta_keywords ?: ($this->tags->pluck('name')->implode(', ')),
-            'wordCount' => str_word_count(strip_tags($this->content)),
-            'timeRequired' => 'PT' . $this->reading_time . 'M',
-        ];
-
-        $scripts = '<script type="application/ld+json">' . "\n" . json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n" . '</script>';
-
-        // If post has custom FAQs, also output FAQPage schema for Google rich results
-        if (!empty($this->faqs) && is_array($this->faqs)) {
-            $validFaqs = array_filter($this->faqs, function ($item) {
-                return !empty($item['question']) && !empty($item['answer']);
-            });
-
-            if (count($validFaqs) > 0) {
-                $faqEntities = [];
-                foreach ($validFaqs as $faq) {
-                    $faqEntities[] = [
-                        '@type' => 'Question',
-                        'name' => $faq['question'],
-                        'acceptedAnswer' => [
-                            '@type' => 'Answer',
-                            'text' => $faq['answer'],
-                        ],
-                    ];
-                }
-
-                $faqSchema = [
-                    '@context' => 'https://schema.org',
-                    '@type' => 'FAQPage',
-                    'mainEntity' => $faqEntities,
-                ];
-
-                $scripts .= "\n" . '<script type="application/ld+json">' . "\n" . json_encode($faqSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n" . '</script>';
-            }
-        }
-
-        return $scripts;
+        return '';
     }
 
     /**

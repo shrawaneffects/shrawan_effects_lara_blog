@@ -18,19 +18,26 @@ class SeoSchemaService
 
         $schemaType = $seo->schema_type ?: ($post->schema_type ?: 'BlogPosting');
 
-        // 1. Main Article Schema
+        $imageUrl = $post->image_url;
+
+        // 1. Main Article Schema (Structured for Google Rich Snippets & SERP Image Thumbnails)
         $articleSchema = [
             '@context' => 'https://schema.org',
             '@type' => $schemaType,
             'mainEntityOfPage' => [
                 '@type' => 'WebPage',
                 '@id' => route('blog.show', $post->slug),
+                'primaryImageOfPage' => [
+                    '@type' => 'ImageObject',
+                    'url' => $imageUrl,
+                ],
             ],
             'headline' => $seo->effective_title,
             'description' => $seo->effective_description,
             'image' => [
-                $post->image_url,
+                $imageUrl,
             ],
+            'thumbnailUrl' => $imageUrl,
             'datePublished' => $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String(),
             'dateModified' => $post->updated_at ? $post->updated_at->toIso8601String() : $post->created_at->toIso8601String(),
             'author' => [

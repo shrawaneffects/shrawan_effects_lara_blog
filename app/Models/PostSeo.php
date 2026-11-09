@@ -97,12 +97,15 @@ class PostSeo extends Model
     }
 
     /**
-     * Effective Robots Directive string
+     * Effective Robots Directive string (ensures max-image-preview:large for Google SERP thumbnails)
      */
     public function getRobotsDirectiveAttribute(): string
     {
         $index = $this->robots_index ? 'index' : 'noindex';
         $follow = $this->robots_follow ? 'follow' : 'nofollow';
+        if ($this->robots_index) {
+            return "{$index}, {$follow}, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+        }
         return "{$index}, {$follow}";
     }
 }
