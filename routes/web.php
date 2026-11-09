@@ -29,6 +29,19 @@ use App\Http\Controllers\Admin\SeoDashboardController as AdminSeoDashboardContro
 use App\Http\Controllers\Admin\SeoAnalysisController as AdminSeoAnalysisController;
 use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 
+use App\Http\Controllers\OpenSeo\ProjectController as OpenSeoProjectController;
+use App\Http\Controllers\OpenSeo\DomainOverviewController as OpenSeoDomainOverviewController;
+use App\Http\Controllers\OpenSeo\KeywordResearchController as OpenSeoKeywordResearchController;
+use App\Http\Controllers\OpenSeo\RankTrackingController as OpenSeoRankTrackingController;
+use App\Http\Controllers\OpenSeo\CompetitorController as OpenSeoCompetitorController;
+use App\Http\Controllers\OpenSeo\BacklinkController as OpenSeoBacklinkController;
+use App\Http\Controllers\OpenSeo\SiteAuditController as OpenSeoSiteAuditController;
+use App\Http\Controllers\OpenSeo\AiVisibilityController as OpenSeoAiVisibilityController;
+use App\Http\Controllers\OpenSeo\LocalSeoController as OpenSeoLocalSeoController;
+use App\Http\Controllers\OpenSeo\SearchPerformanceController as OpenSeoSearchPerformanceController;
+use App\Http\Controllers\OpenSeo\ReportController as OpenSeoReportController;
+use App\Http\Controllers\OpenSeo\SettingController as OpenSeoSettingController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Frontend Routes
@@ -50,6 +63,66 @@ Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('servic
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+/*
+|--------------------------------------------------------------------------
+| OpenSEO Suite Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('openseo')->name('openseo.')->group(function () {
+    // 1. Projects
+    Route::get('/projects', [OpenSeoProjectController::class, 'index'])->name('projects.index');
+    Route::post('/projects', [OpenSeoProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{id}/switch', [OpenSeoProjectController::class, 'switch'])->name('projects.switch');
+    Route::delete('/projects/{id}', [OpenSeoProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // 2. Domain Overview
+    Route::get('/', [OpenSeoDomainOverviewController::class, 'index'])->name('index');
+    Route::get('/domain', [OpenSeoDomainOverviewController::class, 'index'])->name('domain');
+
+    // 3. Keyword Research
+    Route::get('/keywords', [OpenSeoKeywordResearchController::class, 'index'])->name('keywords');
+    Route::post('/keywords/track', [OpenSeoKeywordResearchController::class, 'track'])->name('keywords.track');
+    Route::delete('/keywords/{id}/untrack', [OpenSeoKeywordResearchController::class, 'untrack'])->name('keywords.untrack');
+
+    // 4. Rank Tracking
+    Route::get('/rank-tracking', [OpenSeoRankTrackingController::class, 'index'])->name('rank-tracking');
+    Route::post('/rank-tracking/{id}/check', [OpenSeoRankTrackingController::class, 'check'])->name('rank-tracking.check');
+    Route::post('/rank-tracking/refresh-all', [OpenSeoRankTrackingController::class, 'refreshAll'])->name('rank-tracking.refresh-all');
+
+    // 5. Competitor Insights
+    Route::get('/competitors', [OpenSeoCompetitorController::class, 'index'])->name('competitors');
+    Route::post('/competitors', [OpenSeoCompetitorController::class, 'store'])->name('competitors.store');
+    Route::delete('/competitors/{id}', [OpenSeoCompetitorController::class, 'destroy'])->name('competitors.destroy');
+
+    // 6. Backlinks & Referring Domains
+    Route::get('/backlinks', [OpenSeoBacklinkController::class, 'index'])->name('backlinks');
+
+    // 7. Technical Site Audit
+    Route::get('/audit', [OpenSeoSiteAuditController::class, 'index'])->name('audit');
+    Route::post('/audit/crawl', [OpenSeoSiteAuditController::class, 'crawl'])->name('audit.crawl');
+
+    // 8. AI Visibility / LLM Brand Tracking
+    Route::get('/ai-visibility', [OpenSeoAiVisibilityController::class, 'index'])->name('ai-visibility');
+    Route::post('/ai-visibility/check', [OpenSeoAiVisibilityController::class, 'check'])->name('ai-visibility.check');
+
+    // 9. Local SEO & Maps Geo-Grid
+    Route::get('/local-seo', [OpenSeoLocalSeoController::class, 'index'])->name('local-seo');
+    Route::post('/local-seo/scan', [OpenSeoLocalSeoController::class, 'scan'])->name('local-seo.scan');
+
+    // 10. Search Performance (Google Search Console)
+    Route::get('/search-performance', [OpenSeoSearchPerformanceController::class, 'index'])->name('search-performance');
+
+    // 11. Reports & Exports
+    Route::get('/reports', [OpenSeoReportController::class, 'index'])->name('reports');
+    Route::post('/reports/generate', [OpenSeoReportController::class, 'generate'])->name('reports.generate');
+    Route::get('/reports/share/{share_token}', [OpenSeoReportController::class, 'show'])->name('reports.show');
+    Route::get('/reports/export/{type}', [OpenSeoReportController::class, 'exportCsv'])->name('reports.export');
+
+    // 12. Settings & Integrations
+    Route::get('/settings', [OpenSeoSettingController::class, 'index'])->name('settings');
+    Route::post('/settings', [OpenSeoSettingController::class, 'update'])->name('settings.update');
+});
 
 /*
 |--------------------------------------------------------------------------

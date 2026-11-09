@@ -1313,6 +1313,70 @@
                                 <i class="bi bi-briefcase me-1"></i> Services
                             </a>
                         </li>
+                        <!-- OpenSEO Suite Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('openseo.*') ? 'active text-gradient fw-bold' : '' }}" href="{{ route('openseo.domain') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-radar me-1 text-success"></i> OpenSEO <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.65rem;">SUITE</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.domain') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.domain') }}">
+                                        <i class="bi bi-speedometer2 text-success me-2"></i> Domain Overview
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.keywords') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.keywords') }}">
+                                        <i class="bi bi-key text-info me-2"></i> Keyword Research
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.rank-tracking') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.rank-tracking') }}">
+                                        <i class="bi bi-graph-up-arrow text-success me-2"></i> Rank Tracker
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.competitors') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.competitors') }}">
+                                        <i class="bi bi-crosshair text-warning me-2"></i> Competitor Insights
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.backlinks') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.backlinks') }}">
+                                        <i class="bi bi-link-45deg text-primary me-2"></i> Backlinks Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.audit') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.audit') }}">
+                                        <i class="bi bi-shield-check text-success me-2"></i> Technical Site Audit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.ai-visibility') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.ai-visibility') }}">
+                                        <i class="bi bi-robot text-info me-2"></i> AI Visibility (LLMs)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.local-seo') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.local-seo') }}">
+                                        <i class="bi bi-geo-alt text-danger me-2"></i> Google Maps Geo-Grid
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.search-performance') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.search-performance') }}">
+                                        <i class="bi bi-google text-white me-2"></i> Search Console
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider border-secondary border-opacity-50"></li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.reports') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.reports') }}">
+                                        <i class="bi bi-file-earmark-bar-graph text-info me-2"></i> Reports & Exports
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('openseo.settings') ? 'active text-success fw-bold' : '' }}" href="{{ route('openseo.settings') }}">
+                                        <i class="bi bi-sliders text-secondary me-2"></i> Settings & API Keys
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contact.*') ? 'active text-gradient fw-bold' : '' }}" href="{{ route('contact.index') }}">
                                 <i class="bi bi-envelope me-1"></i> Contact
