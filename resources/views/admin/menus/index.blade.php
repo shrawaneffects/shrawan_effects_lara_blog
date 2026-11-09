@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Menu Builder & Drag & Drop Arrangement')
+@section('title', 'Navigation Menu Builder & Multi-Level Dropdowns')
 @section('page_title', 'Menu Management')
 
 @push('styles')
@@ -33,6 +33,16 @@
             background-color: var(--bs-body-bg);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
+        .menu-children-container {
+            min-height: 8px;
+            transition: all 0.2s ease;
+        }
+        .menu-children-container:empty {
+            min-height: 12px;
+            margin-bottom: 6px;
+            border: 1px dashed rgba(var(--bs-primary-rgb), 0.2) !important;
+            border-radius: 6px;
+        }
         .bulk-action-bar {
             position: sticky;
             top: 70px;
@@ -47,7 +57,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Navigation Menu Builder</h4>
-            <p class="text-body-secondary small mb-0">Drag and drop menu items to rearrange the site navigation bar and footer quick links.</p>
+            <p class="text-body-secondary small mb-0">WordPress-style drag-and-drop menu manager. Rearrange top-level links, dropdown menus, and nested sub-dropdowns.</p>
         </div>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-outline-warning rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#resetMenuModal">
@@ -65,13 +75,17 @@
             <li class="nav-item">
                 <a class="nav-link rounded-pill fw-semibold py-2 {{ $location === 'header' ? 'active' : '' }}" href="{{ route('admin.menus.index', ['location' => 'header']) }}">
                     <i class="bi bi-layout-text-window-reverse me-2"></i> Header Navigation Menu
-                    <span class="badge {{ $location === 'header' ? 'bg-light text-primary' : 'bg-primary-subtle text-primary' }} ms-2">{{ $location === 'header' ? $menuItems->count() : \App\Models\MenuItem::location('header')->count() }}</span>
+                    <span class="badge {{ $location === 'header' ? 'bg-light text-primary' : 'bg-primary-subtle text-primary' }} ms-2">
+                        {{ \App\Models\MenuItem::location('header')->count() }}
+                    </span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link rounded-pill fw-semibold py-2 {{ $location === 'footer' ? 'active' : '' }}" href="{{ route('admin.menus.index', ['location' => 'footer']) }}">
                     <i class="bi bi-layout-text-sidebar-reverse me-2"></i> Footer Navigation Menu
-                    <span class="badge {{ $location === 'footer' ? 'bg-light text-primary' : 'bg-primary-subtle text-primary' }} ms-2">{{ $location === 'footer' ? $menuItems->count() : \App\Models\MenuItem::location('footer')->count() }}</span>
+                    <span class="badge {{ $location === 'footer' ? 'bg-light text-primary' : 'bg-primary-subtle text-primary' }} ms-2">
+                        {{ \App\Models\MenuItem::location('footer')->count() }}
+                    </span>
                 </a>
             </li>
         </ul>
@@ -134,9 +148,31 @@
                                     <input type="hidden" name="type" value="standard">
                                     <input type="hidden" name="location" value="{{ $location }}">
 
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold text-muted">
+                                            <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
+                                        </label>
+                                        <select name="parent_id" class="form-select form-select-sm rounded-pill">
+                                            <option value="">-- None (Add as Top-Level Menu) --</option>
+                                            @foreach($allLocationItems as $pOpt)
+                                                <option value="{{ $pOpt->id }}">
+                                                    {{ $pOpt->parent_id ? '  ↳ ' : '' }}{{ $pOpt->title }} ({{ $pOpt->parent_id ? 'Dropdown Sub-item' : 'Top Level' }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="home" id="stdHome" checked>
                                         <label class="form-check-label small" for="stdHome">Home (/)</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="standards[]" value="services" id="stdServices" checked>
+                                        <label class="form-check-label small" for="stdServices">Services (/services)</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="standards[]" value="openseo" id="stdOpenSeo">
+                                        <label class="form-check-label small" for="stdOpenSeo">OpenSEO Suite (/openseo)</label>
                                     </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="articles" id="stdArticles" checked>
@@ -173,6 +209,20 @@
                                         @csrf
                                         <input type="hidden" name="type" value="pages">
                                         <input type="hidden" name="location" value="{{ $location }}">
+
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold text-muted">
+                                                <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
+                                            </label>
+                                            <select name="parent_id" class="form-select form-select-sm rounded-pill">
+                                                <option value="">-- None (Add as Top-Level Menu) --</option>
+                                                @foreach($allLocationItems as $pOpt)
+                                                    <option value="{{ $pOpt->id }}">
+                                                        {{ $pOpt->parent_id ? '  ↳ ' : '' }}{{ $pOpt->title }} ({{ $pOpt->parent_id ? 'Dropdown Sub-item' : 'Top Level' }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
                                         <div class="mb-3" style="max-height: 180px; overflow-y: auto;">
                                             @foreach($pages as $page)
@@ -212,6 +262,20 @@
                                         <input type="hidden" name="type" value="categories">
                                         <input type="hidden" name="location" value="{{ $location }}">
 
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold text-muted">
+                                                <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
+                                            </label>
+                                            <select name="parent_id" class="form-select form-select-sm rounded-pill">
+                                                <option value="">-- None (Add as Top-Level Menu) --</option>
+                                                @foreach($allLocationItems as $pOpt)
+                                                    <option value="{{ $pOpt->id }}">
+                                                        {{ $pOpt->parent_id ? '  ↳ ' : '' }}{{ $pOpt->title }} ({{ $pOpt->parent_id ? 'Dropdown Sub-item' : 'Top Level' }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
                                         <div class="mb-3" style="max-height: 180px; overflow-y: auto;">
                                             @foreach($categories as $cat)
                                                 <div class="form-check mb-2">
@@ -249,15 +313,29 @@
                                     <input type="hidden" name="type" value="custom">
                                     <input type="hidden" name="location" value="{{ $location }}">
 
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-semibold text-muted">
+                                            <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
+                                        </label>
+                                        <select name="parent_id" class="form-select form-select-sm rounded-pill">
+                                            <option value="">-- None (Add as Top-Level Menu) --</option>
+                                            @foreach($allLocationItems as $pOpt)
+                                                <option value="{{ $pOpt->id }}">
+                                                    {{ $pOpt->parent_id ? '  ↳ ' : '' }}{{ $pOpt->title }} ({{ $pOpt->parent_id ? 'Dropdown Sub-item' : 'Top Level' }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="mb-2">
                                         <label class="form-label small fw-semibold">Link Text <span class="text-danger">*</span></label>
-                                        <input type="text" name="title" class="form-control form-control-sm rounded-pill" placeholder="e.g. GitHub, Documentation" required>
+                                        <input type="text" name="title" class="form-control form-control-sm rounded-pill" placeholder="e.g. Services, Python, Portfolio" required>
                                     </div>
 
                                     <div class="mb-2">
                                         <label class="form-label small fw-semibold">URL Path <span class="text-danger">*</span></label>
-                                        <input type="text" name="url" class="form-control form-control-sm rounded-pill" placeholder="/shrawan-effects or https://..." required>
-                                        <small class="text-muted d-block mt-1" style="font-size:0.75rem;">Enter clean text URL (e.g. <kbd>/shrawan-effects</kbd>) or full external URL.</small>
+                                        <input type="text" name="url" class="form-control form-control-sm rounded-pill" placeholder="/services or https://..." required>
+                                        <small class="text-muted d-block mt-1" style="font-size:0.75rem;">Enter clean relative path (e.g. <kbd>/services</kbd>, <kbd>#</kbd>) or full external link.</small>
                                     </div>
 
                                     <div class="mb-2">
@@ -291,149 +369,45 @@
                             <label class="form-check-label small fw-semibold text-muted" for="selectAllCheckbox">Select All</label>
                         </div>
                         <div>
-                            <h5 class="fw-bold mb-0"><i class="bi bi-arrows-move text-primary me-2"></i> Menu Arrangement</h5>
+                            <h5 class="fw-bold mb-0"><i class="bi bi-diagram-3 text-primary me-2"></i> Menu Structure & Hierarchy</h5>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">
-                            {{ $menuItems->count() }} Total
+                            {{ $allLocationItems->count() }} Total
                         </span>
                         <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1">
-                            {{ $menuItems->where('is_active', true)->count() }} Visible
+                            {{ $allLocationItems->where('is_active', true)->count() }} Visible
                         </span>
-                        @if($menuItems->where('is_active', false)->count() > 0)
+                        @if($allLocationItems->where('is_active', false)->count() > 0)
                             <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2 py-1">
-                                {{ $menuItems->where('is_active', false)->count() }} Hidden
+                                {{ $allLocationItems->where('is_active', false)->count() }} Hidden
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <p class="text-body-secondary small mb-3">
-                    Drag items to reorder them, click the <strong>Eye (<i class="bi bi-eye"></i>)</strong> button to quickly hide/unhide, or select multiple items to hide them together.
-                </p>
+                <div class="alert alert-info border-0 rounded-4 py-2 px-3 mb-3 d-flex align-items-center gap-2 small">
+                    <i class="bi bi-info-circle-fill fs-5 text-info"></i>
+                    <div>
+                        <strong>WordPress-Style Menu Dragging:</strong> Drag items up/down to sort, drag inside another item or click <strong class="badge bg-secondary"><i class="bi bi-arrow-right"></i></strong> to make it a dropdown or sub-dropdown item, or click <strong class="badge bg-secondary"><i class="bi bi-arrow-left"></i></strong> to move it back up. Changes persist automatically!
+                    </div>
+                </div>
 
                 @if($menuItems->count() > 0)
-                    <div id="menuSortableList" class="d-flex flex-column gap-2 mb-3">
+                    <!-- Root Sortable Container -->
+                    <div id="menuSortableList" class="nested-sortable d-flex flex-column gap-2 mb-3" data-parent-id="">
                         @foreach($menuItems as $item)
-                            <div class="card border rounded-3 p-3 bg-body shadow-sm menu-item-card {{ !$item->is_active ? 'is-hidden' : '' }}" data-id="{{ $item->id }}">
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                                    <!-- Selection Checkbox, Drag Handle & Item Info -->
-                                    <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                        <!-- Item Selection Checkbox -->
-                                        <div class="form-check mb-0 me-1">
-                                            <input class="form-check-input item-select-checkbox" type="checkbox" value="{{ $item->id }}" id="chk-{{ $item->id }}">
-                                        </div>
-
-                                        <div class="drag-handle text-muted px-1 py-1 fs-5" title="Click & Drag to reorder">
-                                            <i class="bi bi-grip-vertical"></i>
-                                        </div>
-
-                                        <div class="d-flex align-items-center gap-2">
-                                            @if($item->icon)
-                                                <i class="{{ $item->icon }} {{ $item->is_active ? 'text-primary' : 'text-muted' }}"></i>
-                                            @endif
-                                            <span class="fw-bold item-title {{ !$item->is_active ? 'text-muted text-decoration-line-through' : '' }}">{{ $item->title }}</span>
-                                        </div>
-
-                                        <span class="text-muted small font-monospace d-none d-md-inline-block text-truncate" style="max-width: 180px;">
-                                            {{ $item->url }}
-                                        </span>
-
-                                        @if($item->target === '_blank')
-                                            <span class="badge bg-secondary-subtle text-secondary small d-none d-sm-inline" title="Opens in new tab">
-                                                <i class="bi bi-box-arrow-up-right me-1"></i> New tab
-                                            </span>
-                                        @endif
-
-                                        @if(!$item->is_active)
-                                            <span class="badge bg-secondary text-white small">
-                                                <i class="bi bi-eye-slash me-1"></i> Hidden from site
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <!-- Quick Visibility Toggle, Edit & Delete Controls -->
-                                    <div class="d-flex align-items-center gap-1">
-                                        <!-- Quick One-Click Visibility Toggle -->
-                                        <form action="{{ route('admin.menus.toggle-visibility', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @if($item->is_active)
-                                                <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-2 py-1" title="Click to hide from website">
-                                                    <i class="bi bi-eye me-1"></i> Visible
-                                                </button>
-                                            @else
-                                                <button type="submit" class="btn btn-outline-secondary btn-sm rounded-pill px-2 py-1" title="Click to show on website">
-                                                    <i class="bi bi-eye-slash me-1"></i> Hidden
-                                                </button>
-                                            @endif
-                                        </form>
-
-                                        <!-- Edit Modal Toggle -->
-                                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-2 py-1" data-bs-toggle="collapse" data-bs-target="#editItem-{{ $item->id }}" title="Edit item settings">
-                                            <i class="bi bi-gear"></i>
-                                        </button>
-
-                                        <!-- Delete Item Button -->
-                                        <form action="{{ route('admin.menus.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Remove {{ addslashes($item->title) }} from menu?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-2 py-1" title="Delete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <!-- Collapsible In-Place Edit Form -->
-                                <div class="collapse mt-3 pt-3 border-top" id="editItem-{{ $item->id }}">
-                                    <form action="{{ route('admin.menus.update', $item->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="row g-2">
-                                            <div class="col-md-6">
-                                                <label class="form-label small fw-semibold">Navigation Label</label>
-                                                <input type="text" name="title" class="form-control form-control-sm rounded-pill" value="{{ $item->title }}" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label small fw-semibold">URL</label>
-                                                <input type="text" name="url" class="form-control form-control-sm rounded-pill" value="{{ $item->url }}" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-semibold">Icon Class</label>
-                                                <input type="text" name="icon" class="form-control form-control-sm rounded-pill" value="{{ $item->icon }}" placeholder="bi bi-star">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-semibold">Open Behavior</label>
-                                                <select name="target" class="form-select form-select-sm rounded-pill">
-                                                    <option value="_self" {{ $item->target === '_self' ? 'selected' : '' }}>Same Tab (_self)</option>
-                                                    <option value="_blank" {{ $item->target === '_blank' ? 'selected' : '' }}>New Tab (_blank)</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4 d-flex align-items-center mt-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" name="is_active" value="1" id="activeSwitch-{{ $item->id }}" {{ $item->is_active ? 'checked' : '' }}>
-                                                    <label class="form-check-label small fw-semibold" for="activeSwitch-{{ $item->id }}">Visible / Active</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 text-end mt-2">
-                                                <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3">
-                                                    <i class="bi bi-check-lg me-1"></i> Update Item
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                            @include('admin.menus.item-node', ['item' => $item, 'depth' => 0, 'allLocationItems' => $allLocationItems])
                         @endforeach
                     </div>
                 @else
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-diagram-3 fs-1 d-block mb-3 opacity-50"></i>
                         <h6 class="fw-bold">No Menu Items Configured</h6>
-                        <p class="small mb-3">Add links from the left panel or click "Reset to Defaults" to populate the standard layout.</p>
+                        <p class="small mb-3">Add links from the left panel or click "Reset to Defaults" to populate the standard layout with multi-level dropdowns.</p>
                         <button type="button" class="btn btn-primary rounded-pill btn-sm px-4" data-bs-toggle="modal" data-bs-target="#resetMenuModal">
-                            <i class="bi bi-arrow-counterclockwise me-1"></i> Populate Standard Menu
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Populate Standard Menu Layout
                         </button>
                     </div>
                 @endif
@@ -452,7 +426,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to reset the <strong>{{ ucfirst($location) }} Navigation Menu</strong> to default layout? This will replace your current custom arrangement with standard items.
+                    Are you sure you want to reset the <strong>{{ ucfirst($location) }} Navigation Menu</strong> to default layout? This will replace your current custom arrangement with standard items and sample dropdown sub-menus.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
@@ -468,17 +442,216 @@
 @endsection
 
 @push('scripts')
-    <!-- SortableJS library for Drag and Drop -->
+    <!-- SortableJS library for Nested Drag and Drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const menuListEl = document.getElementById('menuSortableList');
+            const rootSortableEl = document.getElementById('menuSortableList');
             const saveBtn = document.getElementById('saveOrderBtn');
             const toastEl = document.getElementById('saveToast');
             const toastText = document.getElementById('saveToastText');
             const selectAllChk = document.getElementById('selectAllCheckbox');
             const bulkBar = document.getElementById('bulkActionBar');
             const selectedCountSpan = document.getElementById('selectedCount');
+
+            let sortableInstances = [];
+
+            // Initialize SortableJS recursively on root and all child containers
+            function initSortables() {
+                // Destroy existing instances to prevent duplicate handlers
+                sortableInstances.forEach(inst => {
+                    try { inst.destroy(); } catch(e) {}
+                });
+                sortableInstances = [];
+
+                const allContainers = document.querySelectorAll('.nested-sortable');
+                allContainers.forEach(container => {
+                    const inst = new Sortable(container, {
+                        group: {
+                            name: 'nested-menu',
+                            pull: true,
+                            put: true
+                        },
+                        animation: 160,
+                        fallbackOnBody: true,
+                        swapThreshold: 0.65,
+                        handle: '.drag-handle',
+                        ghostClass: 'sortable-ghost',
+                        chosenClass: 'sortable-chosen',
+                        dragClass: 'sortable-drag',
+                        onEnd: function () {
+                            updateTreeVisuals();
+                            saveMenuArrangement();
+                        }
+                    });
+                    sortableInstances.push(inst);
+                });
+            }
+
+            // Update node indentation visual badges and button states based on depth in DOM tree
+            function updateTreeVisuals() {
+                if (!rootSortableEl) return;
+
+                function traverse(container, depth) {
+                    const directChildren = Array.from(container.children).filter(el => el.classList.contains('menu-item-node'));
+                    directChildren.forEach(node => {
+                        node.setAttribute('data-depth', depth);
+
+                        // Update Outdent button disabled state
+                        const outdentBtn = node.querySelector(':scope > .menu-item-card .btn-outdent');
+                        if (outdentBtn) {
+                            outdentBtn.disabled = (depth === 0);
+                        }
+
+                        // Update Depth Badge
+                        const badge = node.querySelector(':scope > .menu-item-card .depth-badge');
+                        if (badge) {
+                            badge.className = 'depth-badge badge small ';
+                            if (depth === 0) {
+                                badge.className += 'bg-primary-subtle text-primary border border-primary-subtle';
+                                badge.innerHTML = '<i class="bi bi-hdd-stack me-1"></i> Top Level';
+                            } else if (depth === 1) {
+                                badge.className += 'bg-info-subtle text-info border border-info-subtle';
+                                badge.innerHTML = '<i class="bi bi-arrow-return-right me-1"></i> Dropdown Item';
+                            } else {
+                                badge.className += 'bg-warning-subtle text-warning border border-warning-subtle';
+                                badge.innerHTML = `<i class="bi bi-diagram-2 me-1"></i> Sub-Dropdown (Tier ${depth + 1})`;
+                            }
+                        }
+
+                        // Recurse into its children container
+                        const childContainer = node.querySelector(':scope > .menu-children-container');
+                        if (childContainer) {
+                            traverse(childContainer, depth + 1);
+                        }
+                    });
+                }
+
+                traverse(rootSortableEl, 0);
+            }
+
+            // Collect all items with order and parent_id
+            function getTreeData() {
+                const items = [];
+                if (!rootSortableEl) return items;
+
+                function traverse(container, parentId, depth) {
+                    const directChildren = Array.from(container.children).filter(el => el.classList.contains('menu-item-node'));
+                    directChildren.forEach((node, index) => {
+                        const id = node.getAttribute('data-id');
+                        items.push({
+                            id: parseInt(id),
+                            order: index + 1,
+                            parent_id: parentId ? parseInt(parentId) : null
+                        });
+
+                        const childContainer = node.querySelector(':scope > .menu-children-container');
+                        if (childContainer) {
+                            traverse(childContainer, id, depth + 1);
+                        }
+                    });
+                }
+
+                traverse(rootSortableEl, null, 0);
+                return items;
+            }
+
+            // Indent Item: move it inside previous sibling's child container
+            window.indentItem = function (id) {
+                const node = document.querySelector(`.menu-item-node[data-id="${id}"]`);
+                if (!node) return;
+
+                const prevSibling = node.previousElementSibling;
+                if (!prevSibling || !prevSibling.classList.contains('menu-item-node')) {
+                    showToast('Cannot indent: An item must have another menu item directly above it to become its sub-item.', false);
+                    return;
+                }
+
+                let childContainer = prevSibling.querySelector(':scope > .menu-children-container');
+                if (!childContainer) {
+                    childContainer = document.createElement('div');
+                    childContainer.className = 'menu-children-container nested-sortable mt-2 ms-4 border-start border-2 border-primary-subtle ps-2 py-1';
+                    childContainer.setAttribute('data-parent-id', prevSibling.getAttribute('data-id'));
+                    prevSibling.appendChild(childContainer);
+                }
+
+                childContainer.appendChild(node);
+                initSortables();
+                updateTreeVisuals();
+                saveMenuArrangement();
+            };
+
+            // Outdent Item: move it up one level into parent's container after the parent
+            window.outdentItem = function (id) {
+                const node = document.querySelector(`.menu-item-node[data-id="${id}"]`);
+                if (!node) return;
+
+                const parentContainer = node.parentElement.closest('.menu-children-container');
+                if (!parentContainer) return; // Already at root
+
+                const parentNode = parentContainer.closest('.menu-item-node');
+                if (!parentNode) return;
+
+                // Move node to after parentNode
+                parentNode.after(node);
+
+                initSortables();
+                updateTreeVisuals();
+                saveMenuArrangement();
+            };
+
+            // Toast helper
+            function showToast(message, isSuccess = true) {
+                toastEl.classList.remove('d-none', 'alert-success', 'alert-danger');
+                toastEl.classList.add(isSuccess ? 'alert-success' : 'alert-danger', 'd-flex');
+                toastText.textContent = message;
+                setTimeout(() => {
+                    toastEl.classList.add('d-none');
+                    toastEl.classList.remove('d-flex');
+                }, 3500);
+            }
+
+            // Save tree arrangement via AJAX
+            function saveMenuArrangement() {
+                const items = getTreeData();
+                if (items.length === 0) return;
+
+                if (saveBtn) {
+                    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Saving...';
+                    saveBtn.disabled = true;
+                }
+
+                fetch("{{ route('admin.menus.reorder') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        location: "{{ $location }}",
+                        items: items
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message || 'Menu arrangement & nested dropdown hierarchy saved!', true);
+                    } else {
+                        showToast('Failed to save menu order.', false);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error reordering menu items:', err);
+                    showToast('An error occurred while saving menu order.', false);
+                })
+                .finally(() => {
+                    if (saveBtn) {
+                        saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save Arrangement';
+                        saveBtn.disabled = false;
+                    }
+                });
+            }
 
             // Bulk selection handling
             function updateBulkBar() {
@@ -523,7 +696,7 @@
                     return;
                 }
 
-                if (action === 'delete' && !confirm('Are you sure you want to delete the selected menu items?')) {
+                if (action === 'delete' && !confirm('Are you sure you want to delete the selected menu items? Any sub-items will also be deleted.')) {
                     return;
                 }
 
@@ -542,85 +715,15 @@
                 document.getElementById('bulkActionForm').submit();
             };
 
-            function showToast(message, isSuccess = true) {
-                toastEl.classList.remove('d-none', 'alert-success', 'alert-danger');
-                toastEl.classList.add(isSuccess ? 'alert-success' : 'alert-danger', 'd-flex');
-                toastText.textContent = message;
-                setTimeout(() => {
-                    toastEl.classList.add('d-none');
-                    toastEl.classList.remove('d-flex');
-                }, 3500);
-            }
-
-            function saveMenuArrangement() {
-                if (!menuListEl) return;
-                
-                const items = [];
-                const cards = menuListEl.querySelectorAll('.menu-item-card');
-                cards.forEach((card, index) => {
-                    items.push({
-                        id: card.getAttribute('data-id'),
-                        order: index + 1,
-                        parent_id: null
-                    });
-                });
-
-                if (saveBtn) {
-                    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Saving...';
-                    saveBtn.disabled = true;
-                }
-
-                fetch("{{ route('admin.menus.reorder') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        location: "{{ $location }}",
-                        items: items
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast(data.message || 'Menu order saved successfully!', true);
-                    } else {
-                        showToast('Failed to save menu order.', false);
-                    }
-                })
-                .catch(err => {
-                    console.error('Error reordering menu items:', err);
-                    showToast('An error occurred while saving menu order.', false);
-                })
-                .finally(() => {
-                    if (saveBtn) {
-                        saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save Arrangement';
-                        saveBtn.disabled = false;
-                    }
-                });
-            }
-
-            if (menuListEl) {
-                new Sortable(menuListEl, {
-                    animation: 180,
-                    handle: '.drag-handle',
-                    ghostClass: 'sortable-ghost',
-                    chosenClass: 'sortable-chosen',
-                    dragClass: 'sortable-drag',
-                    onEnd: function () {
-                        // Automatically persist changes on drag release
-                        saveMenuArrangement();
-                    }
-                });
-            }
-
             if (saveBtn) {
                 saveBtn.addEventListener('click', function () {
                     saveMenuArrangement();
                 });
             }
+
+            // Initialize Sortables on page load
+            initSortables();
+            updateTreeVisuals();
         });
     </script>
 @endpush

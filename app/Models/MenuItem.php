@@ -36,6 +36,23 @@ class MenuItem extends Model
         return $this->hasMany(MenuItem::class, 'parent_id')->orderBy('order');
     }
 
+    public function allChildren()
+    {
+        return $this->children()->with('allChildren');
+    }
+
+    public function activeChildren()
+    {
+        return $this->hasMany(MenuItem::class, 'parent_id')
+            ->where('is_active', true)
+            ->orderBy('order');
+    }
+
+    public function allActiveChildren()
+    {
+        return $this->activeChildren()->with('allActiveChildren');
+    }
+
     public function scopeLocation(Builder $query, string $location): Builder
     {
         return $query->where('location', $location);
@@ -57,7 +74,7 @@ class MenuItem extends Model
     }
 
     /**
-     * Get nested active menu tree for frontend layout
+     * Get nested active menu tree for frontend layout (supports multi-level dropdowns)
      */
     public static function getMenuTree(string $location = 'header')
     {
@@ -65,7 +82,11 @@ class MenuItem extends Model
             ->active()
             ->root()
             ->with(['children' => function ($q) {
-                $q->active()->orderBy('order');
+                $q->active()->orderBy('order')->with(['children' => function ($q2) {
+                    $q2->active()->orderBy('order')->with(['children' => function ($q3) {
+                        $q3->active()->orderBy('order');
+                    }]);
+                }]);
             }])
             ->ordered()
             ->get();

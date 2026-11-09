@@ -21,15 +21,20 @@ class MenuController extends Controller
         $menuItems = MenuItem::location($location)
             ->root()
             ->with(['children' => function ($q) {
-                $q->orderBy('order');
+                $q->orderBy('order')->with(['children' => function ($q2) {
+                    $q2->orderBy('order')->with(['children' => function ($q3) {
+                        $q3->orderBy('order');
+                    }]);
+                }]);
             }])
             ->ordered()
             ->get();
 
+        $allLocationItems = MenuItem::location($location)->orderBy('order')->get();
         $pages = Page::published()->orderBy('title')->get();
         $categories = Category::where('is_active', true)->orderBy('name')->get();
 
-        return view('admin.menus.index', compact('menuItems', 'pages', 'categories', 'location'));
+        return view('admin.menus.index', compact('menuItems', 'allLocationItems', 'pages', 'categories', 'location'));
     }
 
     public function store(Request $request)
@@ -41,7 +46,17 @@ class MenuController extends Controller
             $location = 'header';
         }
 
-        $maxOrder = MenuItem::location($location)->max('order') ?? 0;
+        $parentId = $request->input('parent_id') ? (int) $request->input('parent_id') : null;
+        if ($parentId) {
+            $parentExists = MenuItem::where('location', $location)->where('id', $parentId)->exists();
+            if (!$parentExists) {
+                $parentId = null;
+            }
+        }
+
+        $maxOrder = MenuItem::location($location)
+            ->where('parent_id', $parentId)
+            ->max('order') ?? 0;
 
         if ($type === 'custom') {
             $validated = $request->validate([
@@ -49,23 +64,14 @@ class MenuController extends Controller
                 'url' => 'required|string|max:500',
                 'icon' => 'nullable|string|max:50',
                 'target' => 'nullable|in:_self,_blank',
+                'parent_id' => 'nullable',
             ]);
 
             $cleanUrl = $this->normalizeMenuUrl($validated['url']);
 
-            $existing = MenuItem::where('location', $location)
-                ->where(function ($q) use ($cleanUrl, $validated) {
-                    $q->where('url', $cleanUrl)->orWhere('title', $validated['title']);
-                })
-                ->first();
-
-            if ($existing) {
-                return redirect()->route('admin.menus.index', ['location' => $location])
-                    ->with('error', "A menu item with the link '{$cleanUrl}' or title '{$validated['title']}' already exists in {$location} menu. Duplicate link was prevented.");
-            }
-
             MenuItem::create([
                 'location' => $location,
+                'parent_id' => $parentId,
                 'title' => $validated['title'],
                 'url' => $cleanUrl,
                 'icon' => $validated['icon'] ?? null,
@@ -77,60 +83,61 @@ class MenuController extends Controller
             $validated = $request->validate([
                 'pages' => 'required|array',
                 'pages.*' => 'exists:pages,id',
+                'parent_id' => 'nullable',
             ]);
 
             $pages = Page::whereIn('id', $validated['pages'])->get();
             $addedCount = 0;
             foreach ($pages as $p) {
                 $pageUrl = $this->normalizeMenuUrl(route('page.show', $p->slug, false));
-                $existing = MenuItem::where('location', $location)->where('url', $pageUrl)->first();
-                if (!$existing) {
-                    $maxOrder++;
-                    MenuItem::create([
-                        'location' => $location,
-                        'title' => $p->title,
-                        'url' => $pageUrl,
-                        'icon' => 'bi bi-file-earmark-text',
-                        'target' => '_self',
-                        'order' => $maxOrder,
-                        'is_active' => true,
-                    ]);
-                    $addedCount++;
-                }
+                $maxOrder++;
+                MenuItem::create([
+                    'location' => $location,
+                    'parent_id' => $parentId,
+                    'title' => $p->title,
+                    'url' => $pageUrl,
+                    'icon' => 'bi bi-file-earmark-text',
+                    'target' => '_self',
+                    'order' => $maxOrder,
+                    'is_active' => true,
+                ]);
+                $addedCount++;
             }
         } elseif ($type === 'categories') {
             $validated = $request->validate([
                 'categories' => 'required|array',
                 'categories.*' => 'exists:categories,id',
+                'parent_id' => 'nullable',
             ]);
 
             $categories = Category::whereIn('id', $validated['categories'])->get();
             $addedCount = 0;
             foreach ($categories as $c) {
                 $catUrl = $this->normalizeMenuUrl(route('blog.category', $c->slug, false));
-                $existing = MenuItem::where('location', $location)->where('url', $catUrl)->first();
-                if (!$existing) {
-                    $maxOrder++;
-                    MenuItem::create([
-                        'location' => $location,
-                        'title' => $c->name,
-                        'url' => $catUrl,
-                        'icon' => 'bi bi-folder2',
-                        'target' => '_self',
-                        'order' => $maxOrder,
-                        'is_active' => true,
-                    ]);
-                    $addedCount++;
-                }
+                $maxOrder++;
+                MenuItem::create([
+                    'location' => $location,
+                    'parent_id' => $parentId,
+                    'title' => $c->name,
+                    'url' => $catUrl,
+                    'icon' => 'bi bi-folder2',
+                    'target' => '_self',
+                    'order' => $maxOrder,
+                    'is_active' => true,
+                ]);
+                $addedCount++;
             }
         } elseif ($type === 'standard') {
             $validated = $request->validate([
                 'standards' => 'required|array',
+                'parent_id' => 'nullable',
             ]);
 
             $standardMap = [
                 'home' => ['title' => 'Home', 'url' => '/', 'icon' => 'bi bi-house-door'],
                 'articles' => ['title' => 'Articles', 'url' => '/blog', 'icon' => 'bi bi-grid'],
+                'services' => ['title' => 'Services', 'url' => '/services', 'icon' => 'bi bi-briefcase'],
+                'openseo' => ['title' => 'OpenSEO Suite', 'url' => '/openseo', 'icon' => 'bi bi-radar'],
                 'faq' => ['title' => 'FAQ', 'url' => '/faq', 'icon' => 'bi bi-question-circle'],
                 'contact' => ['title' => 'Contact Us', 'url' => '/contact', 'icon' => 'bi bi-envelope'],
             ];
@@ -138,25 +145,23 @@ class MenuController extends Controller
             foreach ($validated['standards'] as $key) {
                 if (isset($standardMap[$key])) {
                     $stdUrl = $this->normalizeMenuUrl($standardMap[$key]['url']);
-                    $existing = MenuItem::where('location', $location)->where('url', $stdUrl)->first();
-                    if (!$existing) {
-                        $maxOrder++;
-                        MenuItem::create([
-                            'location' => $location,
-                            'title' => $standardMap[$key]['title'],
-                            'url' => $stdUrl,
-                            'icon' => $standardMap[$key]['icon'],
-                            'target' => '_self',
-                            'order' => $maxOrder,
-                            'is_active' => true,
-                        ]);
-                    }
+                    $maxOrder++;
+                    MenuItem::create([
+                        'location' => $location,
+                        'parent_id' => $parentId,
+                        'title' => $standardMap[$key]['title'],
+                        'url' => $stdUrl,
+                        'icon' => $standardMap[$key]['icon'],
+                        'target' => '_self',
+                        'order' => $maxOrder,
+                        'is_active' => true,
+                    ]);
                 }
             }
         }
 
         return redirect()->route('admin.menus.index', ['location' => $location])
-            ->with('success', 'Menu updated successfully without duplicate links!');
+            ->with('success', 'Menu updated successfully!');
     }
 
     public function update(Request $request, $id)
@@ -168,20 +173,19 @@ class MenuController extends Controller
             'url' => 'required|string|max:500',
             'icon' => 'nullable|string|max:50',
             'target' => 'required|in:_self,_blank',
+            'parent_id' => 'nullable',
             'is_active' => 'nullable|boolean',
         ]);
 
         $cleanUrl = $this->normalizeMenuUrl($validated['url']);
 
-        // Prevent duplicate link on update
-        $existing = MenuItem::where('location', $menuItem->location)
-            ->where('id', '!=', $id)
-            ->where('url', $cleanUrl)
-            ->first();
+        $parentId = $request->filled('parent_id') && (int)$request->input('parent_id') > 0
+            ? (int)$request->input('parent_id')
+            : null;
 
-        if ($existing) {
-            return redirect()->route('admin.menus.index', ['location' => $menuItem->location])
-                ->with('error', "Another menu item with URL '{$cleanUrl}' already exists in {$menuItem->location} menu.");
+        // An item cannot be its own parent
+        if ($parentId === (int)$id) {
+            $parentId = null;
         }
 
         $menuItem->update([
@@ -189,6 +193,7 @@ class MenuController extends Controller
             'url' => $cleanUrl,
             'icon' => $validated['icon'] ?? null,
             'target' => $validated['target'],
+            'parent_id' => $parentId,
             'is_active' => $request->boolean('is_active'),
         ]);
 
@@ -265,14 +270,22 @@ class MenuController extends Controller
             'items' => 'required|array',
             'items.*.id' => 'required|exists:menu_items,id',
             'items.*.order' => 'required|integer',
-            'items.*.parent_id' => 'nullable|exists:menu_items,id',
+            'items.*.parent_id' => 'nullable',
         ]);
 
         DB::transaction(function () use ($validated) {
             foreach ($validated['items'] as $itemData) {
+                $parentId = (!empty($itemData['parent_id']) && (int)$itemData['parent_id'] > 0)
+                    ? (int)$itemData['parent_id']
+                    : null;
+
+                if ($parentId === (int)$itemData['id']) {
+                    $parentId = null;
+                }
+
                 MenuItem::where('id', $itemData['id'])->update([
                     'order' => $itemData['order'],
-                    'parent_id' => $itemData['parent_id'] ?? null,
+                    'parent_id' => $parentId,
                     'location' => $validated['location'],
                 ]);
             }
@@ -280,7 +293,7 @@ class MenuController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Menu arrangement updated successfully!',
+            'message' => 'Menu arrangement & hierarchy saved successfully!',
         ]);
     }
 
@@ -291,35 +304,174 @@ class MenuController extends Controller
         MenuItem::location($location)->delete();
 
         if ($location === 'header') {
-            $defaults = [
-                ['title' => 'Home', 'url' => '/', 'icon' => 'bi bi-house-door', 'order' => 1],
-                ['title' => 'Articles', 'url' => '/blog', 'icon' => 'bi bi-grid', 'order' => 2],
-                ['title' => 'Contact', 'url' => '/contact', 'icon' => 'bi bi-envelope', 'order' => 3],
-                ['title' => 'FAQ', 'url' => '/faq', 'icon' => 'bi bi-question-circle', 'order' => 4],
-                ['title' => 'About Us', 'url' => '/page/about-us', 'icon' => 'bi bi-info-circle', 'order' => 5],
-            ];
+            MenuItem::create([
+                'location' => 'header',
+                'title' => 'Home',
+                'url' => '/',
+                'icon' => 'bi bi-house-door',
+                'order' => 1,
+                'is_active' => true,
+            ]);
+
+            $services = MenuItem::create([
+                'location' => 'header',
+                'title' => 'Services',
+                'url' => '/services',
+                'icon' => 'bi bi-briefcase',
+                'order' => 2,
+                'is_active' => true,
+            ]);
+
+            // Sub-item 1 under Services
+            $webDev = MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $services->id,
+                'title' => 'Web Development',
+                'url' => '/services#web-development',
+                'icon' => 'bi bi-code-slash',
+                'order' => 1,
+                'is_active' => true,
+            ]);
+
+            // Sub-sub item under Web Dev (Dropdown inside Dropdown!)
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $webDev->id,
+                'title' => 'Laravel & PHP Systems',
+                'url' => '/services#laravel',
+                'icon' => 'bi bi-terminal',
+                'order' => 1,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $webDev->id,
+                'title' => 'Frontend & Vue Apps',
+                'url' => '/services#frontend',
+                'icon' => 'bi bi-cpu',
+                'order' => 2,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $services->id,
+                'title' => 'AI & Automation',
+                'url' => '/services#ai-solutions',
+                'icon' => 'bi bi-robot',
+                'order' => 2,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $services->id,
+                'title' => 'Cloud & DevOps',
+                'url' => '/services#cloud-devops',
+                'icon' => 'bi bi-cloud-arrow-up',
+                'order' => 3,
+                'is_active' => true,
+            ]);
+
+            $openSeo = MenuItem::create([
+                'location' => 'header',
+                'title' => 'OpenSEO Suite',
+                'url' => '/openseo',
+                'icon' => 'bi bi-radar',
+                'order' => 3,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $openSeo->id,
+                'title' => 'Domain Overview',
+                'url' => '/openseo',
+                'icon' => 'bi bi-speedometer2',
+                'order' => 1,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $openSeo->id,
+                'title' => 'Keyword Research',
+                'url' => '/openseo/keywords',
+                'icon' => 'bi bi-key',
+                'order' => 2,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $openSeo->id,
+                'title' => 'Rank Tracker',
+                'url' => '/openseo/rank-tracking',
+                'icon' => 'bi bi-graph-up-arrow',
+                'order' => 3,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'parent_id' => $openSeo->id,
+                'title' => 'Competitor Insights',
+                'url' => '/openseo/competitors',
+                'icon' => 'bi bi-crosshair',
+                'order' => 4,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'title' => 'Articles',
+                'url' => '/blog',
+                'icon' => 'bi bi-grid',
+                'order' => 4,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'title' => 'FAQ',
+                'url' => '/faq',
+                'icon' => 'bi bi-question-circle',
+                'order' => 5,
+                'is_active' => true,
+            ]);
+
+            MenuItem::create([
+                'location' => 'header',
+                'title' => 'Contact Us',
+                'url' => '/contact',
+                'icon' => 'bi bi-envelope',
+                'order' => 6,
+                'is_active' => true,
+            ]);
         } else {
             $defaults = [
                 ['title' => 'Home', 'url' => '/', 'icon' => 'bi bi-house-door', 'order' => 1],
-                ['title' => 'All Articles', 'url' => '/blog', 'icon' => 'bi bi-grid', 'order' => 2],
-                ['title' => 'FAQ', 'url' => '/faq', 'icon' => 'bi bi-question-circle', 'order' => 3],
-                ['title' => 'About Us', 'url' => '/page/about-us', 'icon' => 'bi bi-info-circle', 'order' => 4],
-                ['title' => 'Privacy Policy', 'url' => '/page/privacy-policy', 'icon' => 'bi bi-shield-check', 'order' => 5],
-                ['title' => 'Terms of Service', 'url' => '/page/terms-of-service', 'icon' => 'bi bi-file-text', 'order' => 6],
-                ['title' => 'Contact Us', 'url' => '/contact', 'icon' => 'bi bi-envelope', 'order' => 7],
+                ['title' => 'Our Services', 'url' => '/services', 'icon' => 'bi bi-briefcase', 'order' => 2],
+                ['title' => 'OpenSEO Suite', 'url' => '/openseo', 'icon' => 'bi bi-radar', 'order' => 3],
+                ['title' => 'All Articles', 'url' => '/blog', 'icon' => 'bi bi-grid', 'order' => 4],
+                ['title' => 'FAQ', 'url' => '/faq', 'icon' => 'bi bi-question-circle', 'order' => 5],
+                ['title' => 'Contact Us', 'url' => '/contact', 'icon' => 'bi bi-envelope', 'order' => 6],
+                ['title' => 'Privacy Policy', 'url' => '/page/privacy-policy', 'icon' => 'bi bi-shield-check', 'order' => 7],
+                ['title' => 'Terms of Service', 'url' => '/page/terms-of-service', 'icon' => 'bi bi-file-text', 'order' => 8],
             ];
-        }
 
-        foreach ($defaults as $d) {
-            MenuItem::create([
-                'location' => $location,
-                'title' => $d['title'],
-                'url' => $d['url'],
-                'icon' => $d['icon'] ?? null,
-                'target' => '_self',
-                'order' => $d['order'],
-                'is_active' => true,
-            ]);
+            foreach ($defaults as $d) {
+                MenuItem::create([
+                    'location' => $location,
+                    'title' => $d['title'],
+                    'url' => $d['url'],
+                    'icon' => $d['icon'] ?? null,
+                    'target' => '_self',
+                    'order' => $d['order'],
+                    'is_active' => true,
+                ]);
+            }
         }
 
         return redirect()->route('admin.menus.index', ['location' => $location])

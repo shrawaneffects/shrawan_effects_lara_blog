@@ -284,6 +284,42 @@
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
         }
 
+        /* Multi-Level Nested Dropdowns (WordPress-style Dropdown inside Dropdown) */
+        .dropdown-submenu {
+            position: relative;
+        }
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: 2px;
+            border-radius: 8px;
+        }
+        @media (min-width: 992px) {
+            .dropdown-submenu:hover > .dropdown-menu {
+                display: block;
+            }
+            .dropdown-submenu > a.dropdown-toggle::after {
+                display: inline-block;
+                margin-left: auto;
+                vertical-align: 0;
+                content: "";
+                border-top: .32em solid transparent;
+                border-right: 0;
+                border-bottom: .32em solid transparent;
+                border-left: .32em solid;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .dropdown-submenu > .dropdown-menu {
+                position: static !important;
+                transform: none !important;
+                margin-left: 1rem;
+                border-left: 2px solid rgba(0, 255, 102, 0.4) !important;
+                background: rgba(9, 18, 6, 0.98) !important;
+            }
+        }
+
         /* Nav links hover cyber glow */
         .nav-link {
             position: relative;
@@ -1279,13 +1315,47 @@
                                     <a class="nav-link dropdown-toggle {{ request()->is(ltrim($mItem->url, '/')) ? 'active text-gradient fw-bold' : '' }}" href="{{ $mItem->url }}" role="button" data-bs-toggle="dropdown" aria-expanded="false" target="{{ $mItem->target }}">
                                         @if($mItem->icon) <i class="{{ $mItem->icon }} me-1"></i> @endif {{ $mItem->title }}
                                     </a>
-                                    <ul class="dropdown-menu shadow border-0 rounded-3">
+                                    <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
                                         @foreach($mItem->children as $child)
-                                            <li>
-                                                <a class="dropdown-item {{ request()->is(ltrim($child->url, '/')) ? 'active' : '' }}" href="{{ $child->url }}" target="{{ $child->target }}">
-                                                    @if($child->icon) <i class="{{ $child->icon }} me-1"></i> @endif {{ $child->title }}
-                                                </a>
-                                            </li>
+                                            @if($child->children->count() > 0)
+                                                <li class="dropdown-submenu dropend">
+                                                    <a class="dropdown-item dropdown-toggle d-flex align-items-center justify-content-between {{ request()->is(ltrim($child->url, '/')) ? 'active text-success fw-bold' : '' }}" href="{{ $child->url }}" data-bs-toggle="dropdown" aria-expanded="false" target="{{ $child->target }}">
+                                                        <span>@if($child->icon) <i class="{{ $child->icon }} me-2"></i> @endif {{ $child->title }}</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
+                                                        @foreach($child->children as $subChild)
+                                                            @if($subChild->children->count() > 0)
+                                                                <li class="dropdown-submenu dropend">
+                                                                    <a class="dropdown-item dropdown-toggle d-flex align-items-center justify-content-between {{ request()->is(ltrim($subChild->url, '/')) ? 'active text-success fw-bold' : '' }}" href="{{ $subChild->url }}" data-bs-toggle="dropdown" aria-expanded="false" target="{{ $subChild->target }}">
+                                                                        <span>@if($subChild->icon) <i class="{{ $subChild->icon }} me-2"></i> @endif {{ $subChild->title }}</span>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
+                                                                        @foreach($subChild->children as $tier3)
+                                                                            <li>
+                                                                                <a class="dropdown-item {{ request()->is(ltrim($tier3->url, '/')) ? 'active text-success fw-bold' : '' }}" href="{{ $tier3->url }}" target="{{ $tier3->target }}">
+                                                                                    @if($tier3->icon) <i class="{{ $tier3->icon }} me-2"></i> @endif {{ $tier3->title }}
+                                                                                </a>
+                                                                            </li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <a class="dropdown-item {{ request()->is(ltrim($subChild->url, '/')) ? 'active text-success fw-bold' : '' }}" href="{{ $subChild->url }}" target="{{ $subChild->target }}">
+                                                                        @if($subChild->icon) <i class="{{ $subChild->icon }} me-2"></i> @endif {{ $subChild->title }}
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                    </ul>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <a class="dropdown-item {{ request()->is(ltrim($child->url, '/')) ? 'active text-success fw-bold' : '' }}" href="{{ $child->url }}" target="{{ $child->target }}">
+                                                        @if($child->icon) <i class="{{ $child->icon }} me-2"></i> @endif {{ $child->title }}
+                                                    </a>
+                                                </li>
+                                            @endif
                                         @endforeach
                                     </ul>
                                 </li>
@@ -1645,6 +1715,32 @@
                 });
             });
         })();
+    </script>
+
+    <!-- Multi-level Nested Submenus Mobile/Touch Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.dropdown-submenu > a.dropdown-toggle').forEach(function(toggleLink) {
+                toggleLink.addEventListener('click', function(e) {
+                    if (window.innerWidth < 992 || ('ontouchstart' in window)) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const currentSubmenu = this.nextElementSibling;
+                        if (currentSubmenu && currentSubmenu.classList.contains('dropdown-menu')) {
+                            const parentUl = this.closest('.dropdown-menu');
+                            if (parentUl) {
+                                parentUl.querySelectorAll('.dropdown-menu.show').forEach(function(openMenu) {
+                                    if (openMenu !== currentSubmenu && !currentSubmenu.contains(openMenu)) {
+                                        openMenu.classList.remove('show');
+                                    }
+                                });
+                            }
+                            currentSubmenu.classList.toggle('show');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 
     <!-- Floating Anti-Inspect & Content Protection Alert Toast -->
