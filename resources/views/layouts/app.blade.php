@@ -10,8 +10,11 @@
     $disableRightClick = \App\Models\Setting::get('disable_right_click', '1') === '1';
     $disableInspect = \App\Models\Setting::get('disable_inspect', '1') === '1';
     $disableScreenshot = \App\Models\Setting::get('disable_screenshot', '1') === '1';
-    $defaultMetaDesc = \App\Models\Setting::get('homepage_meta_description') ?: \App\Models\Setting::get('footer_text', 'A modern tech publication built on Laravel 12 & Bootstrap 5');
-    $defaultMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'laravel, php, web development, bootstrap 5, tech');
+    $rawHpDesc = \App\Models\Setting::get('homepage_meta_description');
+    $defaultMetaDesc = (!empty($rawHpDesc) && !str_starts_with($rawHpDesc, 'Shrawan Effects is a website where you can always find tech-relevant content'))
+        ? $rawHpDesc
+        : 'Explore cutting-edge fullstack web development, Laravel & React engineering, AI automation solutions, and expert technology insights at Shrawan Effects.';
+    $defaultMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'fullstack web development, laravel 12, react, php, ai automation, openseo suite, tech tutorials, shrawan effects');
 @endphp
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -37,13 +40,24 @@
     <meta name="description" content="@yield('meta_description', $defaultMetaDesc)">
     <meta name="keywords" content="@yield('meta_keywords', $defaultMetaKeywords)">
     <meta name="robots" content="@yield('robots_meta', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')">
-    <link rel="canonical" href="@yield('canonical_url', url()->current())">
+
+    <!-- Canonical URL Optimization (Strip query strings & enforce HTTPS) -->
+    @php
+        $rawCanonical = View::getSection('canonical_url') ?: url()->current();
+        $cleanCanonical = preg_replace('/^http:/i', 'https:', strtok($rawCanonical, '?'));
+        if (strlen($cleanCanonical) > 8) {
+            $cleanCanonical = rtrim($cleanCanonical, '/');
+        }
+        $appTitle = View::getSection('title', $siteName);
+        $appDesc = View::getSection('meta_description', $defaultMetaDesc);
+    @endphp
+    <link rel="canonical" href="{{ $cleanCanonical }}">
 
     <!-- OpenGraph Social Metadata -->
-    <meta property="og:title" content="@yield('og_title', View::getSection('title', $siteName))">
-    <meta property="og:description" content="@yield('og_description', View::getSection('meta_description', $defaultMetaDesc))">
+    <meta property="og:title" content="@yield('og_title', $appTitle)">
+    <meta property="og:description" content="@yield('og_description', $appDesc)">
     <meta property="og:image" content="@yield('og_image', asset('storage/default.jpg'))">
-    <meta property="og:url" content="@yield('og_url', url()->current())">
+    <meta property="og:url" content="{{ $cleanCanonical }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:site_name" content="{{ $siteName }}">
 
@@ -57,14 +71,14 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="675">
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="@yield('og_title', View::getSection('title', $siteName))">
+    <meta property="og:image:alt" content="@yield('og_title', $appTitle)">
 
     <!-- Twitter / X Card Metadata -->
     <meta name="twitter:card" content="@yield('twitter_card', 'summary_large_image')">
-    <meta name="twitter:title" content="@yield('twitter_title', View::getSection('og_title', $siteName))">
-    <meta name="twitter:description" content="@yield('twitter_description', View::getSection('og_description', ''))">
+    <meta name="twitter:title" content="@yield('twitter_title', View::getSection('og_title', $appTitle))">
+    <meta name="twitter:description" content="@yield('twitter_description', View::getSection('og_description', $appDesc))">
     <meta name="twitter:image" content="@yield('twitter_image', View::getSection('og_image', asset('storage/default.jpg')))">
-    <meta name="twitter:image:alt" content="@yield('twitter_title', View::getSection('og_title', $siteName))">
+    <meta name="twitter:image:alt" content="@yield('twitter_title', View::getSection('og_title', $appTitle))">
 
     <!-- Schema.org JSON-LD Structured Data -->
     @stack('schema')
@@ -78,16 +92,21 @@
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $adsensePublisherId }}" crossorigin="anonymous"></script>
     @endif
 
-    <!-- Fonts: Geist & Geist Mono by Vercel -->
+    <!-- Resource Hints & Preconnects for Core Web Vitals -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/core.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/mono.css">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
 
-    <!-- Bootstrap 5.3 & Icons -->
+    <!-- Fonts: Geist & Geist Mono via Google Fonts (swap display to prevent FOIT) -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap Icons (Non-blocking Preload to eliminate render-blocking CSS penalty) -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
 
     <style>
         :root {
@@ -1309,15 +1328,18 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- Skip to main content for Accessibility -->
+    <a href="#main-content" class="visually-hidden-focusable btn btn-success position-absolute top-0 start-0 m-2 px-3 py-2" style="z-index: 9999;">Skip to main content</a>
+
     <!-- Top Animated Rainbow Line -->
     <div class="top-gradient-bar"></div>
 
     <!-- Top Navigation -->
-    <nav class="navbar navbar-expand-lg sticky-top navbar-glass py-3">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-glass py-3" role="navigation" aria-label="Main Navigation">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
                 @if($siteLogo)
-                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" style="max-height: 40px; width: auto; object-fit: contain;">
+                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" width="160" height="40" style="max-height: 40px; width: auto; object-fit: contain;">
                 @else
                     <i class="bi bi-cpu fs-3 me-2 text-gradient"></i>
                     <span class="text-gradient font-cyber">{{ $siteName }}</span>
@@ -1487,18 +1509,18 @@
                 </ul>
 
                 <!-- Search form in navbar with telemetry styling -->
-                <form class="d-flex me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET">
+                <form class="d-flex me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET" role="search">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text border-end-0 nav-search-addon"><i class="bi bi-search"></i></span>
-                        <input class="form-control border-start-0 nav-search-input" type="search" name="search" placeholder="Search telemetry..." value="{{ request('search') }}" aria-label="Search">
+                        <span class="input-group-text border-end-0 nav-search-addon"><i class="bi bi-search" aria-hidden="true"></i></span>
+                        <input class="form-control border-start-0 nav-search-input" type="search" name="search" placeholder="Search telemetry..." value="{{ request('search') }}" aria-label="Search telemetry">
                     </div>
                 </form>
 
                 <!-- Action items -->
                 <div class="d-flex align-items-center gap-2">
                     <!-- Dark/Light Theme Toggle -->
-                    <button class="btn btn-outline-secondary btn-theme-toggle" id="themeToggleBtn" type="button" title="Toggle theme">
-                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    <button class="btn btn-outline-secondary btn-theme-toggle" id="themeToggleBtn" type="button" title="Toggle theme" aria-label="Toggle dark/light theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon" aria-hidden="true"></i>
                     </button>
 
                     @guest
@@ -1592,19 +1614,19 @@
     </div>
 
     <!-- Main Content Slot -->
-    <main>
+    <main id="main-content" role="main">
         @yield('content')
     </main>
 
     <!-- Footer -->
-    <footer class="footer py-5 mt-5">
+    <footer class="footer py-5 mt-5" role="contentinfo">
         <div class="container">
             <div class="row g-4">
                 <!-- Section 1: Brand & Telemetry -->
                 <div class="col-lg-4 col-md-12">
                     <a class="d-flex align-items-center text-decoration-none mb-3" href="{{ route('home') }}">
                         @if($siteLogo)
-                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" style="max-height: 38px; width: auto; object-fit: contain;">
+                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" width="160" height="38" style="max-height: 38px; width: auto; object-fit: contain;">
                         @else
                             <i class="bi bi-cpu fs-3 me-2 text-gradient"></i>
                             <span class="fs-4 fw-bold text-gradient font-cyber">{{ $siteName }}</span>
@@ -1615,19 +1637,19 @@
                     </p>
                     <div class="mb-3 small text-body-secondary font-mono">
                         <div class="d-flex align-items-start gap-2 mb-1">
-                            <i class="bi bi-geo-alt-fill text-success flex-shrink-0 mt-1"></i>
+                            <i class="bi bi-geo-alt-fill text-success flex-shrink-0 mt-1" aria-hidden="true"></i>
                             <span>House No. 1049, Jeevan Nagar, Gounchhi, FARIDABAD, Haryana 121004</span>
                         </div>
                     </div>
                     <div class="d-flex gap-3 fs-5 mt-2">
                         @if($githubUrl)
-                            <a href="{{ $githubUrl }}" target="_blank" class="text-body-secondary hover-lift" title="GitHub"><i class="bi bi-github"></i></a>
+                            <a href="{{ $githubUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="GitHub" aria-label="Visit Shrawan Effects on GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
                         @endif
                         @if($twitterUrl)
-                            <a href="{{ $twitterUrl }}" target="_blank" class="text-body-secondary hover-lift" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
+                            <a href="{{ $twitterUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="Twitter / X" aria-label="Visit Shrawan Effects on Twitter / X"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
                         @endif
                         @if($linkedinUrl)
-                            <a href="{{ $linkedinUrl }}" target="_blank" class="text-body-secondary hover-lift" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            <a href="{{ $linkedinUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="LinkedIn" aria-label="Visit Shrawan Effects on LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
                         @endif
                     </div>
                 </div>
@@ -1677,8 +1699,8 @@
                     <form action="{{ route('newsletter.store') }}" method="POST" id="footerNewsletterForm">
                         @csrf
                         <div class="input-group">
-                            <input type="email" name="email" class="form-control rounded-start-pill ps-3 footer-email-input" placeholder="user@domain.com" required style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.3); font-family: var(--font-mono); font-size: 0.85rem;">
-                            <button class="btn btn-gradient rounded-end-pill px-4" type="submit">TRANSMIT</button>
+                            <input type="email" name="email" class="form-control rounded-start-pill ps-3 footer-email-input" placeholder="user@domain.com" aria-label="Email address for weekly telemetry newsletter" required style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.3); font-family: var(--font-mono); font-size: 0.85rem;">
+                            <button class="btn btn-gradient rounded-end-pill px-4" type="submit" aria-label="Transmit newsletter subscription">TRANSMIT</button>
                         </div>
                     </form>
                 </div>
@@ -1693,8 +1715,8 @@
         </div>
     </footer>
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Bundle JS (Deferred for PageSpeed) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- Theme Switcher & Interactive Mouse Spotlight Script -->
     <script>

@@ -136,4 +136,98 @@ class SeoSchemaService
 
         return $scripts;
     }
+
+    /**
+     * Generate complete Schema.org JSON-LD Knowledge Graph for Homepage & Agentic AI Crawlers
+     */
+    public static function generateHomepageSchema(): string
+    {
+        $siteName = Setting::get('site_name', 'Shrawan Effects');
+        $siteLogo = Setting::getLogoUrl() ?? asset('storage/default.jpg');
+        $siteUrl = rtrim(config('app.url', url('/')), '/');
+        $twitterUrl = Setting::get('twitter_url', 'https://twitter.com');
+        $githubUrl = Setting::get('github_url', 'https://github.com');
+        $linkedinUrl = Setting::get('linkedin_url', 'https://linkedin.com');
+        $contactEmail = Setting::get('contact_email', 'shrawaneffects@gmail.com');
+
+        $sameAs = array_values(array_filter([
+            $twitterUrl,
+            $githubUrl,
+            $linkedinUrl,
+        ]));
+
+        $graph = [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'WebSite',
+                    '@id' => $siteUrl . '/#website',
+                    'url' => $siteUrl . '/',
+                    'name' => $siteName,
+                    'alternateName' => 'Shrawan Effects Tech & AI Innovations',
+                    'description' => 'Cutting-edge fullstack web development, Laravel 12 & React architecture, AI automation solutions, and expert technology insights.',
+                    'inLanguage' => 'en-US',
+                    'publisher' => [
+                        '@id' => $siteUrl . '/#organization',
+                    ],
+                    'potentialAction' => [
+                        '@type' => 'SearchAction',
+                        'target' => [
+                            '@type' => 'EntryPoint',
+                            'urlTemplate' => $siteUrl . '/articles?search={search_term_string}',
+                        ],
+                        'query-input' => 'required name=search_term_string',
+                    ],
+                ],
+                [
+                    '@type' => 'Organization',
+                    '@id' => $siteUrl . '/#organization',
+                    'name' => $siteName,
+                    'url' => $siteUrl . '/',
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        '@id' => $siteUrl . '/#logo',
+                        'url' => $siteLogo,
+                        'caption' => $siteName,
+                    ],
+                    'image' => [
+                        '@id' => $siteUrl . '/#logo',
+                    ],
+                    'description' => 'A premier fullstack software engineering and AI automation platform delivering modern web architectures, OpenSEO intelligence, and enterprise technology publications.',
+                    'email' => $contactEmail,
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => 'House No. 1049, Jeevan Nagar, Gounchhi',
+                        'addressLocality' => 'Faridabad',
+                        'addressRegion' => 'Haryana',
+                        'postalCode' => '121004',
+                        'addressCountry' => 'IN',
+                    ],
+                    'sameAs' => $sameAs,
+                ],
+                [
+                    '@type' => 'ProfessionalService',
+                    '@id' => $siteUrl . '/#service',
+                    'name' => $siteName . ' Development & AI Solutions',
+                    'url' => $siteUrl . '/',
+                    'parentOrganization' => [
+                        '@id' => $siteUrl . '/#organization',
+                    ],
+                    'priceRange' => '$$',
+                    'areaServed' => 'Worldwide',
+                    'knowsAbout' => [
+                        'Fullstack Web Development',
+                        'Laravel 12 Architecture',
+                        'React & Vue Frontend Engineering',
+                        'Artificial Intelligence & Agentic Workflows',
+                        'Technical SEO & OpenSEO Suite',
+                        'REST & GraphQL APIs',
+                        'Performance Optimization & Core Web Vitals',
+                    ],
+                ],
+            ],
+        ];
+
+        return '<script type="application/ld+json">' . "\n" . json_encode($graph, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n" . '</script>';
+    }
 }

@@ -1,0 +1,33 @@
+# Shrawan Effects
+
+> Shrawan Effects is a high-performance web publication, technology engineering consultancy, and AI-driven software platform founded by Shrawan Sharma. It specializes in cutting-edge fullstack engineering (Laravel 12, PHP 8.3+, React, Vue, TypeScript), AI automation workflows, autonomous agents, OpenSEO intelligence tooling, and developer tutorials.
+
+## Core Mission & Architecture
+- **Website**: https://shrawaneffects.com/
+- **Focus**: High-scalability web systems, custom CMS & SaaS platforms, LLM agent integration, real-time analytics, and Core Web Vitals engineering.
+- **Tech Stack**: Laravel 12, Bootstrap 5.3 Cyberpunk HUD, Livewire/Alpine, MySQL, Python AI agents, OpenSEO Suite, Google Cloud, Docker.
+
+## Services Offered
+- **Fullstack Web Development**: Enterprise Laravel & PHP backends, responsive high-speed frontends.
+- **AI Automation & Agents**: Autonomous LLM agent workflows, RAG systems, API integrations, and prompt engineering.
+- **OpenSEO Suite**: Comprehensive real-time domain analysis, keyword research, SERP simulation, and Google Search Console integration.
+- **Technical SEO & Performance**: 90+ Core Web Vitals, rich JSON-LD knowledge graphs, accessibility compliance, and server-level caching.
+
+## Key Sections & Resources
+- **Homepage**: https://shrawaneffects.com/
+- **Articles & Dispatches**: https://shrawaneffects.com/articles
+- **Services Portfolio**: https://shrawaneffects.com/services
+- **OpenSEO Domain Overview**: https://shrawaneffects.com/openseo/domain
+- **OpenSEO Keyword Research**: https://shrawaneffects.com/openseo/keywords
+- **OpenSEO SERP Simulator**: https://shrawaneffects.com/openseo/serp
+- **OpenSEO Backlink Intelligence**: https://shrawaneffects.com/openseo/backlinks
+- **FAQ**: https://shrawaneffects.com/faq
+- **Contact**: https://shrawaneffects.com/contact
+- **Sitemap**: https://shrawaneffects.com/sitemap.xml
+
+## Contact Information
+- **Location**: House No. 1049, Jeevan Nagar, Gounchhi, Faridabad, Haryana 121004, India
+- **Email**: shrawaneffects@gmail.com
+- **GitHub**: https://github.com/shrawan-sharma
+- **Twitter / X**: https://twitter.com/shrawaneffects
+- **LinkedIn**: https://linkedin.com/in/shrawaneffects

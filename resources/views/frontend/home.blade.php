@@ -3,13 +3,25 @@
 @php
     $hpCustomTitle = \App\Models\Setting::get('homepage_meta_title');
     $siteName = \App\Models\Setting::get('site_name', config('app.name', 'Shrawan Effects'));
-    $siteTagline = \App\Models\Setting::get('site_tagline', 'Futuristic Tech Publications & Cyber Insights');
-    $hpMetaTitle = $hpCustomTitle ?: ($siteTagline ? ($siteName . ' - ' . $siteTagline) : ('Home - ' . $siteName));
+    $siteTagline = \App\Models\Setting::get('site_tagline');
+    
+    // High-CTR, authoritative SEO title
+    if (!empty($hpCustomTitle)) {
+        $hpMetaTitle = $hpCustomTitle;
+    } elseif (!empty($siteTagline) && $siteTagline !== 'Tech update available here') {
+        $hpMetaTitle = $siteName . ' - ' . $siteTagline;
+    } else {
+        $hpMetaTitle = $siteName . ' | Fullstack Web Development, AI Automation & Tech Insights';
+    }
 
     $hpCustomDesc = \App\Models\Setting::get('homepage_meta_description');
-    $hpMetaDesc = $hpCustomDesc ?: \App\Models\Setting::get('footer_text', 'A futuristic, high-performance blog platform crafted with Laravel 12 and Cyberpunk HUD aesthetic.');
+    if (!empty($hpCustomDesc) && !str_starts_with($hpCustomDesc, 'Shrawan Effects is a website where you can always find tech-relevant content')) {
+        $hpMetaDesc = $hpCustomDesc;
+    } else {
+        $hpMetaDesc = 'Explore cutting-edge fullstack web development, Laravel & React engineering, AI automation solutions, and expert technology insights at Shrawan Effects.';
+    }
 
-    $hpMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'laravel, php, web development, cyberpunk, futuristic, tech hud');
+    $hpMetaKeywords = \App\Models\Setting::get('homepage_meta_keywords', 'fullstack web development, laravel 12, react, php, ai automation, openseo suite, tech tutorials, shrawan effects');
 @endphp
 
 @section('title', $hpMetaTitle)
@@ -19,7 +31,11 @@
 @section('og_description', $hpMetaDesc)
 @section('twitter_title', $hpMetaTitle)
 @section('twitter_description', $hpMetaDesc)
-@section('canonical_url', route('home'))
+@section('canonical_url', 'https://shrawaneffects.com')
+
+@push('schema')
+{!! \App\Services\Seo\SeoSchemaService::generateHomepageSchema() !!}
+@endpush
 
 @section('content')
     <!-- Futuristic HUD Status Ticker -->
@@ -51,7 +67,7 @@
                     <div class="col-lg-7">
                         <div class="card card-post spotlight-card h-100 position-relative shadow-lg">
                             <div class="post-thumb-container position-relative">
-                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}">
+                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" height="380" fetchpriority="high" loading="eager" decoding="async">
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge priority-intel-badge">
                                         <i class="bi bi-star-fill text-warning me-1"></i> PRIORITY INTEL
@@ -73,7 +89,7 @@
                                 </h2>
                                 <p class="card-text text-body-secondary mt-2">{{ $leadPost->excerpt }}</p>
                                 <div class="d-flex align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
-                                    <img src="{{ $leadPost->author->avatar_url }}" alt="{{ $leadPost->author->name }}" class="author-avatar me-3">
+                                    <img src="{{ $leadPost->author->avatar_url }}" alt="{{ $leadPost->author->name }}" class="author-avatar me-3" width="40" height="40" loading="lazy" decoding="async">
                                     <div class="d-flex flex-column">
                                         <h6 class="mb-0 fw-semibold">{{ $leadPost->author->name }}</h6>
                                         <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
@@ -91,7 +107,7 @@
                             <div class="card card-post spotlight-card flex-grow-1 shadow-sm">
                                 <div class="row g-0 h-100">
                                     <div class="col-sm-5 post-thumb-container">
-                                        <img src="{{ $fPost->image_url }}" class="img-fluid h-100 w-100 post-thumb object-fit-cover rounded-start" alt="{{ $fPost->title }}" style="min-height: 160px;">
+                                        <img src="{{ $fPost->image_url }}" class="img-fluid h-100 w-100 post-thumb object-fit-cover rounded-start" alt="{{ $fPost->title }}" width="250" height="180" loading="lazy" decoding="async" style="min-height: 160px;">
                                     </div>
                                     <div class="col-sm-7 d-flex flex-column justify-content-center p-3">
                                         <div>
@@ -142,7 +158,7 @@
                                 <span class="trend-number fs-1 fw-bold opacity-85 lh-1">0{{ $index + 1 }}</span>
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center gap-2 mb-1">
-                                        <img src="{{ $tPost->author->avatar_url }}" alt="{{ $tPost->author->name }}" class="rounded-circle author-avatar" style="width: 22px; height: 22px;">
+                                        <img src="{{ $tPost->author->avatar_url }}" alt="{{ $tPost->author->name }}" class="rounded-circle author-avatar" width="22" height="22" loading="lazy" decoding="async" style="width: 22px; height: 22px;">
                                         <span class="small fw-semibold">{{ $tPost->author->name }}</span>
                                     </div>
                                     <h6 class="fw-bold mb-2">
@@ -219,7 +235,7 @@
                             <div class="col-md-6">
                                 <div class="card card-post spotlight-card h-100 shadow-sm">
                                     <div class="post-thumb-container position-relative">
-                                        <img src="{{ $post->image_url }}" class="card-img-top post-thumb" alt="{{ $post->title }}">
+                                        <img src="{{ $post->image_url }}" class="card-img-top post-thumb" alt="{{ $post->title }}" width="420" height="220" loading="lazy" decoding="async">
                                         @if($post->category)
                                             <a href="{{ route('blog.category', $post->category->slug) }}" class="badge badge-category text-white text-decoration-none position-absolute top-0 start-0 m-3" style="background-color: {{ $post->category->color }};">
                                                 {{ $post->category->name }}
@@ -237,7 +253,7 @@
                                         </p>
                                         <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" style="width: 32px; height: 32px;">
+                                                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" width="32" height="32" loading="lazy" decoding="async" style="width: 32px; height: 32px;">
                                                 <span class="small fw-semibold">{{ $post->author->name }}</span>
                                             </div>
                                             <div class="font-mono text-body-secondary" style="font-size: 0.75rem;">
@@ -271,10 +287,10 @@
                         <!-- Search Box Widget -->
                         <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
                             <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-terminal me-2 text-success"></i> DATABASE QUERY</h5>
-                            <form action="{{ route('blog.index') }}" method="GET">
+                            <form action="{{ route('blog.index') }}" method="GET" role="search">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search keywords..." style="border-color: rgba(0,255,102,0.25); font-family: var(--font-mono); font-size: 0.85rem;">
-                                    <button class="btn btn-gradient rounded-end-pill px-3" type="submit"><i class="bi bi-search"></i></button>
+                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search keywords..." aria-label="Search articles by keywords" style="border-color: rgba(0,255,102,0.25); font-family: var(--font-mono); font-size: 0.85rem;">
+                                    <button class="btn btn-gradient rounded-end-pill px-3" type="submit" aria-label="Search articles"><i class="bi bi-search" aria-hidden="true"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -305,9 +321,9 @@
                                 <form action="{{ route('newsletter.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="agent@shrawaneffects.com" required>
+                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="agent@shrawaneffects.com" aria-label="Email address for subscription" required>
                                     </div>
-                                    <button type="submit" class="btn btn-gradient w-100 rounded-pill py-2">
+                                    <button type="submit" class="btn btn-gradient w-100 rounded-pill py-2" aria-label="Initiate subscription">
                                         <i class="bi bi-shield-check me-1"></i> INITIATE SUBSCRIPTION
                                     </button>
                                 </form>
