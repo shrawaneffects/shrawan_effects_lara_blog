@@ -197,6 +197,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/services/{id}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
 
     // Centralized Media Library (Images, Videos, Audios, Documents)
+    Route::post('/media/sync-storage', [AdminMediaController::class, 'syncStorage'])->name('media.sync-storage');
     Route::resource('media', AdminMediaController::class)->except(['create', 'edit']);
     Route::get('/media-picker-api', [AdminMediaController::class, 'apiPicker'])->name('media.picker-api');
 

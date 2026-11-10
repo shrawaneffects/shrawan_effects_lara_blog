@@ -106,14 +106,14 @@ class PostController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'excerpt' => 'nullable|string|max:500',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'image_url' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published,scheduled',
             'is_featured' => 'boolean',
             'is_trending' => 'boolean',
             'enable_toc' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:255',
             'schema_type' => 'nullable|string|max:50',
             'custom_schema' => 'nullable|string',
@@ -188,8 +188,8 @@ class PostController extends Controller
 
         // Image Handling
         if ($request->hasFile('featured_image')) {
-            $path = $request->file('featured_image')->store('posts', 'public');
-            $post->featured_image = $path;
+            $media = app(\App\Services\Media\MediaUploadService::class)->upload($request->file('featured_image'), auth()->user());
+            $post->featured_image = $media->file_path;
         } elseif (!empty($validated['image_url'])) {
             $post->featured_image = $validated['image_url'];
         }
@@ -248,14 +248,14 @@ class PostController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'excerpt' => 'nullable|string|max:500',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'image_url' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published,scheduled',
             'is_featured' => 'boolean',
             'is_trending' => 'boolean',
             'enable_toc' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:255',
             'schema_type' => 'nullable|string|max:50',
             'custom_schema' => 'nullable|string',
@@ -305,7 +305,7 @@ class PostController extends Controller
         $post->is_featured = $request->boolean('is_featured');
         $post->is_trending = $request->boolean('is_trending');
         $post->enable_toc = $request->has('enable_toc') ? $request->boolean('enable_toc') : false;
-        $post->meta_title = $validated['seo_title'] ?? ($validated['meta_title'] ?? $validated['title']);
+        $post->meta_title = $validated['meta_title'] ?? ($validated['seo_title'] ?? $post->title);
         $post->meta_description = $validated['meta_description'] ?? $post->excerpt;
         $post->meta_keywords = $validated['meta_keywords'] ?? null;
         $post->schema_type = $validated['schema_type'] ?? 'BlogPosting';
@@ -336,8 +336,8 @@ class PostController extends Controller
             if ($post->featured_image && !str_starts_with($post->featured_image, 'http') && Storage::disk('public')->exists($post->featured_image)) {
                 Storage::disk('public')->delete($post->featured_image);
             }
-            $path = $request->file('featured_image')->store('posts', 'public');
-            $post->featured_image = $path;
+            $media = app(\App\Services\Media\MediaUploadService::class)->upload($request->file('featured_image'), auth()->user());
+            $post->featured_image = $media->file_path;
         } elseif (!empty($validated['image_url'])) {
             $post->featured_image = $validated['image_url'];
         }
@@ -372,8 +372,8 @@ class PostController extends Controller
      */
     protected function syncPostSeo(Post $post, Request $request): PostSeo
     {
-        $seoTitle = $request->input('seo_title', $post->title);
-        $metaDescription = $request->input('meta_description', $post->excerpt);
+        $seoTitle = $request->input('meta_title') ?: ($request->input('seo_title') ?: $post->title);
+        $metaDescription = $request->input('meta_description') ?: ($post->meta_description ?: $post->excerpt);
         $primaryKeyword = $request->input('primary_keyword');
         $searchIntent = $request->input('search_intent', 'informational');
         $canonicalUrl = $request->input('canonical_url');

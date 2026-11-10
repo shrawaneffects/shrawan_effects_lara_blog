@@ -9,9 +9,17 @@
             <h4 class="fw-bold mb-1"><i class="bi bi-collection-play-fill text-primary me-2"></i> Centralized Media Library</h4>
             <p class="text-body-secondary small mb-0">Upload, manage, and embed Images, Videos, Audios, and Documents with persistent database tracking.</p>
         </div>
-        <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="collapse" data-bs-target="#uploadCollapse" aria-expanded="false">
-            <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload New Media
-        </button>
+        <div class="d-flex align-items-center gap-2">
+            <form action="{{ route('admin.media.sync-storage') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-outline-success shadow-sm rounded-pill px-3" title="Scan server storage and index unlisted images">
+                    <i class="bi bi-arrow-repeat me-1"></i> Scan &amp; Sync Storage
+                </button>
+            </form>
+            <button type="button" class="btn btn-primary shadow-sm rounded-pill px-3" data-bs-toggle="collapse" data-bs-target="#uploadCollapse" aria-expanded="false">
+                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload New Media
+            </button>
+        </div>
     </div>
 
     <!-- Media Overview Analytics Cards -->
@@ -208,9 +216,14 @@
 
                     <!-- Meta Body -->
                     <div class="p-2.5 d-flex flex-column flex-grow-1">
-                        <h6 class="fw-semibold text-truncate mb-1 small" title="{{ $media->original_name }}" style="font-size: 0.82rem;">
+                        <h6 class="fw-semibold text-truncate mb-1 small" id="media-title-{{ $media->id }}" title="{{ $media->original_name }}" style="font-size: 0.82rem;">
                             {{ $media->title ?: $media->original_name }}
                         </h6>
+                        @if($media->caption)
+                            <p class="text-body-secondary small text-truncate mb-1" id="media-caption-{{ $media->id }}" style="font-size: 0.72rem;" title="{{ $media->caption }}">
+                                <i class="bi bi-chat-quote text-success me-1"></i>{{ $media->caption }}
+                            </p>
+                        @endif
                         <div class="d-flex justify-content-between align-items-center mt-auto small text-muted" style="font-size: 0.72rem;">
                             <span>{{ $media->formatted_size }}</span>
                             <span>{{ $media->created_at->format('M d') }}</span>
@@ -219,8 +232,8 @@
 
                     <!-- Card Actions Strip -->
                     <div class="card-footer bg-body-tertiary border-top p-1.5 d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn btn-link btn-sm text-decoration-none text-primary p-0" title="Inspect & Edit Details" onclick="openMediaModal({{ $media->id }})">
-                            <i class="bi bi-pencil-square"></i> Info
+                        <button type="button" class="btn btn-link btn-sm text-decoration-none text-primary p-0 fw-semibold" title="Inspect & Edit Caption, Title, Alt Text" onclick="openMediaModal({{ $media->id }})">
+                            <i class="bi bi-pencil-square me-1"></i> Edit
                         </button>
                         <button type="button" class="btn btn-link btn-sm text-decoration-none text-secondary p-0" title="Copy Public URL" onclick="copyMediaUrl('{{ $media->url }}')">
                             <i class="bi bi-link-45deg fs-6"></i> Copy
@@ -239,11 +252,19 @@
             <div class="col-12">
                 <div class="p-5 text-center bg-body rounded-4 shadow-sm border-0">
                     <i class="bi bi-folder-x fs-1 text-muted"></i>
-                    <h5 class="mt-3 fw-bold">No Media Files Found</h5>
-                    <p class="text-muted small">Upload your first image, video, audio or document to get started.</p>
-                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" onclick="document.getElementById('fileInput').click(); new bootstrap.Collapse(document.getElementById('uploadCollapse')).show();">
-                        <i class="bi bi-cloud-arrow-up me-1"></i> Upload First Asset
-                    </button>
+                    <h5 class="mt-3 fw-bold">No Media Files Registered in Database</h5>
+                    <p class="text-muted small">You can scan your server storage to index existing images and article uploads, or upload new assets directly.</p>
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <form action="{{ route('admin.media.sync-storage') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill px-4">
+                                <i class="bi bi-arrow-repeat me-1"></i> Scan &amp; Index Storage Files
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" onclick="document.getElementById('fileInput').click(); new bootstrap.Collapse(document.getElementById('uploadCollapse')).show();">
+                            <i class="bi bi-cloud-arrow-up me-1"></i> Upload First Asset
+                        </button>
+                    </div>
                 </div>
             </div>
         @endforelse
@@ -300,6 +321,11 @@
                                 <div class="mb-2">
                                     <label class="form-label small fw-bold mb-1">Caption</label>
                                     <textarea name="caption" id="modalMetaCaption" rows="2" class="form-control form-control-sm rounded-3" placeholder="Add a caption..."></textarea>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold mb-1">Description / Notes</label>
+                                    <textarea name="description" id="modalMetaDescription" rows="2" class="form-control form-control-sm rounded-3" placeholder="Detailed notes or description..."></textarea>
                                 </div>
 
                                 <!-- File Specs Summary -->
@@ -472,6 +498,7 @@
                     document.getElementById('modalMetaTitle').value = media.title || '';
                     document.getElementById('modalMetaAlt').value = media.alt_text || '';
                     document.getElementById('modalMetaCaption').value = media.caption || '';
+                    document.getElementById('modalMetaDescription').value = media.description || '';
 
                     // Specifications
                     document.getElementById('modalSpecFileName').textContent = media.file_name;
@@ -489,13 +516,89 @@
                     }
 
                     // Show Modal
-                    const modal = new bootstrap.Modal(document.getElementById('mediaDetailModal'));
+                    const modalEl = document.getElementById('mediaDetailModal');
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
                     modal.show();
                 }
             })
             .catch(err => {
                 console.error('Failed to load media specs:', err);
             });
+    }
+
+    // AJAX Handler for Media Metadata Updates
+    const mediaEditForm = document.getElementById('mediaEditForm');
+    if (mediaEditForm) {
+        mediaEditForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const actionUrl = this.action;
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+
+            fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+
+                if (data.success) {
+                    const media = data.media;
+                    // Update card title and caption live on page
+                    const titleEl = document.getElementById(`media-title-${media.id}`);
+                    if (titleEl) {
+                        titleEl.textContent = media.title || media.original_name;
+                    }
+
+                    let captionEl = document.getElementById(`media-caption-${media.id}`);
+                    if (media.caption) {
+                        if (captionEl) {
+                            captionEl.innerHTML = `<i class="bi bi-chat-quote text-success me-1"></i>${media.caption}`;
+                            captionEl.title = media.caption;
+                        } else if (titleEl) {
+                            const newCap = document.createElement('p');
+                            newCap.id = `media-caption-${media.id}`;
+                            newCap.className = 'text-body-secondary small text-truncate mb-1';
+                            newCap.style.fontSize = '0.72rem';
+                            newCap.title = media.caption;
+                            newCap.innerHTML = `<i class="bi bi-chat-quote text-success me-1"></i>${media.caption}`;
+                            titleEl.after(newCap);
+                        }
+                    } else if (captionEl) {
+                        captionEl.remove();
+                    }
+
+                    // Hide modal
+                    const modalEl = document.getElementById('mediaDetailModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+
+                    // Show success feedback
+                    const toastMsg = document.querySelector('#copyToast .toast-body span');
+                    if (toastMsg) toastMsg.textContent = 'Media metadata (title & caption) updated successfully!';
+                    showCopyToast();
+                } else {
+                    alert(data.message || 'Error saving media metadata.');
+                }
+            })
+            .catch(err => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                // Fallback to regular submit if fetch fails
+                mediaEditForm.submit();
+            });
+        });
     }
 </script>
 @endpush

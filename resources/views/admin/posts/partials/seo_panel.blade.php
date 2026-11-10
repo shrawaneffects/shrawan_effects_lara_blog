@@ -162,7 +162,7 @@
                                 <label class="form-label fw-bold small mb-0">Meta Description</label>
                                 <span class="badge bg-body-tertiary text-body border" id="descCharCounter">0 / 160 chars</span>
                             </div>
-                            <textarea name="meta_description" id="seoDescInput" class="form-control" rows="3" placeholder="Engaging summary for search result snippets...">{{ old('meta_description', $postSeo->meta_description ?? ($post->meta_description ?? '')) }}</textarea>
+                            <textarea name="meta_description_panel" id="seoDescInput" class="form-control" rows="3" placeholder="Engaging summary for search result snippets...">{{ old('meta_description', $postSeo->meta_description ?? ($post->meta_description ?? '')) }}</textarea>
                             <div class="progress mt-1.5" style="height: 4px;">
                                 <div id="descProgressBar" class="progress-bar bg-success" style="width: 0%;"></div>
                             </div>
@@ -212,7 +212,7 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label fw-bold small">Custom Canonical URL (Override)</label>
-                        <input type="url" name="canonical_url" id="seoCanonicalUrl" class="form-control" placeholder="https://example.com/original-article" value="{{ old('canonical_url', $postSeo->canonical_url ?? '') }}">
+                        <input type="url" name="canonical_url_panel" id="seoCanonicalUrl" class="form-control" placeholder="https://example.com/original-article" value="{{ old('canonical_url', $postSeo->canonical_url ?? '') }}">
                         <small class="text-body-secondary d-block mt-1">Leave blank to default to this article's own permanent URL (Recommended for original content).</small>
                     </div>
 

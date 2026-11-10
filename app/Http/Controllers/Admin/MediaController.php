@@ -24,6 +24,11 @@ class MediaController extends Controller
      */
     public function index(Request $request): View
     {
+        // Auto-scan and index files if library is currently empty
+        if (Media::count() === 0) {
+            $this->scanAndImportStorageFiles();
+        }
+
         $query = Media::with('user');
 
         // Filter by media type
@@ -206,5 +211,68 @@ class MediaController extends Controller
             return number_format($bytes / 1024, 1) . ' KB';
         }
         return $bytes . ' B';
+    }
+
+    /**
+     * Scan server storage directories and index existing files into Media Library.
+     */
+    public function syncStorage(Request $request): RedirectResponse
+    {
+        $importedCount = $this->scanAndImportStorageFiles();
+
+        return redirect()->route('admin.media.index')->with(
+            'success',
+            $importedCount > 0
+                ? "Storage scan complete! {$importedCount} media asset(s) successfully registered into Media Library."
+                : "Storage scan complete! All storage files are already indexed in the Media Library."
+        );
+    }
+
+    /**
+     * Internal scanner for public disk and post featured images
+     */
+    protected function scanAndImportStorageFiles(): int
+    {
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
+        $importedCount = 0;
+
+        // 1. Scan Post featured images
+        try {
+            $posts = \App\Models\Post::whereNotNull('featured_image')->get();
+            foreach ($posts as $post) {
+                $img = $post->featured_image;
+                if (!empty($img) && !str_starts_with($img, 'http://') && !str_starts_with($img, 'https://')) {
+                    $cleanPath = ltrim(str_replace('storage/', '', $img), '/');
+                    if ($disk->exists($cleanPath) && !Media::where('file_path', $cleanPath)->exists()) {
+                        $this->uploader->importFromDisk($cleanPath, $post->author);
+                        $importedCount++;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Ignore failure
+        }
+
+        // 2. Scan public storage directory recursively
+        try {
+            $allFiles = $disk->allFiles();
+            foreach ($allFiles as $filePath) {
+                $base = basename($filePath);
+                if (str_starts_with($base, '.')) {
+                    continue;
+                }
+
+                if (!Media::where('file_path', $filePath)->exists()) {
+                    $imported = $this->uploader->importFromDisk($filePath, auth()->user());
+                    if ($imported) {
+                        $importedCount++;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Ignore failure
+        }
+
+        return $importedCount;
     }
 }

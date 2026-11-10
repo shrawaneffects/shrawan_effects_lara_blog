@@ -39,6 +39,9 @@
                     </div>
                 </div>
 
+                <!-- Primary Meta Title, Meta Description & Canonical Tag Card -->
+                @include('admin.posts.partials.meta_canonical_card')
+
                 <!-- 2026 On-Page SEO Management Suite -->
                 @include('admin.posts.partials.seo_panel')
 

@@ -86,6 +86,81 @@ class MediaUploadService
     }
 
     /**
+     * Import an existing file on public storage disk into the Media database.
+     */
+    public function importFromDisk(string $relativeFilePath, ?User $user = null): ?Media
+    {
+        $cleanPath = ltrim(str_replace('storage/', '', $relativeFilePath), '/');
+        
+        if (!Storage::disk('public')->exists($cleanPath)) {
+            return null;
+        }
+
+        // Check if already registered in media database
+        $existing = Media::where('file_path', $cleanPath)->first();
+        if ($existing) {
+            return $existing;
+        }
+
+        $fileName = basename($cleanPath);
+        $originalName = $fileName;
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $fullPath = Storage::disk('public')->path($cleanPath);
+        
+        $fileSize = 0;
+        try {
+            $fileSize = Storage::disk('public')->size($cleanPath);
+        } catch (\Throwable $e) {
+            $fileSize = @filesize($fullPath) ?: 0;
+        }
+
+        $mimeType = 'application/octet-stream';
+        try {
+            $mimeType = Storage::disk('public')->mimeType($cleanPath);
+        } catch (\Throwable $e) {
+            $mimeType = @mime_content_type($fullPath) ?: 'application/octet-stream';
+        }
+
+        $mediaType = $this->determineMediaType($mimeType, $extension);
+
+        // Dimensions for images
+        $width = null;
+        $height = null;
+        if ($mediaType === 'image' && $extension !== 'svg' && file_exists($fullPath)) {
+            try {
+                $imageInfo = @getimagesize($fullPath);
+                if ($imageInfo) {
+                    $width = $imageInfo[0];
+                    $height = $imageInfo[1];
+                }
+            } catch (\Throwable $e) {
+                // Ignore dimension failure
+            }
+        }
+
+        $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+        $title = ucwords(str_replace(['-', '_'], ' ', $baseName));
+        $altText = $mediaType === 'image' ? $title : null;
+
+        return Media::create([
+            'user_id' => $user ? $user->id : (auth()->check() ? auth()->id() : 1),
+            'file_name' => $fileName,
+            'original_name' => $originalName,
+            'file_path' => $cleanPath,
+            'disk' => 'public',
+            'mime_type' => $mimeType,
+            'media_type' => $mediaType,
+            'file_size' => $fileSize,
+            'width' => $width,
+            'height' => $height,
+            'alt_text' => $altText,
+            'title' => $title,
+            'caption' => null,
+            'description' => null,
+        ]);
+    }
+
+    /**
      * Categorize media type based on MIME type and extension.
      */
     public function determineMediaType(string $mimeType, string $extension): string
