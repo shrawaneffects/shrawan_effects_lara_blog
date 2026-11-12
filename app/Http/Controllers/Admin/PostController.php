@@ -10,6 +10,7 @@ use App\Models\PostSeo;
 use App\Models\PostSeoKeyword;
 use App\Models\PostSeoEntity;
 use App\Models\SeoAudit;
+use App\Models\AuditLog;
 use App\Services\Seo\SeoAuditService;
 use App\Services\Seo\SeoRedirectService;
 use Illuminate\Http\Request;
@@ -516,5 +517,51 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->back()->with('success', 'Trending status updated!');
+    }
+
+    /**
+     * Adjust or reset an article's view count (to remove historical bot-inflated counts).
+     */
+    public function updateViews(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+        $validated = $request->validate([
+            'views_count' => 'required|integer|min:0|max:100000000',
+        ]);
+
+        $oldViews = (int) $post->views_count;
+        $newViews = (int) $validated['views_count'];
+        $post->views_count = $newViews;
+        $post->save();
+
+        AuditLog::record(
+            'post_views_adjusted',
+            "Adjusted views on post #{$post->id} ('{$post->title}') from {$oldViews} to {$newViews}",
+            auth()->id(),
+            ['post_id' => $post->id, 'old_views' => $oldViews, 'new_views' => $newViews],
+            'info',
+            $request
+        );
+
+        return redirect()->back()->with('success', "Views updated for \"{$post->title}\" ({$oldViews} → {$newViews}).");
+    }
+
+    /**
+     * Reset all article view counts to zero so only verified human views accumulate going forward.
+     */
+    public function resetAllViews(Request $request)
+    {
+        $affected = Post::query()->update(['views_count' => 0]);
+
+        AuditLog::record(
+            'all_post_views_reset',
+            "Reset historical view counts to 0 across {$affected} posts",
+            auth()->id(),
+            ['affected_posts' => $affected],
+            'warning',
+            $request
+        );
+
+        return redirect()->back()->with('success', "Reset view counts to 0 across all {$affected} articles. Only verified human views will be counted now.");
     }
 }

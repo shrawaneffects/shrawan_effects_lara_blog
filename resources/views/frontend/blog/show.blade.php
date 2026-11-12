@@ -72,7 +72,7 @@
                                 <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
                                     {{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }} &bull;
                                     <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m read &bull;
-                                    <i class="bi bi-eye me-1 text-success"></i>{{ number_format($post->views_count) }} views
+                                    <i class="bi bi-eye me-1 text-success"></i><span id="post-views-count">{{ number_format($post->views_count) }}</span> views
                                 </small>
                             </div>
                         </div>
@@ -491,17 +491,101 @@
             }
         });
 
-        @if(isset($viewTokenData))
-        // Verified Human View Tracking Beacon (Prevents robotic/crawler/prefetch view inflation)
+        @if(!empty($viewTokenData))
+        // Verified Human-Only View Tracking Beacon (requires trusted interaction, >=2.8s visible dwell, non-webdriver & JS proof)
         (function() {
-            let viewTracked = false;
-            function sendHumanViewPing() {
-                if (viewTracked) return;
-                if (document.visibilityState && document.visibilityState !== 'visible') return;
-                viewTracked = true;
+            function hasAutomationSignals() {
+                if (navigator.webdriver === true) return true;
+                if (window.outerWidth === 0 && window.outerHeight === 0) return true;
+                if ('__playwright' in window || '__pw_manual' in window || '__nightmare' in window || 'callPhantom' in window || '_phantom' in window) return true;
+                for (var key in document) {
+                    if (Object.prototype.hasOwnProperty.call(document, key) && /^\$cdc_/.test(key)) return true;
+                }
+                return false;
+            }
+            if (hasAutomationSignals()) return;
 
+            function sha256Hex(str) {
+                var K = [1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];
+                var H = [1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];
+                var utf8 = unescape(encodeURIComponent(str));
+                var words = [], i, l = utf8.length * 8;
+                for (i = 0; i < utf8.length; i++) words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+                words[l >> 5] |= 0x80 << (24 - (l % 32));
+                words[((l + 64 >> 9) << 4) + 15] = l;
+                var W = new Array(64);
+                for (i = 0; i < words.length; i += 16) {
+                    var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+                    for (var t = 0; t < 64; t++) {
+                        if (t < 16) W[t] = words[i + t] | 0;
+                        else {
+                            var g0 = W[t-15], g1 = W[t-2];
+                            var s0 = ((g0 >>> 7) | (g0 << 25)) ^ ((g0 >>> 18) | (g0 << 14)) ^ (g0 >>> 3);
+                            var s1 = ((g1 >>> 17) | (g1 << 15)) ^ ((g1 >>> 19) | (g1 << 13)) ^ (g1 >>> 10);
+                            W[t] = (W[t-16] + s0 + W[t-7] + s1) | 0;
+                        }
+                        var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+                        var ch = (e & f) ^ ((~e) & g);
+                        var temp1 = (h + S1 + ch + K[t] + W[t]) | 0;
+                        var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+                        var maj = (a & b) ^ (a & c) ^ (b & c);
+                        var temp2 = (S0 + maj) | 0;
+                        h = g; g = f; f = e; e = (d + temp1) | 0; d = c; c = b; b = a; a = (temp1 + temp2) | 0;
+                    }
+                    H[0]=(H[0]+a)|0; H[1]=(H[1]+b)|0; H[2]=(H[2]+c)|0; H[3]=(H[3]+d)|0;
+                    H[4]=(H[4]+e)|0; H[5]=(H[5]+f)|0; H[6]=(H[6]+g)|0; H[7]=(H[7]+h)|0;
+                }
+                return H.map(function(v) { return ('00000000' + (v >>> 0).toString(16)).slice(-8); }).join('');
+            }
+
+            var viewTracked = false;
+            var interacted = false;
+            var moveCount = 0;
+            var maxScrollY = Math.round(window.scrollY || 0);
+            var accumulatedVisibleMs = 0;
+            var visibleStart = document.visibilityState === 'visible' ? Date.now() : null;
+            var checkTimer = null;
+
+            function getVisibleMs() {
+                return accumulatedVisibleMs + (visibleStart !== null ? (Date.now() - visibleStart) : 0);
+            }
+
+            function markInteraction(e) {
+                if (!e || e.isTrusted !== true) return;
+                if (e.type === 'scroll') {
+                    var y = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+                    if (y > maxScrollY) maxScrollY = y;
+                    if (y >= 30) interacted = true;
+                } else if (e.type === 'pointermove' || e.type === 'mousemove') {
+                    moveCount++;
+                    if (moveCount >= 2) interacted = true;
+                } else {
+                    interacted = true;
+                }
+                maybeDispatch();
+            }
+
+            function cleanupListeners() {
+                if (checkTimer) { clearInterval(checkTimer); checkTimer = null; }
+                ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown', 'pointermove', 'mousemove'].forEach(function(evt) {
+                    window.removeEventListener(evt, markInteraction);
+                });
+                document.removeEventListener('visibilitychange', onVisibilityChange);
+                window.removeEventListener('pagehide', onPageHide);
+            }
+
+            function sendHumanViewPing(useKeepAlive) {
+                if (viewTracked) return;
+                var dwellMs = Math.max(2500, Math.round(getVisibleMs()));
+                var scrollY = Math.max(0, Math.round(maxScrollY));
+                viewTracked = true;
+                cleanupListeners();
+
+                var payloadStr = "{{ $post->id }}|{{ $viewTokenData['nonce'] }}|{{ $viewTokenData['timestamp'] }}|{{ $viewTokenData['challenge_salt'] }}|" + dwellMs + "|" + scrollY;
+                var proof = sha256Hex(payloadStr);
                 fetch("{{ route('blog.track-view', $post->id) }}", {
                     method: 'POST',
+                    keepalive: Boolean(useKeepAlive),
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
@@ -511,21 +595,51 @@
                     body: JSON.stringify({
                         token: "{{ $viewTokenData['token'] }}",
                         timestamp: {{ $viewTokenData['timestamp'] }},
-                        nonce: "{{ $viewTokenData['nonce'] }}"
+                        nonce: "{{ $viewTokenData['nonce'] }}",
+                        js_proof: proof,
+                        dwell_ms: dwellMs,
+                        scroll_y: scrollY,
+                        engaged: true,
+                        webdriver: false
                     })
+                }).then(function(res) {
+                    return res && res.ok ? res.json() : null;
+                }).then(function(data) {
+                    if (data && data.tracked && typeof data.views_count === 'number') {
+                        var el = document.getElementById('post-views-count');
+                        if (el) el.textContent = Number(data.views_count).toLocaleString();
+                    }
                 }).catch(function() {});
             }
 
-            if (document.visibilityState === 'visible') {
-                setTimeout(sendHumanViewPing, 1500);
-            } else {
-                document.addEventListener('visibilitychange', function onVisible() {
-                    if (document.visibilityState === 'visible') {
-                        document.removeEventListener('visibilitychange', onVisible);
-                        setTimeout(sendHumanViewPing, 1500);
-                    }
-                });
+            function maybeDispatch() {
+                if (!viewTracked && interacted && getVisibleMs() >= 2800 && document.visibilityState === 'visible') {
+                    sendHumanViewPing(false);
+                }
             }
+
+            function onVisibilityChange() {
+                if (document.visibilityState === 'visible') {
+                    if (visibleStart === null) visibleStart = Date.now();
+                    maybeDispatch();
+                } else if (visibleStart !== null) {
+                    accumulatedVisibleMs += (Date.now() - visibleStart);
+                    visibleStart = null;
+                }
+            }
+
+            function onPageHide() {
+                if (!viewTracked && interacted && getVisibleMs() >= 2500) {
+                    sendHumanViewPing(true);
+                }
+            }
+
+            ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown', 'pointermove', 'mousemove'].forEach(function(evt) {
+                window.addEventListener(evt, markInteraction, { passive: true });
+            });
+            document.addEventListener('visibilitychange', onVisibilityChange);
+            window.addEventListener('pagehide', onPageHide);
+            checkTimer = setInterval(maybeDispatch, 500);
         })();
         @endif
     </script>

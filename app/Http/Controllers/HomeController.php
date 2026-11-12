@@ -46,7 +46,9 @@ class HomeController extends Controller
             if ($postId) {
                 $post = Post::with(['author', 'category', 'tags'])->published()->find($postId);
                 if ($post) {
-                    $viewTokenData = \App\Services\Security\BotDetectionService::generateViewToken($post->id, $request);
+                    $viewTokenData = !\App\Services\Security\BotDetectionService::isBot($request)
+                        ? \App\Services\Security\BotDetectionService::generateViewToken($post->id, $request)
+                        : null;
 
                     $comments = $post->comments()
                         ->where('status', 'approved')

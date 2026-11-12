@@ -22,8 +22,10 @@ class PostController extends Controller
             $post = $postQuery->published()->where('slug', $slug)->firstOrFail();
         }
 
-        // Generate signed anti-bot human view verification token (views count only after verified visible browser beacon)
-        $viewTokenData = BotDetectionService::generateViewToken($post->id, $request);
+        // Only issue signed human view challenge to non-bot browser requests
+        $viewTokenData = !BotDetectionService::isBot($request)
+            ? BotDetectionService::generateViewToken($post->id, $request)
+            : null;
 
         // Approved comments with user and nested replies
         $comments = $post->comments()

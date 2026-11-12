@@ -9,10 +9,41 @@
             <h4 class="fw-bold mb-1">Articles & Posts</h4>
             <p class="text-body-secondary small mb-0">Create, edit, and organize publications.</p>
         </div>
-        <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Add New Article
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            @if(auth()->user()->isAdmin())
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#resetAllViewsModal">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset All Bot Views
+                </button>
+            @endif
+            <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Add New Article
+            </a>
+        </div>
     </div>
+
+    @if(auth()->user()->isAdmin())
+        <div class="modal fade" id="resetAllViewsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold text-warning"><i class="bi bi-shield-check me-2"></i> Reset Historical View Counts</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">This will reset <code>views_count</code> to <strong>0</strong> for all articles so historical robotic views are cleared.</p>
+                        <p class="small text-muted mb-0">Or you can set individual post counts (e.g., matching Google Analytics) using the pencil icon next to each post's view count below.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="{{ route('admin.posts.reset-all-views') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-warning fw-semibold">Confirm Reset to 0</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- SEO Internal Linking Stats Overview -->
     <div class="row g-3 mb-4">
@@ -263,7 +294,40 @@
                                     </form>
                                 </div>
                             </td>
-                            <td class="small fw-semibold">{{ number_format($post->views_count) }}</td>
+                            <td class="small fw-semibold">
+                                <div class="d-flex align-items-center gap-1">
+                                    <span>{{ number_format($post->views_count) }}</span>
+                                    @if(auth()->user()->isAdmin())
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-muted" data-bs-toggle="modal" data-bs-target="#editViewsModal-{{ $post->id }}" title="Reset or Adjust Views">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    @endif
+                                </div>
+                                @if(auth()->user()->isAdmin())
+                                    <div class="modal fade text-start" id="editViewsModal-{{ $post->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm modal-dialog-centered">
+                                            <div class="modal-content rounded-4 border-0 shadow">
+                                                <form action="{{ route('admin.posts.update-views', $post->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h6 class="modal-title fw-bold">Adjust Views</h6>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="small text-muted mb-2">{{ Str::limit($post->title, 50) }}</p>
+                                                        <label class="form-label small fw-semibold">Verified View Count</label>
+                                                        <input type="number" name="views_count" class="form-control form-control-sm" min="0" value="{{ $post->views_count }}" required>
+                                                    </div>
+                                                    <div class="modal-footer py-2">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="this.form.querySelector('input[name=views_count]').value='0'; this.form.submit();">Set 0</button>
+                                                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('blog.show', $post->slug) }}" target="_blank" class="btn btn-outline-secondary" title="View Article"><i class="bi bi-eye"></i></a>

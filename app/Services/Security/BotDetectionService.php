@@ -2,6 +2,7 @@
 
 namespace App\Services\Security;
 
+use App\Models\AuditLog;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -18,9 +19,13 @@ class BotDetectionService
         'curl/', 'wget/', 'python', 'requests/', 'aiohttp', 'httpx', 'urllib',
         'go-http-client', 'java/', 'ruby', 'php/', 'guzzle', 'node-fetch',
         'axios/', 'undici', 'postman', 'insomnia', 'libwww-perl', 'mechanize',
-        'scrapy', 'headless', 'phantomjs', 'selenium', 'puppeteer', 'playwright',
-        'lighthouse', 'pagespeed', 'gtmetrix', 'pingdom', 'uptimerobot', 'statuscake',
+        'scrapy', 'headless', 'headlesschrome', 'phantom', 'phantomjs', 'selenium',
+        'puppeteer', 'playwright', 'jsdom', 'zombie', 'htmlunit',
+        'lighthouse', 'chrome-lighthouse', 'pagespeed', 'gtmetrix', 'pingdom',
+        'uptimerobot', 'statuscake', 'prerender', 'cf-worker', 'deno/', 'bun/',
+        'got/', 'superagent', 'okhttp', 'dalvik', 'cfnetwork',
         'ahrefs', 'semrush', 'mj12bot', 'dotbot', 'petalbot', 'bytespider',
+        'amazonbot', 'oai-searchbot', 'googleother', 'google-inspectiontool',
         'gptbot', 'chatgpt-user', 'claudebot', 'anthropic', 'perplexity',
         'applebot', 'bingpreview', 'facebookexternalhit', 'facebot', 'twitterbot',
         'whatsapp', 'telegrambot', 'linkedinbot', 'discordbot', 'slackbot',
@@ -73,12 +78,36 @@ class BotDetectionService
             return true;
         }
 
-        // Real desktop/mobile browsers always send an Accept-Language header on page/fetch requests
-        if (empty($request->header('Accept-Language')) && !$request->ajax()) {
+        // Real desktop/mobile browsers always send an Accept-Language header on page and fetch requests
+        if (empty($request->header('Accept-Language'))) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Validate browser-enforced same-origin headers on view-tracking beacons.
+     */
+    public static function hasValidSameOriginHeaders(Request $request): bool
+    {
+        $secFetchSite = strtolower(trim((string) $request->header('Sec-Fetch-Site', '')));
+        if ($secFetchSite !== '' && $secFetchSite !== 'same-origin') {
+            return false;
+        }
+
+        $expectedHost = strtolower((string) $request->getHost());
+        foreach (['Origin', 'Referer'] as $headerName) {
+            $headerVal = trim((string) $request->header($headerName, ''));
+            if ($headerVal !== '') {
+                $host = strtolower((string) parse_url($headerVal, PHP_URL_HOST));
+                if ($host === '' || $host !== $expectedHost) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -120,9 +149,9 @@ class BotDetectionService
     }
 
     /**
-     * Generate a short-lived HMAC-signed view verification token for real JS browser sessions.
+     * Generate a short-lived HMAC-signed view verification challenge for real JS browser sessions.
      *
-     * @return array{token: string, timestamp: int, nonce: string}
+     * @return array{token: string, timestamp: int, nonce: string, challenge_salt: string}
      */
     public static function generateViewToken(int $postId, Request $request): array
     {
@@ -135,11 +164,12 @@ class BotDetectionService
             'token' => $token,
             'timestamp' => $timestamp,
             'nonce' => $nonce,
+            'challenge_salt' => self::getChallengeSalt($postId, $nonce, $timestamp),
         ];
     }
 
     /**
-     * Verify token, filter bots/prefetchers, enforce per-visitor deduplication, and increment views_count once.
+     * Verify signed challenge, interactive JS proof, dwell time, and per-visitor dedup before counting a view.
      */
     public static function recordHumanView(
         Post $post,
@@ -148,30 +178,48 @@ class BotDetectionService
         int|string|null $timestamp,
         ?string $nonce
     ): bool {
-        if (self::isBot($request)) {
+        // Already counted in this browser session — silent no-op without warning audit logs
+        $sessionKey = 'viewed_post_' . $post->id;
+        if ($request->hasSession() && $request->session()->has($sessionKey)) {
+            return false;
+        }
+
+        if (self::isBot($request) || !self::hasValidSameOriginHeaders($request)) {
+            self::recordBlockedViewAudit($request, $post, 'Bot/invalid-origin view beacon blocked');
+            return false;
+        }
+
+        if ($request->boolean('webdriver') || !$request->boolean('engaged')) {
+            self::recordBlockedViewAudit($request, $post, 'Automated or non-interactive view ping rejected');
             return false;
         }
 
         $ts = intval($timestamp);
         $now = time();
-        if (empty($token) || empty($nonce) || $ts <= 0 || ($now - $ts) > 600 || $ts > ($now + 60)) {
+        $elapsedSec = $now - $ts;
+        // Require >= 2s elapsed since page render (stops instant scrapers) and <= 1h challenge lifetime
+        if (empty($token) || empty($nonce) || $ts <= 0 || $elapsedSec < 2 || $elapsedSec > 3600) {
+            self::recordBlockedViewAudit($request, $post, 'Invalid timing/challenge metadata on view beacon');
             return false;
         }
 
         $ipHash = self::getVisitorFingerprint($request);
         $expected = hash_hmac('sha256', "{$post->id}|{$ipHash}|{$ts}|{$nonce}", self::getSecretKey());
         if (!hash_equals($expected, (string) $token)) {
+            self::recordBlockedViewAudit($request, $post, 'Invalid HMAC signature on view beacon');
+            return false;
+        }
+
+        $dwellMs = (int) $request->input('dwell_ms', 0);
+        $scrollY = (int) $request->input('scroll_y', -1);
+        $jsProof = $request->input('js_proof');
+        if (!self::verifyJsProof($post->id, (string) $nonce, $ts, $dwellMs, $scrollY, is_string($jsProof) ? $jsProof : null)) {
+            self::recordBlockedViewAudit($request, $post, 'Failed dynamic JS proof-of-execution challenge');
             return false;
         }
 
         // Prevent token replay
-        if (!Cache::add("view_token_used_{$token}", true, now()->addMinutes(15))) {
-            return false;
-        }
-
-        // Session-level deduplication
-        $sessionKey = 'viewed_post_' . $post->id;
-        if ($request->hasSession() && $request->session()->has($sessionKey)) {
+        if (!Cache::add("view_token_used_{$token}", true, now()->addMinutes(65))) {
             return false;
         }
 
@@ -181,10 +229,11 @@ class BotDetectionService
             return false;
         }
 
-        // Per-IP hourly velocity cap (max 30 unique post views per IP per hour)
-        $ipKey = 'view_velocity_' . sha1((string) $request->ip());
+        // Hourly velocity cap per IP (or IPv6 /64 subnet): max 25 unique post views per hour
+        $ipKey = 'view_velocity_' . sha1(self::getVelocityBucketKey($request));
         $hourlyCount = (int) Cache::get($ipKey, 0);
-        if ($hourlyCount >= 30) {
+        if ($hourlyCount >= 25) {
+            self::recordBlockedViewAudit($request, $post, 'Exceeded hourly view velocity threshold');
             return false;
         }
 
@@ -201,6 +250,75 @@ class BotDetectionService
         }
 
         return true;
+    }
+
+    /**
+     * Derive per-challenge salt bound to the rendered post and nonce.
+     */
+    public static function getChallengeSalt(int $postId, string $nonce, int $timestamp): string
+    {
+        return substr(hash_hmac('sha256', "salt|{$postId}|{$nonce}|{$timestamp}", self::getSecretKey()), 0, 16);
+    }
+
+    /**
+     * Verify dynamic SHA-256 execution proof computed in the reader's browser.
+     */
+    protected static function verifyJsProof(
+        int $postId,
+        string $nonce,
+        int $timestamp,
+        int $dwellMs,
+        int $scrollY,
+        ?string $jsProof
+    ): bool {
+        if ($dwellMs < 2500 || $dwellMs > 86400000 || $scrollY < 0 || $scrollY > 1000000 || empty($jsProof)) {
+            return false;
+        }
+
+        $salt = self::getChallengeSalt($postId, $nonce, $timestamp);
+        $expected = hash('sha256', "{$postId}|{$nonce}|{$timestamp}|{$salt}|{$dwellMs}|{$scrollY}");
+
+        return hash_equals($expected, strtolower(trim($jsProof)));
+    }
+
+    /**
+     * Group IPv6 clients by /64 subnet for rate limiting so rotating host bits cannot bypass velocity caps.
+     */
+    protected static function getVelocityBucketKey(Request $request): string
+    {
+        $ip = (string) $request->ip();
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $packed = @inet_pton($ip);
+            if ($packed !== false && strlen($packed) === 16) {
+                return 'v6_' . bin2hex(substr($packed, 0, 8));
+            }
+        }
+
+        return 'v4_' . $ip;
+    }
+
+    /**
+     * Log blocked robotic view attempts to AuditLog (throttled per IP/post every 15 minutes).
+     */
+    protected static function recordBlockedViewAudit(Request $request, Post $post, string $reason): void
+    {
+        try {
+            $ipHash = self::getVisitorFingerprint($request);
+            if (!Cache::add("audit_bot_view_{$post->id}_{$ipHash}", true, now()->addMinutes(15))) {
+                return;
+            }
+
+            AuditLog::record(
+                'bot_view_blocked',
+                "{$reason} on post #{$post->id} (UA: " . substr((string) $request->userAgent(), 0, 120) . ')',
+                null,
+                ['post_id' => $post->id, 'slug' => $post->slug, 'ip' => $request->ip()],
+                'info',
+                $request
+            );
+        } catch (\Throwable $e) {
+            // Never let audit logging break response flow
+        }
     }
 
     protected static function getVisitorFingerprint(Request $request): string

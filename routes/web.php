@@ -182,12 +182,15 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', fn () => redirect()->route('admin.dashboard'))->name('root');
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Posts Management
+    Route::post('/posts/reset-all-views', [AdminPostController::class, 'resetAllViews'])->name('posts.reset-all-views');
     Route::resource('posts', AdminPostController::class);
     Route::post('/posts/{id}/toggle-featured', [AdminPostController::class, 'toggleFeatured'])->name('posts.toggle-featured');
     Route::post('/posts/{id}/toggle-trending', [AdminPostController::class, 'toggleTrending'])->name('posts.toggle-trending');
+    Route::post('/posts/{id}/views', [AdminPostController::class, 'updateViews'])->name('posts.update-views');
 
     // Dynamic Pages Management
     Route::resource('pages', AdminPageController::class)->except(['show']);
