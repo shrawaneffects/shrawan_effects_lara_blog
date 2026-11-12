@@ -44,6 +44,20 @@ use App\Http\Controllers\OpenSeo\SettingController as OpenSeoSettingController;
 
 /*
 |--------------------------------------------------------------------------
+| Spam / Stale URL Removal — 410 Gone
+|--------------------------------------------------------------------------
+| These URLs were indexed by Google as spam or old legacy pages.
+| Returning 410 (Gone) tells Google they are permanently removed,
+| which clears them faster from the index than a 404.
+*/
+Route::any('/shop.php', fn () => response('Gone', 410))->name('shop.gone');
+Route::any('/run_index.php', fn () => response('Gone', 410));
+Route::any('/sync_{file}.php', fn () => response('Gone', 410))->where('file', '[a-f0-9]+');
+Route::any('/deploy_{file}.php', fn () => response('Gone', 410))->where('file', '[a-f0-9]+');
+Route::any('/deploy_openseo.php', fn () => response('Gone', 410));
+
+/*
+|--------------------------------------------------------------------------
 | Public Frontend Routes
 |--------------------------------------------------------------------------
 */

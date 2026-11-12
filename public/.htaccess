@@ -8,6 +8,15 @@
     # 1. Protect Sensitive / Hidden Files
     RewriteRule ^(\.git|\.env|composer\.(json|lock)|package\.(json|lock)) - [F,L,NC]
 
+    # 1a. Return 410 Gone for /shop.php (spam URLs — permanently removed)
+    RewriteRule ^shop\.php$ - [G,L]
+
+    # 1b. Return 410 Gone for stale deploy/sync scripts
+    RewriteRule ^(sync_[a-f0-9]+\.php|run_index\.php|deploy_[a-f0-9]+\.php|deploy_openseo\.php|sync_serp_update\.php|app\.blade\.php)$ - [G,L]
+
+    # 1c. Block SQL file access — 403 Forbidden
+    RewriteRule \.(sql|zip|tar|gz|bak|log)$ - [F,L,NC]
+
     # 2. Handle Authorization & CSRF Headers
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

@@ -28,6 +28,10 @@ Disallow: /login
 Disallow: /register
 Disallow: /reset-password
 Disallow: /forgot-password
+Disallow: /shop.php
+Disallow: /*.php$
+Disallow: /*.sql$
+Disallow: /openseo/
 Allow: /
 
 # Sitemaps & Machine Context
