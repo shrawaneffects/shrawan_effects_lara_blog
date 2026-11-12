@@ -64,13 +64,22 @@
     <!-- Google SERP Thumbnails & Rich Media Discovery -->
     @php
         $metaThumbImage = View::getSection('og_image') ?: asset('storage/default.jpg');
+        // Determine MIME type from URL extension for correct og:image:type
+        $metaThumbExt = strtolower(pathinfo(parse_url($metaThumbImage, PHP_URL_PATH), PATHINFO_EXTENSION));
+        $metaThumbMime = match($metaThumbExt) {
+            'png'  => 'image/png',
+            'webp' => 'image/webp',
+            'gif'  => 'image/gif',
+            'svg'  => 'image/svg+xml',
+            default => 'image/jpeg',
+        };
     @endphp
     <meta name="thumbnail" content="{{ $metaThumbImage }}">
     <link rel="image_src" href="{{ $metaThumbImage }}">
     <meta property="og:image:secure_url" content="{{ $metaThumbImage }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="675">
-    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:type" content="{{ $metaThumbMime }}">
     <meta property="og:image:alt" content="@yield('og_title', $appTitle)">
 
     <!-- Twitter / X Card Metadata -->

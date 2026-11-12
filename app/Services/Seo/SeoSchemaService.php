@@ -20,6 +20,29 @@ class SeoSchemaService
 
         $imageUrl = $post->image_url;
 
+        // Build ImageObject variants for SERP thumbnail eligibility.
+        // Google requires at least 1200×675px (16:9) for large SERP thumbnails.
+        // Providing multiple aspect-ratio variants (16:9, 4:3, 1:1) gives Google
+        // maximum flexibility to pick the best-fit thumbnail.
+        $imageObject16x9 = [
+            '@type'  => 'ImageObject',
+            'url'    => $imageUrl,
+            'width'  => 1200,
+            'height' => 675,
+        ];
+        $imageObject4x3 = [
+            '@type'  => 'ImageObject',
+            'url'    => $imageUrl,
+            'width'  => 1200,
+            'height' => 900,
+        ];
+        $imageObject1x1 = [
+            '@type'  => 'ImageObject',
+            'url'    => $imageUrl,
+            'width'  => 1200,
+            'height' => 1200,
+        ];
+
         // 1. Main Article Schema (Structured for Google Rich Snippets & SERP Image Thumbnails)
         $articleSchema = [
             '@context' => 'https://schema.org',
@@ -27,15 +50,15 @@ class SeoSchemaService
             'mainEntityOfPage' => [
                 '@type' => 'WebPage',
                 '@id' => route('blog.show', $post->slug),
-                'primaryImageOfPage' => [
-                    '@type' => 'ImageObject',
-                    'url' => $imageUrl,
-                ],
+                'primaryImageOfPage' => $imageObject16x9,
             ],
             'headline' => $seo->effective_title,
             'description' => $seo->effective_description,
+            // Google picks from multiple aspect-ratio variants — 16:9 is preferred for SERP thumbnails
             'image' => [
-                $imageUrl,
+                $imageObject16x9,
+                $imageObject4x3,
+                $imageObject1x1,
             ],
             'thumbnailUrl' => $imageUrl,
             'datePublished' => $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String(),
