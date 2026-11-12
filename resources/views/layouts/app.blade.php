@@ -1698,6 +1698,7 @@
                     <p class="text-body-secondary small mb-3">Subscribe to receive weekly telemetry curations on architecture, Laravel innovations, and futuristic tech.</p>
                     <form action="{{ route('newsletter.store') }}" method="POST" id="footerNewsletterForm">
                         @csrf
+                        @include('components.honeypot')
                         <div class="input-group">
                             <input type="email" name="email" class="form-control rounded-start-pill ps-3 footer-email-input" placeholder="user@domain.com" aria-label="Email address for weekly telemetry newsletter" required style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.3); font-family: var(--font-mono); font-size: 0.85rem;">
                             <button class="btn btn-gradient rounded-end-pill px-4" type="submit" aria-label="Transmit newsletter subscription">TRANSMIT</button>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Services\Security\BotDetectionService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -20,12 +22,8 @@ class PostController extends Controller
             $post = $postQuery->published()->where('slug', $slug)->firstOrFail();
         }
 
-        // Increment views with session throttle
-        $sessionKey = 'viewed_post_' . $post->id;
-        if (!$request->session()->has($sessionKey)) {
-            $post->increment('views_count');
-            $request->session()->put($sessionKey, true);
-        }
+        // Generate signed anti-bot human view verification token (views count only after verified visible browser beacon)
+        $viewTokenData = BotDetectionService::generateViewToken($post->id, $request);
 
         // Approved comments with user and nested replies
         $comments = $post->comments()
@@ -77,7 +75,32 @@ class PostController extends Controller
             'previousPost',
             'nextPost',
             'popularPosts',
-            'categories'
+            'categories',
+            'viewTokenData'
         ));
+    }
+
+    /**
+     * Record a verified human article view via signed JS beacon (blocks crawlers/scrapers/robots).
+     */
+    public function trackView(Request $request, int $postId): JsonResponse
+    {
+        $post = Post::published()->find($postId);
+        if (!$post) {
+            return response()->json(['tracked' => false], 404);
+        }
+
+        $tracked = BotDetectionService::recordHumanView(
+            $post,
+            $request,
+            $request->input('token'),
+            $request->input('timestamp'),
+            $request->input('nonce')
+        );
+
+        return response()->json([
+            'tracked' => $tracked,
+            'views_count' => $post->fresh()->views_count ?? $post->views_count,
+        ]);
     }
 }

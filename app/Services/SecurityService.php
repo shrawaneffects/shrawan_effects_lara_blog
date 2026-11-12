@@ -40,11 +40,25 @@ class SecurityService
     }
 
     /**
-     * Check if a honeypot field was filled by a spam bot.
+     * Check if a honeypot field was filled or form was submitted faster than humanly possible (<1s).
      */
     public static function isBotSubmission(Request $request, string $field = '_hp_token'): bool
     {
-        return !empty($request->input($field));
+        if (!empty($request->input($field))) {
+            return true;
+        }
+
+        if ($request->filled('captcha_timestamp') && $request->filled('_form_ts_sig')) {
+            if (!\App\Services\Security\CaptchaService::verifyFormTimestamp(
+                $request->input('captcha_timestamp'),
+                $request->input('_form_ts_sig'),
+                1
+            )) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

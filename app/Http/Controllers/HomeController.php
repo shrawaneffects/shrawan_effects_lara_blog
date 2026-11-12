@@ -46,12 +46,7 @@ class HomeController extends Controller
             if ($postId) {
                 $post = Post::with(['author', 'category', 'tags'])->published()->find($postId);
                 if ($post) {
-                    // Increment views with session throttle
-                    $sessionKey = 'viewed_post_' . $post->id;
-                    if (!$request->session()->has($sessionKey)) {
-                        $post->increment('views_count');
-                        $request->session()->put($sessionKey, true);
-                    }
+                    $viewTokenData = \App\Services\Security\BotDetectionService::generateViewToken($post->id, $request);
 
                     $comments = $post->comments()
                         ->where('status', 'approved')
@@ -88,7 +83,8 @@ class HomeController extends Controller
                         'relatedPosts',
                         'previousPost',
                         'nextPost',
-                        'popularPosts'
+                        'popularPosts',
+                        'viewTokenData'
                     ));
                 }
             }

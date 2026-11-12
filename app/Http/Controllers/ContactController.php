@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactFormMail;
+use App\Models\AuditLog;
 use App\Models\Contact;
 use App\Models\Setting;
+use App\Services\Security\CaptchaService;
 use App\Services\SecurityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,8 +21,16 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-        // Honeypot check
+        // Honeypot & speed-trap spam check
         if (SecurityService::isBotSubmission($request)) {
+            AuditLog::record(
+                'contact_bot_blocked',
+                'Blocked bot contact form submission via honeypot/time-trap',
+                null,
+                ['ip' => $request->ip()],
+                'warning',
+                $request
+            );
             return redirect()->back()->with('success', 'Thank you for reaching out! We will get back to you shortly.');
         }
 
@@ -29,7 +39,22 @@ class ContactController extends Controller
             'email' => 'required|email|max:150',
             'subject' => 'nullable|string|max:200',
             'message' => 'required|string|min:10|max:5000',
+            'captcha_answer' => 'required',
+        ], [
+            'captcha_answer.required' => 'Please solve the security verification challenge before submitting.',
         ]);
+
+        // Enforce Visual SVG CAPTCHA verification
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp'),
+            $request->input('captcha_nonce')
+        )) {
+            return redirect()->back()
+                ->withErrors(['captcha_answer' => 'Security CAPTCHA verification failed. Please solve the new challenge and try again.'])
+                ->withInput($request->except('captcha_answer'));
+        }
 
         $validated['name'] = strip_tags($validated['name']);
         $validated['subject'] = isset($validated['subject']) ? strip_tags($validated['subject']) : null;

@@ -12,6 +12,7 @@ use App\Models\EmailVerification;
 use App\Models\User;
 use App\Services\Security\AuthRateLimiterService;
 use App\Services\Security\CaptchaService;
+use App\Services\SecurityService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +52,37 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle user credential check and sign in (with Math Captcha protection like Shyamo).
+     * Enforce honeypot/speed-trap and Vector SVG CAPTCHA verification.
+     * Returns an error message on failure, or null when verification passes.
+     */
+    protected function verifyCaptchaAndBotShield(Request $request): ?string
+    {
+        if (SecurityService::isBotSubmission($request)) {
+            AuditLog::record(
+                'auth_bot_blocked',
+                'Bot/Honeypot trap triggered on ' . $request->path(),
+                null,
+                ['ip' => $request->ip(), 'email' => $request->input('email')],
+                'warning',
+                $request
+            );
+            return 'Automated or suspicious submission detected. Please submit manually.';
+        }
+
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp'),
+            $request->input('captcha_nonce')
+        )) {
+            return 'Security CAPTCHA verification failed. Please solve the visual math puzzle and try again.';
+        }
+
+        return null;
+    }
+
+    /**
+     * Handle user credential check and sign in.
      */
     public function login(Request $request)
     {
@@ -65,14 +96,10 @@ class AuthController extends Controller
 
         $email = strtolower(trim($credentials['email']));
 
-        // 1. Verify Human Security Captcha
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
+        // 1. Verify Human Security Captcha & Bot Shield
+        if ($captchaError = $this->verifyCaptchaAndBotShield($request)) {
             return back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+                'captcha_answer' => $captchaError,
             ])->onlyInput('email');
         }
 
@@ -188,14 +215,10 @@ class AuthController extends Controller
 
         $email = strtolower(trim($request->input('email')));
 
-        // 1. Verify Captcha
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
+        // 1. Verify Captcha & Bot Shield
+        if ($captchaError = $this->verifyCaptchaAndBotShield($request)) {
             return back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again.',
+                'captcha_answer' => $captchaError,
             ])->with('active_tab', 'magic-link')->onlyInput('email');
         }
 
@@ -330,14 +353,10 @@ class AuthController extends Controller
 
         $email = strtolower(trim($request->input('email')));
 
-        // 1. Captcha verification
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
+        // 1. Captcha & Bot Shield verification
+        if ($captchaError = $this->verifyCaptchaAndBotShield($request)) {
             return back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again.',
+                'captcha_answer' => $captchaError,
             ])->with('active_tab', 'email-otp')->onlyInput('email');
         }
 
@@ -704,14 +723,10 @@ class AuthController extends Controller
 
         $email = strtolower(trim($validated['email']));
 
-        // 1. Verify Human Security Captcha
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
+        // 1. Verify Human Security Captcha & Bot Shield
+        if ($captchaError = $this->verifyCaptchaAndBotShield($request)) {
             return back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+                'captcha_answer' => $captchaError,
             ])->onlyInput('name', 'email');
         }
 
@@ -979,14 +994,10 @@ class AuthController extends Controller
 
         $email = strtolower(trim($validated['email']));
 
-        // 1. Verify Human Security Captcha
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
+        // 1. Verify Human Security Captcha & Bot Shield
+        if ($captchaError = $this->verifyCaptchaAndBotShield($request)) {
             return back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again with the new question.',
+                'captcha_answer' => $captchaError,
             ])->onlyInput('email');
         }
 

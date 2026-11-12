@@ -50,14 +50,15 @@ use App\Http\Controllers\OpenSeo\SettingController as OpenSeoSettingController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
+Route::post('/blog/{post}/track-view', [PostController::class, 'trackView'])->middleware('throttle:60,1')->name('blog.track-view');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
 Route::get('/author/{id}', [BlogController::class, 'author'])->name('blog.author');
 
-Route::post('/blog/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::post('/blog/{post}/comments', [CommentController::class, 'store'])->middleware('throttle:10,1')->name('comments.store');
+Route::post('/newsletter', [NewsletterController::class, 'store'])->middleware('throttle:5,1')->name('newsletter.store');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
@@ -129,17 +130,17 @@ Route::prefix('openseo')->name('openseo.')->group(function () {
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/captcha', [AuthController::class, 'getCaptchaChallenge'])->name('captcha.refresh');
-Route::get('/api/captcha', [AuthController::class, 'getCaptchaChallenge']);
+Route::get('/captcha', [AuthController::class, 'getCaptchaChallenge'])->middleware('throttle:30,1')->name('captcha.refresh');
+Route::get('/api/captcha', [AuthController::class, 'getCaptchaChallenge'])->middleware('throttle:30,1');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
 // Magic Link & Email OTP Direct Login Routes
-Route::post('/login/magic-link', [AuthController::class, 'sendMagicLink'])->name('login.magic-link');
+Route::post('/login/magic-link', [AuthController::class, 'sendMagicLink'])->middleware('throttle:10,1')->name('login.magic-link');
 Route::get('/login/magic-link/{token}', [AuthController::class, 'verifyMagicLink'])->name('login.magic-link.verify');
-Route::post('/login/email-otp', [AuthController::class, 'sendLoginOtp'])->name('login.email-otp');
-Route::post('/login/email-otp/verify', [AuthController::class, 'verifyLoginOtpCode'])->name('login.email-otp.verify');
+Route::post('/login/email-otp', [AuthController::class, 'sendLoginOtp'])->middleware('throttle:10,1')->name('login.email-otp');
+Route::post('/login/email-otp/verify', [AuthController::class, 'verifyLoginOtpCode'])->middleware('throttle:10,1')->name('login.email-otp.verify');
 
 // 2FA Login Email OTP Routes
 Route::get('/login/verify-otp', [AuthController::class, 'showLoginOtpForm'])->name('login.verify-otp');
@@ -147,7 +148,7 @@ Route::post('/login/verify-otp', [AuthController::class, 'verifyLoginOtp'])->nam
 Route::post('/login/resend-otp', [AuthController::class, 'resendLoginOtp'])->name('login.resend-otp');
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 
 // Registration Email OTP Routes
 Route::get('/register/verify-otp', [AuthController::class, 'showRegisterOtpForm'])->name('register.verify-otp');
@@ -158,7 +159,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Forgot & Reset Password Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
-Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('throttle:10,1')->name('password.email');
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 

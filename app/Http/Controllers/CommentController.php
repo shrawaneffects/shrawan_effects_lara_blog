@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Services\Security\CaptchaService;
 use App\Services\SecurityService;
 use Illuminate\Http\Request;
 
@@ -11,8 +13,16 @@ class CommentController extends Controller
 {
     public function store(Request $request, $postId)
     {
-        // Honeypot spam protection
+        // Honeypot & speed-trap spam protection
         if (SecurityService::isBotSubmission($request)) {
+            AuditLog::record(
+                'comment_bot_blocked',
+                "Blocked automated comment spam attempt on post #{$postId}",
+                auth()->id(),
+                ['ip' => $request->ip(), 'post_id' => $postId],
+                'warning',
+                $request
+            );
             return redirect()->back()->with('success', 'Your comment has been posted successfully!');
         }
 
@@ -21,6 +31,7 @@ class CommentController extends Controller
         $rules = [
             'content' => 'required|string|min:3|max:2000',
             'parent_id' => 'nullable|exists:comments,id',
+            'captcha_answer' => 'required',
         ];
 
         if (!auth()->check()) {
@@ -28,7 +39,21 @@ class CommentController extends Controller
             $rules['guest_email'] = 'required|email|max:150';
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate($rules, [
+            'captcha_answer.required' => 'Please solve the security verification challenge to post your comment.',
+        ]);
+
+        // Enforce Visual SVG CAPTCHA verification
+        if (!CaptchaService::verify(
+            $request->input('captcha_answer'),
+            $request->input('captcha_token'),
+            $request->input('captcha_timestamp'),
+            $request->input('captcha_nonce')
+        )) {
+            return redirect(url()->previous() . '#commentsSection')
+                ->withErrors(['captcha_answer' => 'Security CAPTCHA verification failed. Please solve the new challenge to submit your comment.'])
+                ->withInput($request->except('captcha_answer'));
+        }
 
         $comment = new Comment();
         $comment->post_id = $post->id;

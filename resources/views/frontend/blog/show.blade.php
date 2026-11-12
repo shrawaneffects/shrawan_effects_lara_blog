@@ -329,6 +329,13 @@
                             </h3>
                         </div>
 
+                        @if($errors->has('captcha_answer') || $errors->has('content') || $errors->has('guest_name') || $errors->has('guest_email'))
+                            <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+                                <i class="bi bi-shield-exclamation me-2"></i>
+                                {{ $errors->first('captcha_answer') ?: ($errors->first('content') ?: $errors->first()) }}
+                            </div>
+                        @endif
+
                         <!-- Post a Comment Form -->
                         <div class="card border-0 shadow-sm p-4 rounded-4 bg-body-tertiary mb-5">
                             <h5 class="fw-bold mb-3">Leave a Comment</h5>
@@ -338,11 +345,11 @@
                                     <div class="row g-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label small fw-semibold">Your Name *</label>
-                                            <input type="text" name="guest_name" class="form-control" placeholder="Jane Doe" required>
+                                            <input type="text" name="guest_name" class="form-control" placeholder="Jane Doe" value="{{ old('guest_name') }}" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-semibold">Your Email *</label>
-                                            <input type="email" name="guest_email" class="form-control" placeholder="jane@example.com" required>
+                                            <input type="email" name="guest_email" class="form-control" placeholder="jane@example.com" value="{{ old('guest_email') }}" required>
                                         </div>
                                     </div>
                                 @else
@@ -354,8 +361,11 @@
 
                                 <div class="mb-3">
                                     <label class="form-label small fw-semibold">Comment *</label>
-                                    <textarea name="content" class="form-control rounded-4 p-3" rows="4" placeholder="Join the discussion... Share your insights or questions" required></textarea>
+                                    <textarea name="content" class="form-control rounded-4 p-3" rows="4" placeholder="Join the discussion... Share your insights or questions" required>{{ old('parent_id') ? '' : old('content') }}</textarea>
                                 </div>
+
+                                <!-- Anti-Bot Visual SVG CAPTCHA & Honeypot -->
+                                @include('components.captcha')
 
                                 <button type="submit" class="btn btn-gradient px-4 rounded-pill">
                                     <i class="bi bi-send-fill me-1"></i> Submit Comment
@@ -400,6 +410,7 @@
                                                         <div class="mb-2">
                                                             <textarea name="content" class="form-control form-control-sm rounded-3" rows="2" placeholder="Write your reply..." required></textarea>
                                                         </div>
+                                                        @include('components.captcha')
                                                         <button type="submit" class="btn btn-gradient btn-sm rounded-pill px-3">Reply</button>
                                                     </form>
                                                 </div>
@@ -479,6 +490,44 @@
                 });
             }
         });
+
+        @if(isset($viewTokenData))
+        // Verified Human View Tracking Beacon (Prevents robotic/crawler/prefetch view inflation)
+        (function() {
+            let viewTracked = false;
+            function sendHumanViewPing() {
+                if (viewTracked) return;
+                if (document.visibilityState && document.visibilityState !== 'visible') return;
+                viewTracked = true;
+
+                fetch("{{ route('blog.track-view', $post->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify({
+                        token: "{{ $viewTokenData['token'] }}",
+                        timestamp: {{ $viewTokenData['timestamp'] }},
+                        nonce: "{{ $viewTokenData['nonce'] }}"
+                    })
+                }).catch(function() {});
+            }
+
+            if (document.visibilityState === 'visible') {
+                setTimeout(sendHumanViewPing, 1500);
+            } else {
+                document.addEventListener('visibilitychange', function onVisible() {
+                    if (document.visibilityState === 'visible') {
+                        document.removeEventListener('visibilitychange', onVisible);
+                        setTimeout(sendHumanViewPing, 1500);
+                    }
+                });
+            }
+        })();
+        @endif
     </script>
     @endpush
 @endsection
