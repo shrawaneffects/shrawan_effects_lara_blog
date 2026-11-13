@@ -9,6 +9,11 @@
     RewriteRule ^(\.git|\.env|composer\.(json|lock)|package\.(json|lock)|\.cpanel\.yml) - [F,L,NC]
     RewriteRule ^storage/logs/ - [F,L,NC]
 
+    # 2.5. Clean Legacy/Spam URLs: Return HTTP 410 Gone for shop.php and spam injection queries
+    RewriteRule ^shop\.php$ - [G,L,NC]
+    RewriteCond %{QUERY_STRING} (^|&)a-[0-9]+ [NC]
+    RewriteRule ^.*$ - [G,L]
+
     # 3. Forward all requests to public/ directory for shared hosting environments
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]

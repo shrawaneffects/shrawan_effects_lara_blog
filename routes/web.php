@@ -180,7 +180,12 @@ Route::middleware('auth')->group(function () {
 | Admin & Author Dashboard Routes
 |--------------------------------------------------------------------------
 */
+Route::redirect('/admin', '/admin/dashboard');
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Posts Management

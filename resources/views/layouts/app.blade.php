@@ -1319,6 +1319,67 @@
             pointer-events: auto;
         }
         @endif
+
+        /* Article Image Figure & Figcaption SEO Styling */
+        figure.post-image-figure {
+            margin: 1.75rem 0;
+            display: block;
+            text-align: center;
+        }
+        figure.post-image-figure.align-center {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        figure.post-image-figure.align-full {
+            width: 100%;
+            text-align: center;
+        }
+        figure.post-image-figure.align-left {
+            float: left;
+            margin-right: 1.75rem;
+            margin-bottom: 1.25rem;
+            max-width: 50%;
+        }
+        figure.post-image-figure.align-right {
+            float: right;
+            margin-left: 1.75rem;
+            margin-bottom: 1.25rem;
+            max-width: 50%;
+        }
+        figure.post-image-figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        figure.post-image-figure img:hover {
+            transform: scale(1.008);
+            box-shadow: 0 8px 30px rgba(0, 255, 102, 0.15);
+        }
+        figcaption.post-image-caption {
+            margin-top: 0.65rem;
+            font-size: 0.85rem;
+            color: var(--bs-secondary-color, #94a3b8);
+            font-style: italic;
+            line-height: 1.45;
+            padding: 0 0.5rem;
+        }
+        [data-bs-theme="dark"] figcaption.post-image-caption {
+            color: #94a3b8;
+        }
+        [data-bs-theme="light"] figcaption.post-image-caption {
+            color: #64748b;
+        }
+        .post-doc-card, .post-audio-card, .post-video-card {
+            margin: 1.75rem 0;
+            border-radius: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .post-doc-card:hover, .post-audio-card:hover, .post-video-card:hover {
+            transform: translateY(-2px);
+        }
     </style>
     @stack('styles')
 </head>

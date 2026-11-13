@@ -8,6 +8,11 @@
     # 1. Protect Sensitive / Hidden Files
     RewriteRule ^(\.git|\.env|composer\.(json|lock)|package\.(json|lock)) - [F,L,NC]
 
+    # 1.5. Clean Legacy/Spam URLs: Return HTTP 410 Gone to Googlebot for shop.php and spam injection queries
+    RewriteRule ^shop\.php$ - [G,L,NC]
+    RewriteCond %{QUERY_STRING} (^|&)a-[0-9]+ [NC]
+    RewriteRule ^.*$ - [G,L]
+
     # 2. Handle Authorization & CSRF Headers
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

@@ -224,28 +224,16 @@
         </div>
     </form>
 
+    <!-- Image Alt, Title & Caption Editor + Media Library Asset Inserter Modals -->
+    @include('admin.posts.partials.editor_media_modals')
+
     @push('scripts')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+    <script src="{{ asset('js/summernote-media-caption.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#summernoteEditor').summernote({
-                height: 350,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ],
-                callbacks: {
-                    onChange: function(contents) {
-                        updateDetectedHeadings(contents);
-                    }
-                }
-            });
+            initSummernoteWithMedia('#summernoteEditor');
 
             function updateDetectedHeadings(html) {
                 const tempDiv = document.createElement('div');
