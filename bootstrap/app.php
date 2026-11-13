@@ -12,7 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(\App\Http\Middleware\SecurityHeadersMiddleware::class);
-        $middleware->append(\App\Http\Middleware\BotShieldMiddleware::class);
         $middleware->append(\App\Http\Middleware\RedirectMiddleware::class);
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,

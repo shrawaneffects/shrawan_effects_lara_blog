@@ -152,9 +152,6 @@
                             @error('message') <small class="text-danger font-mono">{{ $message }}</small> @enderror
                         </div>
 
-                        <!-- Anti-Bot Visual SVG CAPTCHA & Honeypot -->
-                        @include('components.captcha')
-
                         <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-pill shadow-sm">
                             <i class="bi bi-send-fill me-2"></i> INITIATE TRANSMISSION
                         </button>
