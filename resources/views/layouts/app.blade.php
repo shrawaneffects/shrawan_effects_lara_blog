@@ -4,9 +4,14 @@
     $siteFavicon = \App\Models\Setting::getFaviconUrl();
     $contactEmail = \App\Models\Setting::get('contact_email', 'shrawaneffects@gmail.com');
     $footerText = \App\Models\Setting::get('footer_text', 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.');
-    $twitterUrl = \App\Models\Setting::get('twitter_url', 'https://twitter.com');
-    $githubUrl = \App\Models\Setting::get('github_url', 'https://github.com');
-    $linkedinUrl = \App\Models\Setting::get('linkedin_url', 'https://linkedin.com');
+    $facebookUrl = \App\Models\Setting::get('facebook_url', '');
+    $twitterUrl = \App\Models\Setting::get('twitter_url', '');
+    $instagramUrl = \App\Models\Setting::get('instagram_url', '');
+    $linkedinUrl = \App\Models\Setting::get('linkedin_url', '');
+    $youtubeUrl = \App\Models\Setting::get('youtube_url', '');
+    $pinterestUrl = \App\Models\Setting::get('pinterest_url', '');
+    $whatsappUrl = \App\Models\Setting::get('whatsapp_url', '');
+    $githubUrl = \App\Models\Setting::get('github_url', '');
     $disableRightClick = \App\Models\Setting::get('disable_right_click', '1') === '1';
     $disableInspect = \App\Models\Setting::get('disable_inspect', '1') === '1';
     $disableScreenshot = \App\Models\Setting::get('disable_screenshot', '1') === '1';
@@ -1702,15 +1707,34 @@
                             <span>House No. 1049, Jeevan Nagar, Gounchhi, FARIDABAD, Haryana 121004</span>
                         </div>
                     </div>
-                    <div class="d-flex gap-3 fs-5 mt-2">
-                        @if($githubUrl)
-                            <a href="{{ $githubUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="GitHub" aria-label="Visit Shrawan Effects on GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
+                    <div class="d-flex flex-wrap align-items-center gap-3 fs-5 mt-2">
+                        @if(!empty($facebookUrl))
+                            <a href="{{ $facebookUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="Facebook" aria-label="Visit Shrawan Effects on Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
                         @endif
-                        @if($twitterUrl)
-                            <a href="{{ $twitterUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="Twitter / X" aria-label="Visit Shrawan Effects on Twitter / X"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
+                        @if(!empty($twitterUrl))
+                            <a href="{{ $twitterUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="X (Twitter)" aria-label="Visit Shrawan Effects on X (Twitter)"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
                         @endif
-                        @if($linkedinUrl)
+                        @if(!empty($instagramUrl))
+                            <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="Instagram" aria-label="Visit Shrawan Effects on Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                        @endif
+                        @if(!empty($linkedinUrl))
                             <a href="{{ $linkedinUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="LinkedIn" aria-label="Visit Shrawan Effects on LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                        @endif
+                        @if(!empty($youtubeUrl))
+                            <a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="YouTube" aria-label="Visit Shrawan Effects on YouTube"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+                        @endif
+                        @if(!empty($pinterestUrl))
+                            <a href="{{ $pinterestUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="Pinterest" aria-label="Visit Shrawan Effects on Pinterest"><i class="bi bi-pinterest" aria-hidden="true"></i></a>
+                        @endif
+                        @if(!empty($whatsappUrl))
+                            @php
+                                $waCleanNumber = preg_replace('/[^0-9]/', '', $whatsappUrl);
+                                $waLink = str_starts_with($whatsappUrl, 'http') ? $whatsappUrl : 'https://wa.me/' . $waCleanNumber;
+                            @endphp
+                            <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift text-success-hover" title="WhatsApp" aria-label="Chat with Shrawan Effects on WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
+                        @endif
+                        @if(!empty($githubUrl))
+                            <a href="{{ $githubUrl }}" target="_blank" rel="noopener noreferrer" class="text-body-secondary hover-lift" title="GitHub" aria-label="Visit Shrawan Effects on GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
                         @endif
                     </div>
                 </div>

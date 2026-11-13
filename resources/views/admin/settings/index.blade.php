@@ -358,20 +358,98 @@
 
                 <!-- Social Links Card -->
                 <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-body mb-4">
-                    <h5 class="fw-bold mb-4 text-primary"><i class="bi bi-share me-2"></i> Social Profiles</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-primary mb-0">
+                            <i class="bi bi-share me-2"></i> Social Profiles &amp; Channels
+                        </h5>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5 small">
+                            <i class="bi bi-globe2 me-1"></i> Displayed in Website Footer
+                        </span>
+                    </div>
+                    <p class="text-body-secondary small mb-4">
+                        Connect your brand's social networks. Active channels will automatically render as interactive icons in the website's footer. Leave any field blank to hide that icon.
+                    </p>
 
                     <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small"><i class="bi bi-twitter-x me-1"></i> Twitter / X URL</label>
-                            <input type="url" name="twitter_url" class="form-control" value="{{ old('twitter_url', $settings['twitter_url']) }}">
+                        <!-- Facebook -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-facebook text-primary me-1"></i> Facebook Page / Profile
+                            </label>
+                            <input type="text" name="facebook_url" class="form-control rounded-3" 
+                                   value="{{ old('facebook_url', $settings['facebook_url'] ?? '') }}" 
+                                   placeholder="https://facebook.com/yourpage">
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small"><i class="bi bi-github me-1"></i> GitHub URL</label>
-                            <input type="url" name="github_url" class="form-control" value="{{ old('github_url', $settings['github_url']) }}">
+
+                        <!-- Twitter / X -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-twitter-x me-1"></i> X (Twitter) Profile
+                            </label>
+                            <input type="text" name="twitter_url" class="form-control rounded-3" 
+                                   value="{{ old('twitter_url', $settings['twitter_url'] ?? '') }}" 
+                                   placeholder="https://x.com/yourhandle">
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small"><i class="bi bi-linkedin me-1"></i> LinkedIn URL</label>
-                            <input type="url" name="linkedin_url" class="form-control" value="{{ old('linkedin_url', $settings['linkedin_url']) }}">
+
+                        <!-- Instagram -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-instagram text-danger me-1"></i> Instagram Profile
+                            </label>
+                            <input type="text" name="instagram_url" class="form-control rounded-3" 
+                                   value="{{ old('instagram_url', $settings['instagram_url'] ?? '') }}" 
+                                   placeholder="https://instagram.com/yourprofile">
+                        </div>
+
+                        <!-- LinkedIn -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-linkedin text-info me-1"></i> LinkedIn Page / Profile
+                            </label>
+                            <input type="text" name="linkedin_url" class="form-control rounded-3" 
+                                   value="{{ old('linkedin_url', $settings['linkedin_url'] ?? '') }}" 
+                                   placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+
+                        <!-- YouTube -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-youtube text-danger me-1"></i> YouTube Channel
+                            </label>
+                            <input type="text" name="youtube_url" class="form-control rounded-3" 
+                                   value="{{ old('youtube_url', $settings['youtube_url'] ?? '') }}" 
+                                   placeholder="https://youtube.com/@yourchannel">
+                        </div>
+
+                        <!-- Pinterest -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-pinterest text-danger me-1"></i> Pinterest Profile
+                            </label>
+                            <input type="text" name="pinterest_url" class="form-control rounded-3" 
+                                   value="{{ old('pinterest_url', $settings['pinterest_url'] ?? '') }}" 
+                                   placeholder="https://pinterest.com/yourprofile">
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Link / Number
+                            </label>
+                            <input type="text" name="whatsapp_url" class="form-control rounded-3" 
+                                   value="{{ old('whatsapp_url', $settings['whatsapp_url'] ?? '') }}" 
+                                   placeholder="https://wa.me/919999999999 or 9999999999">
+                            <small class="text-muted d-block" style="font-size: 0.72rem;">Accepts wa.me URL or phone number with country code</small>
+                        </div>
+
+                        <!-- GitHub -->
+                        <div class="col-md-6 col-lg-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-github me-1"></i> GitHub Repository / Profile
+                            </label>
+                            <input type="text" name="github_url" class="form-control rounded-3" 
+                                   value="{{ old('github_url', $settings['github_url'] ?? '') }}" 
+                                   placeholder="https://github.com/yourusername">
                         </div>
                     </div>
                 </div>

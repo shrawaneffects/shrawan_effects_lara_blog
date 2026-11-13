@@ -18,9 +18,14 @@ class SettingController extends Controller
             'site_favicon' => Setting::getFaviconUrl(),
             'contact_email' => Setting::get('contact_email', 'shrawaneffects@gmail.com'),
             'footer_text' => Setting::get('footer_text', 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.'),
+            'facebook_url' => Setting::get('facebook_url', ''),
             'twitter_url' => Setting::get('twitter_url', 'https://twitter.com'),
-            'github_url' => Setting::get('github_url', 'https://github.com'),
+            'instagram_url' => Setting::get('instagram_url', ''),
             'linkedin_url' => Setting::get('linkedin_url', 'https://linkedin.com'),
+            'youtube_url' => Setting::get('youtube_url', ''),
+            'pinterest_url' => Setting::get('pinterest_url', ''),
+            'whatsapp_url' => Setting::get('whatsapp_url', ''),
+            'github_url' => Setting::get('github_url', 'https://github.com'),
             'timezone' => Setting::get('timezone', config('app.timezone', 'Asia/Kolkata')),
             'disable_right_click' => Setting::get('disable_right_click', '1') === '1',
             'disable_inspect' => Setting::get('disable_inspect', '1') === '1',
@@ -68,9 +73,14 @@ class SettingController extends Controller
             'site_favicon' => 'nullable|file|mimes:ico,png,jpg,jpeg,svg,webp|max:1024',
             'contact_email' => 'nullable|email|max:150',
             'footer_text' => 'nullable|string|max:500',
-            'twitter_url' => 'nullable|url|max:255',
-            'github_url' => 'nullable|url|max:255',
-            'linkedin_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|string|max:255',
+            'twitter_url' => 'nullable|string|max:255',
+            'instagram_url' => 'nullable|string|max:255',
+            'linkedin_url' => 'nullable|string|max:255',
+            'youtube_url' => 'nullable|string|max:255',
+            'pinterest_url' => 'nullable|string|max:255',
+            'whatsapp_url' => 'nullable|string|max:255',
+            'github_url' => 'nullable|string|max:255',
             'delete_logo' => 'nullable|boolean',
             'delete_favicon' => 'nullable|boolean',
             'disable_right_click' => 'nullable|boolean',
@@ -100,9 +110,26 @@ class SettingController extends Controller
         Setting::set('homepage_meta_keywords', $validated['homepage_meta_keywords'] ?? '');
         Setting::set('contact_email', $validated['contact_email'] ?? '');
         Setting::set('footer_text', $validated['footer_text'] ?? '');
-        Setting::set('twitter_url', $validated['twitter_url'] ?? '');
-        Setting::set('github_url', $validated['github_url'] ?? '');
-        Setting::set('linkedin_url', $validated['linkedin_url'] ?? '');
+
+        // Auto-normalize web URLs with https:// if scheme is missing
+        $normalizeUrl = function ($url) {
+            if (empty($url)) return '';
+            $url = trim($url);
+            if (!preg_match('~^(?:f|ht)tps?://~i', $url)) {
+                return 'https://' . $url;
+            }
+            return $url;
+        };
+
+        Setting::set('facebook_url', $normalizeUrl($validated['facebook_url'] ?? ''));
+        Setting::set('twitter_url', $normalizeUrl($validated['twitter_url'] ?? ''));
+        Setting::set('instagram_url', $normalizeUrl($validated['instagram_url'] ?? ''));
+        Setting::set('linkedin_url', $normalizeUrl($validated['linkedin_url'] ?? ''));
+        Setting::set('youtube_url', $normalizeUrl($validated['youtube_url'] ?? ''));
+        Setting::set('pinterest_url', $normalizeUrl($validated['pinterest_url'] ?? ''));
+        Setting::set('whatsapp_url', trim($validated['whatsapp_url'] ?? ''));
+        Setting::set('github_url', $normalizeUrl($validated['github_url'] ?? ''));
+
         Setting::set('disable_right_click', $request->has('disable_right_click') ? '1' : '0');
         Setting::set('disable_inspect', $request->has('disable_inspect') ? '1' : '0');
         Setting::set('disable_screenshot', $request->has('disable_screenshot') ? '1' : '0');
