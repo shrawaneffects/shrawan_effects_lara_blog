@@ -68,6 +68,9 @@ class PostController extends Controller
             $p->incoming_links = $incomingList;
             $p->incoming_links_count = count($incomingList);
 
+            $outArticles = $metrics['outlinksMap'][$p->slug] ?? [];
+            $p->outgoing_articles = $outArticles;
+
             $outData = $metrics['outgoingCounts'][$p->id] ?? ['total' => 0, 'internal' => 0, 'external' => 0];
             $p->outgoing_links_count = $outData['total'];
             $p->outgoing_internal_count = $outData['internal'];
@@ -76,6 +79,7 @@ class PostController extends Controller
             $p->is_orphan = ($p->incoming_links_count === 0);
         }
 
+        $allPosts = Post::select('id', 'title', 'slug')->orderBy('title')->get();
         $categories = Category::all();
         $totalArticlesCount = $metrics['totalPosts'];
         $orphanArticlesCount = $metrics['orphanCount'];
@@ -83,6 +87,7 @@ class PostController extends Controller
 
         return view('admin.posts.index', compact(
             'posts',
+            'allPosts',
             'categories',
             'totalArticlesCount',
             'orphanArticlesCount',
@@ -516,5 +521,84 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->back()->with('success', 'Trending status updated!');
+    }
+
+    /**
+     * Adjust or reset an article's view count.
+     */
+    public function updateViews(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+        $validated = $request->validate([
+            'views_count' => 'required|integer|min:0|max:100000000',
+        ]);
+
+        $oldViews = (int) $post->views_count;
+        $newViews = (int) $validated['views_count'];
+        $post->views_count = $newViews;
+        $post->save();
+
+        return redirect()->back()->with('success', "Views updated for \"{$post->title}\" ({$oldViews} → {$newViews}).");
+    }
+
+    /**
+     * Reset all article view counts.
+     */
+    public function resetAllViews(Request $request)
+    {
+        $affected = Post::query()->update(['views_count' => 0]);
+
+        return redirect()->back()->with('success', "Reset view counts to 0 across all {$affected} articles.");
+    }
+
+    /**
+     * Add an internal link from a source article to a target (orphan) article.
+     */
+    public function addInternalLink(Request $request)
+    {
+        $validated = $request->validate([
+            'source_post_id' => 'required|exists:posts,id',
+            'target_post_id' => 'required|exists:posts,id|different:source_post_id',
+            'anchor_text' => 'nullable|string|max:150',
+        ]);
+
+        $source = Post::findOrFail($validated['source_post_id']);
+        $target = Post::findOrFail($validated['target_post_id']);
+
+        $anchor = !empty($validated['anchor_text']) ? trim($validated['anchor_text']) : $target->title;
+        $linkHtml = '<p class="internal-link-callout mt-3"><strong>Also Read:</strong> <a href="' . url('/blog/' . $target->slug) . '">' . e($anchor) . '</a></p>';
+
+        $source->content = ($source->content ?? '') . "\n" . $linkHtml;
+        $source->save();
+
+        return redirect()->back()->with('success', "Internal link added! \"{$source->title}\" now links to \"{$target->title}\".");
+    }
+
+    /**
+     * Remove an internal link to a target article from a source article.
+     */
+    public function removeInternalLink(Request $request)
+    {
+        $validated = $request->validate([
+            'source_post_id' => 'required|exists:posts,id',
+            'target_slug' => 'required|string',
+        ]);
+
+        $source = Post::findOrFail($validated['source_post_id']);
+        $targetSlug = preg_quote($validated['target_slug'], '/');
+
+        // Remove <p> tag containing link to target slug or the anchor tag itself
+        $pattern = '/<p[^>]*>.*?<a\s+[^>]*href=["\'][^"\']*\/blog\/' . $targetSlug . '["\'][^>]*>.*?<\/a>.*?<\/p>/is';
+        $cleaned = preg_replace($pattern, '', $source->content);
+
+        if ($cleaned === $source->content) {
+            $patternAnchor = '/<a\s+[^>]*href=["\'][^"\']*\/blog\/' . $targetSlug . '["\'][^>]*>(.*?)<\/a>/is';
+            $cleaned = preg_replace($patternAnchor, '$1', $source->content);
+        }
+
+        $source->content = $cleaned;
+        $source->save();
+
+        return redirect()->back()->with('success', "Internal link to \"{$validated['target_slug']}\" removed from \"{$source->title}\".");
     }
 }

@@ -9,10 +9,41 @@
             <h4 class="fw-bold mb-1">Articles & Posts</h4>
             <p class="text-body-secondary small mb-0">Create, edit, and organize publications.</p>
         </div>
-        <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Add New Article
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            @if(auth()->user()->isAdmin())
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#resetAllViewsModal">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Reset All Views
+                </button>
+            @endif
+            <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Add New Article
+            </a>
+        </div>
     </div>
+
+    @if(auth()->user()->isAdmin())
+        <div class="modal fade" id="resetAllViewsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold text-warning"><i class="bi bi-shield-check me-2"></i> Reset All Article Views</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">This will reset <code>views_count</code> to <strong>0</strong> across all articles.</p>
+                        <p class="small text-muted mb-0">You can also adjust individual post counts using the pencil icon next to each post's view count in the table below.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="{{ route('admin.posts.reset-all-views') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-warning fw-semibold">Confirm Reset to 0</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- SEO Internal Linking Stats Overview -->
     <div class="row g-3 mb-4">
@@ -182,7 +213,7 @@
                                     <div class="d-flex align-items-center gap-1">
                                         <!-- Incoming Links Badge -->
                                         @if($post->incoming_links_count > 0)
-                                            <a href="#inlinksModal-{{ $post->id }}" data-bs-toggle="modal" class="badge bg-primary-subtle text-primary text-decoration-none rounded-pill px-2 py-1" title="Click to view {{ $post->incoming_links_count }} incoming link sources">
+                                            <a href="#inlinksModal-{{ $post->id }}" data-bs-toggle="modal" class="badge bg-primary-subtle text-primary text-decoration-none rounded-pill px-2 py-1" title="Click to view & manage {{ $post->incoming_links_count }} incoming link sources">
                                                 <i class="bi bi-box-arrow-in-down-right me-1"></i>{{ $post->incoming_links_count }} In
                                             </a>
                                         @else
@@ -192,22 +223,35 @@
                                         @endif
 
                                         <!-- Outgoing Links Badge -->
-                                        <span class="badge bg-body-secondary text-body border rounded-pill px-2 py-1" title="Outgoing links in content: {{ $post->outgoing_internal_count }} internal, {{ $post->outgoing_external_count }} external">
-                                            <i class="bi bi-box-arrow-up-right me-1"></i>{{ $post->outgoing_links_count }} Out
-                                        </span>
+                                        @if($post->outgoing_links_count > 0)
+                                            <a href="#outlinksModal-{{ $post->id }}" data-bs-toggle="modal" class="badge bg-body-secondary text-body border text-decoration-none rounded-pill px-2 py-1" title="Click to view outgoing links: {{ $post->outgoing_internal_count }} internal, {{ $post->outgoing_external_count }} external">
+                                                <i class="bi bi-box-arrow-up-right me-1"></i>{{ $post->outgoing_links_count }} Out
+                                            </a>
+                                        @else
+                                            <span class="badge bg-body-secondary text-body border rounded-pill px-2 py-1" title="0 outgoing links">
+                                                <i class="bi bi-box-arrow-up-right me-1"></i>0 Out
+                                            </span>
+                                        @endif
                                     </div>
 
-                                    <!-- Orphan Badge -->
-                                    @if($post->is_orphan)
-                                        <div>
+                                    <!-- Orphan Badge & Link CRUD Action -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        @if($post->is_orphan)
                                             <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill small px-2 py-1" title="Orphan Article: No other articles link to this post">
                                                 <i class="bi bi-exclamation-triangle me-1"></i>Orphan
                                             </span>
-                                        </div>
-                                    @endif
+                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1 border-0" data-bs-toggle="modal" data-bs-target="#linkOrphanModal-{{ $post->id }}" title="Create internal inlink to fix orphan">
+                                                <i class="bi bi-plus-circle-fill text-primary"></i> Link
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-link btn-sm p-0 text-muted small text-decoration-none" data-bs-toggle="modal" data-bs-target="#linkOrphanModal-{{ $post->id }}" title="Add more internal inlinks">
+                                                <i class="bi bi-link-45deg"></i> +Add Link
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <!-- Inlinks Source Modal -->
+                                <!-- Inlinks Source Modal (with Remove Link CRUD) -->
                                 @if($post->incoming_links_count > 0)
                                     <div class="modal fade text-start" id="inlinksModal-{{ $post->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -219,14 +263,20 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body p-4">
-                                                    <p class="small text-muted mb-3">The following articles contain links directing to this post:</p>
+                                                    <p class="small text-muted mb-3">The following articles link to this post. You can view, edit, or delete any link:</p>
                                                     <div class="list-group list-group-flush rounded-3 border">
                                                         @foreach($post->incoming_links as $src)
-                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <span class="small fw-semibold text-truncate me-2">{{ $src['title'] }}</span>
-                                                                <div class="btn-group btn-group-sm">
+                                                            <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                                                <span class="small fw-semibold text-truncate me-2" style="max-width: 250px;">{{ $src['title'] }}</span>
+                                                                <div class="d-flex align-items-center gap-1">
                                                                     <a href="{{ route('blog.show', $src['slug']) }}" target="_blank" class="btn btn-outline-secondary btn-sm py-0 px-2" title="View"><i class="bi bi-eye"></i></a>
-                                                                    <a href="{{ route('admin.posts.edit', $src['id']) }}" class="btn btn-outline-primary btn-sm py-0 px-2" title="Edit"><i class="bi bi-pencil"></i></a>
+                                                                    <a href="{{ route('admin.posts.edit', $src['id']) }}" class="btn btn-outline-primary btn-sm py-0 px-2" title="Edit Article"><i class="bi bi-pencil"></i></a>
+                                                                    <form action="{{ route('admin.posts.remove-internal-link') }}" method="POST" class="d-inline" onsubmit="return confirm('Remove internal link from this article?');">
+                                                                        @csrf
+                                                                        <input type="hidden" name="source_post_id" value="{{ $src['id'] }}">
+                                                                        <input type="hidden" name="target_slug" value="{{ $post->slug }}">
+                                                                        <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-2" title="Remove Link"><i class="bi bi-trash"></i></button>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -239,6 +289,80 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                <!-- Outgoing Links Modal -->
+                                <div class="modal fade text-start" id="outlinksModal-{{ $post->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 border-0 shadow">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title fw-bold">
+                                                    <i class="bi bi-box-arrow-up-right me-2 text-info"></i> Outgoing Links from "{{ Str::limit($post->title, 35) }}"
+                                                </h6>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <p class="small text-muted mb-2">Internal links included in this article's content:</p>
+                                                @if(!empty($post->outgoing_articles) && count($post->outgoing_articles) > 0)
+                                                    <div class="list-group list-group-flush rounded-3 border">
+                                                        @foreach($post->outgoing_articles as $targetArt)
+                                                            <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                                                <span class="small fw-semibold text-truncate me-2" style="max-width: 280px;">{{ $targetArt['title'] }}</span>
+                                                                <a href="{{ route('blog.show', $targetArt['slug']) }}" target="_blank" class="btn btn-outline-secondary btn-sm py-0 px-2" title="View"><i class="bi bi-eye"></i></a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-light border small text-muted mb-0">No internal article links detected in content.</div>
+                                                @endif
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-outline-primary btn-sm rounded-pill">Edit Content & Links</a>
+                                                <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Link Orphan / Add Inlink Modal (CRUD) -->
+                                <div class="modal fade text-start" id="linkOrphanModal-{{ $post->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 border-0 shadow">
+                                            <form action="{{ route('admin.posts.add-internal-link') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="target_post_id" value="{{ $post->id }}">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title fw-bold">
+                                                        <i class="bi bi-link-45deg me-2 text-primary"></i> Link to "{{ Str::limit($post->title, 35) }}"
+                                                    </h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body p-4">
+                                                    <p class="small text-muted mb-3">Choose a published article to automatically insert an internal link to this post:</p>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-semibold">Source Article (Where link will be added)</label>
+                                                        <select name="source_post_id" class="form-select form-select-sm" required>
+                                                            <option value="">-- Select Source Article --</option>
+                                                            @foreach($allPosts as $art)
+                                                                @if($art->id !== $post->id)
+                                                                    <option value="{{ $art->id }}">{{ Str::limit($art->title, 60) }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label class="form-label small fw-semibold">Anchor / Callout Text (Optional)</label>
+                                                        <input type="text" name="anchor_text" class="form-control form-control-sm" value="{{ $post->title }}" placeholder="Link anchor text">
+                                                        <small class="text-muted" style="font-size: 0.75rem;">Defaults to target article title.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary btn-sm rounded-pill"><i class="bi bi-link-45deg me-1"></i> Add Internal Link</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 @if($post->status === 'published')
@@ -263,7 +387,40 @@
                                     </form>
                                 </div>
                             </td>
-                            <td class="small fw-semibold">{{ number_format($post->views_count) }}</td>
+                            <td class="small fw-semibold">
+                                <div class="d-flex align-items-center gap-1">
+                                    <span>{{ number_format($post->views_count) }}</span>
+                                    @if(auth()->user()->isAdmin())
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-muted" data-bs-toggle="modal" data-bs-target="#editViewsModal-{{ $post->id }}" title="Edit View Count">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    @endif
+                                </div>
+                                @if(auth()->user()->isAdmin())
+                                    <div class="modal fade text-start" id="editViewsModal-{{ $post->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm modal-dialog-centered">
+                                            <div class="modal-content rounded-4 border-0 shadow">
+                                                <form action="{{ route('admin.posts.update-views', $post->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h6 class="modal-title fw-bold">Adjust Views</h6>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="small text-muted mb-2">{{ Str::limit($post->title, 45) }}</p>
+                                                        <label class="form-label small fw-semibold">Total Views</label>
+                                                        <input type="number" name="views_count" class="form-control form-control-sm" min="0" value="{{ $post->views_count }}" required>
+                                                    </div>
+                                                    <div class="modal-footer py-2">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="this.form.querySelector('input[name=views_count]').value='0'; this.form.submit();">Set 0</button>
+                                                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('blog.show', $post->slug) }}" target="_blank" class="btn btn-outline-secondary" title="View Article"><i class="bi bi-eye"></i></a>

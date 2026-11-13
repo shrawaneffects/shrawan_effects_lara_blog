@@ -187,6 +187,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('posts', AdminPostController::class);
     Route::post('/posts/{id}/toggle-featured', [AdminPostController::class, 'toggleFeatured'])->name('posts.toggle-featured');
     Route::post('/posts/{id}/toggle-trending', [AdminPostController::class, 'toggleTrending'])->name('posts.toggle-trending');
+    Route::post('/posts/{id}/update-views', [AdminPostController::class, 'updateViews'])->name('posts.update-views');
+    Route::post('/posts/reset-all-views', [AdminPostController::class, 'resetAllViews'])->name('posts.reset-all-views');
+    Route::post('/posts/add-internal-link', [AdminPostController::class, 'addInternalLink'])->name('posts.add-internal-link');
+    Route::post('/posts/remove-internal-link', [AdminPostController::class, 'removeInternalLink'])->name('posts.remove-internal-link');
 
     // Dynamic Pages Management
     Route::resource('pages', AdminPageController::class)->except(['show']);
@@ -271,13 +275,34 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 // --------------------------------------------------------------------------
-// Storage Fallback Route (ensures images/avatars/media load seamlessly even if symlink is missing on shared hosting)
+// Storage & Media Fallback Routes (ensures images/avatars/media load seamlessly on shared hosting)
 // --------------------------------------------------------------------------
 Route::get('storage/{path}', function (string $path) {
-    $filePath = storage_path('app/public/' . $path);
-    if (!file_exists($filePath)) {
-        abort(404);
+    $candidates = [
+        storage_path('app/public/' . $path),
+        public_path('storage/' . $path),
+        base_path('../public_html/storage/' . $path),
+        public_path($path),
+    ];
+    foreach ($candidates as $filePath) {
+        if (file_exists($filePath) && !is_dir($filePath)) {
+            return response()->file($filePath);
+        }
     }
-    return response()->file($filePath);
+    abort(404);
 })->where('path', '.*')->name('storage.fallback');
+
+Route::get('uploads/{path}', function (string $path) {
+    $candidates = [
+        public_path('uploads/' . $path),
+        storage_path('app/public/uploads/' . $path),
+        base_path('../public_html/uploads/' . $path),
+    ];
+    foreach ($candidates as $filePath) {
+        if (file_exists($filePath) && !is_dir($filePath)) {
+            return response()->file($filePath);
+        }
+    }
+    abort(404);
+})->where('path', '.*');
 

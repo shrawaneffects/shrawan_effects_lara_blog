@@ -140,13 +140,16 @@ class Post extends Model
     // Accessors & Helpers
     public function getImageUrlAttribute(): string
     {
-        if ($this->featured_image) {
-            if (str_starts_with($this->featured_image, 'http')) {
-                return $this->featured_image;
+        if (!empty($this->featured_image)) {
+            $img = trim($this->featured_image);
+            if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
+                return $img;
             }
-            if (file_exists(public_path('storage/' . $this->featured_image)) || \Illuminate\Support\Facades\Storage::disk('public')->exists($this->featured_image)) {
-                return asset('storage/' . $this->featured_image);
+            $clean = ltrim($img, '/');
+            if (str_starts_with($clean, 'storage/')) {
+                return asset($clean);
             }
+            return asset('storage/' . $clean);
         }
         return 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80';
     }
