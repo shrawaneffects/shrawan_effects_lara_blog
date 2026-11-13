@@ -27,30 +27,34 @@ class Setting extends Model
 
     public static function getLogoUrl(): ?string
     {
-        $logo = static::get('site_logo');
-        if ($logo) {
-            $fullPath = public_path('storage/' . $logo);
-            if (file_exists($fullPath)) {
-                return asset('storage/' . $logo) . '?v=' . filemtime($fullPath);
+        $logo = static::get('site_logo') ?: static::get('logo');
+        if (!empty($logo)) {
+            $logo = trim($logo);
+            if (str_starts_with($logo, 'http://') || str_starts_with($logo, 'https://') || str_starts_with($logo, 'data:')) {
+                return $logo;
             }
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($logo)) {
-                return asset('storage/' . $logo);
+            $clean = ltrim($logo, '/');
+            if (str_starts_with($clean, 'storage/')) {
+                return asset($clean);
             }
+            return asset('storage/' . $clean);
         }
         return null;
     }
 
     public static function getFaviconUrl(): ?string
     {
-        $favicon = static::get('site_favicon');
-        if ($favicon) {
-            $fullPath = public_path('storage/' . $favicon);
-            if (file_exists($fullPath)) {
-                return asset('storage/' . $favicon) . '?v=' . filemtime($fullPath);
+        $favicon = static::get('site_favicon') ?: static::get('favicon');
+        if (!empty($favicon)) {
+            $favicon = trim($favicon);
+            if (str_starts_with($favicon, 'http://') || str_starts_with($favicon, 'https://') || str_starts_with($favicon, 'data:')) {
+                return $favicon;
             }
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($favicon)) {
-                return asset('storage/' . $favicon);
+            $clean = ltrim($favicon, '/');
+            if (str_starts_with($clean, 'storage/')) {
+                return asset($clean);
             }
+            return asset('storage/' . $clean);
         }
         return null;
     }

@@ -140,9 +140,41 @@ class Post extends Model
     // Accessors & Helpers
     public function getImageUrlAttribute(): string
     {
+        // 1. If featured_image is explicitly set and not the generic coffee-laptop unsplash image
         if (!empty($this->featured_image)) {
             $img = trim($this->featured_image);
-            if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
+            $isGenericFallback = str_contains($img, 'photo-1499750310107-5fef28a66643');
+            if (!$isGenericFallback) {
+                if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://') || str_starts_with($img, 'data:')) {
+                    return $img;
+                }
+                $clean = ltrim($img, '/');
+                if (str_starts_with($clean, 'storage/')) {
+                    return asset($clean);
+                }
+                return asset('storage/' . $clean);
+            }
+        }
+
+        // 2. Extract first uploaded/embedded image from article content (handles base64 Summernote uploads or storage uploads)
+        if (!empty($this->content)) {
+            if (preg_match('/<img\s+[^>]*src=["\']([^"\']+)["\']/i', $this->content, $match)) {
+                $contentImg = trim($match[1]);
+                if (str_starts_with($contentImg, 'http://') || str_starts_with($contentImg, 'https://') || str_starts_with($contentImg, 'data:')) {
+                    return $contentImg;
+                }
+                $clean = ltrim($contentImg, '/');
+                if (str_starts_with($clean, 'storage/')) {
+                    return asset($clean);
+                }
+                return asset('storage/' . $clean);
+            }
+        }
+
+        // 3. Fallback to featured_image if any exists
+        if (!empty($this->featured_image)) {
+            $img = trim($this->featured_image);
+            if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://') || str_starts_with($img, 'data:')) {
                 return $img;
             }
             $clean = ltrim($img, '/');
@@ -151,6 +183,7 @@ class Post extends Model
             }
             return asset('storage/' . $clean);
         }
+
         return 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80';
     }
 
