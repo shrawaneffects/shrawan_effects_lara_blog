@@ -274,34 +274,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/seo/analyze', [AdminSeoAnalysisController::class, 'analyze'])->name('seo.analyze');
 });
 
-Route::get('test-debug-storage', function () {
-    $path = 'media/image/2026/11/google-pixel-drop-Ad32kl.png';
-    $paths = [
-        'storage_path' => storage_path('app/public/' . $path),
-        'public_path' => public_path('storage/' . $path),
-        'base_path_app_public' => base_path('storage/app/public/' . $path),
-        'cpanel_public_html' => '/home/sites/25b/c/c4cef84f1f/public_html/storage/' . $path,
-        'cpanel_storage' => '/home/sites/25b/c/c4cef84f1f/storage/app/public/' . $path,
-        'logo_check' => '/home/sites/25b/c/c4cef84f1f/storage/app/public/settings/' . \App\Models\Setting::get('site_logo'),
-    ];
-    $results = [];
-    foreach ($paths as $k => $p) {
-        $results[$k] = [
-            'path' => $p,
-            'file_exists' => file_exists($p),
-            'is_readable' => is_readable($p),
-        ];
-    }
-    return response()->json([
-        'base_path' => base_path(),
-        'public_path' => public_path(),
-        'storage_path' => storage_path(),
-        'setting_site_logo' => \App\Models\Setting::get('site_logo'),
-        'setting_site_favicon' => \App\Models\Setting::get('site_favicon'),
-        'results' => $results,
-    ]);
-});
-
 // --------------------------------------------------------------------------
 // Storage & Media Fallback Routes (ensures images/avatars/media load seamlessly on shared hosting)
 // --------------------------------------------------------------------------
