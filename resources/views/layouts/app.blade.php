@@ -1386,8 +1386,9 @@
             transform: translateY(-2px);
         }
 
-        /* Single Post Left Sidebar Styles */
+        /* Single Post Sidebar Styles */
         @media (min-width: 992px) {
+            .blog-sidebar .sticky-sidebar,
             .blog-left-sidebar .sticky-sidebar {
                 position: sticky;
                 top: 88px;
@@ -1397,9 +1398,11 @@
                 scrollbar-width: thin;
                 scrollbar-color: rgba(0, 255, 102, 0.2) transparent;
             }
+            .blog-sidebar .sticky-sidebar::-webkit-scrollbar,
             .blog-left-sidebar .sticky-sidebar::-webkit-scrollbar {
                 width: 4px;
             }
+            .blog-sidebar .sticky-sidebar::-webkit-scrollbar-thumb,
             .blog-left-sidebar .sticky-sidebar::-webkit-scrollbar-thumb {
                 background: rgba(0, 255, 102, 0.25);
                 border-radius: 4px;
