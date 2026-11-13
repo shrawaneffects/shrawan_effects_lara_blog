@@ -38,22 +38,6 @@
 @endpush
 
 @section('content')
-    <!-- Futuristic HUD Status Ticker -->
-    <div class="container pt-3">
-        <div class="d-flex flex-wrap align-items-center justify-content-between p-2 px-3 rounded-3 hud-ticker">
-            <div class="d-flex align-items-center gap-2">
-                <span class="cyber-beacon"></span>
-                <span class="text-success fw-bold">// SYSTEM: ACTIVE</span>
-                <span class="text-body-secondary d-none d-md-inline">| NODE: SECURE_CORE_01</span>
-                <span class="text-body-secondary d-none d-lg-inline">| PROTOCOL: TLS 1.3 / HTTP/2.0</span>
-            </div>
-            <div class="d-flex align-items-center gap-3 text-body-secondary">
-                <span class="d-none d-sm-inline"><i class="bi bi-cpu text-success me-1"></i> LATENCY: 12ms</span>
-                <span class="text-success"><i class="bi bi-shield-check me-1"></i> 100% OPERATIONAL</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Hero Banner / Featured Section -->
     @if($featuredPosts->count() > 0)
         <section class="hero-banner">

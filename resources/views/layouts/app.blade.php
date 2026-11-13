@@ -1578,7 +1578,7 @@
                 <form class="d-flex me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET" role="search">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text border-end-0 nav-search-addon"><i class="bi bi-search" aria-hidden="true"></i></span>
-                        <input class="form-control border-start-0 nav-search-input" type="search" name="search" placeholder="Search telemetry..." value="{{ request('search') }}" aria-label="Search telemetry">
+                        <input class="form-control border-start-0 nav-search-input" type="search" name="search" placeholder="John 3:16" value="{{ request('search') }}" aria-label="Search">
                     </div>
                 </form>
 
@@ -1794,8 +1794,8 @@
             <hr class="my-4 border-secondary opacity-25">
 
             <div class="d-flex flex-wrap justify-content-between align-items-center small text-body-secondary font-mono">
-                <p class="mb-0">&copy; {{ date('Y') }} SHRAWAN EFFECTS // ALL RIGHTS RESERVED.</p>
-                <p class="mb-0 text-success"><i class="bi bi-shield-check me-1"></i> Everything is https</p>
+                <p class="mb-0">&copy; {{ date('Y') }} Shrawan Effects - All Rights Reserved.</p>
+                <p class="mb-0 text-success"><i class="bi bi-shield-check me-1"></i> Colossians 1:16</p>
             </div>
         </div>
     </footer>
