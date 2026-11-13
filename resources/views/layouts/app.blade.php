@@ -1385,6 +1385,52 @@
         .post-doc-card:hover, .post-audio-card:hover, .post-video-card:hover {
             transform: translateY(-2px);
         }
+
+        /* Single Post Left Sidebar Styles */
+        @media (min-width: 992px) {
+            .blog-left-sidebar .sticky-sidebar {
+                position: sticky;
+                top: 88px;
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+                padding-right: 4px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 255, 102, 0.2) transparent;
+            }
+            .blog-left-sidebar .sticky-sidebar::-webkit-scrollbar {
+                width: 4px;
+            }
+            .blog-left-sidebar .sticky-sidebar::-webkit-scrollbar-thumb {
+                background: rgba(0, 255, 102, 0.25);
+                border-radius: 4px;
+            }
+        }
+        .sidebar-widget {
+            border: 1px solid rgba(0, 255, 102, 0.12) !important;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .sidebar-widget:hover {
+            border-color: rgba(0, 255, 102, 0.28) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .hover-scale {
+            transition: transform 0.25s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.06);
+        }
     </style>
     @stack('styles')
 </head>

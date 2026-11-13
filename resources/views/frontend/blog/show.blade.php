@@ -29,9 +29,16 @@
 @section('content')
     <article class="py-4">
         <!-- Post Header -->
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-9">
+        <!-- Post Layout: Left Sidebar + Main Content -->
+        <div class="container-xl">
+            <div class="row g-4 g-xl-5">
+                <!-- Left Sidebar: Author Bio, Recent Posts, Categories, Comments -->
+                <aside class="col-lg-4 col-xl-3 order-2 order-lg-1 blog-left-sidebar">
+                    @include('frontend.blog.partials.sidebar')
+                </aside>
+
+                <!-- Main Post Content -->
+                <div class="col-lg-8 col-xl-9 order-1 order-lg-2">
                     <nav aria-label="breadcrumb" class="mb-3">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>

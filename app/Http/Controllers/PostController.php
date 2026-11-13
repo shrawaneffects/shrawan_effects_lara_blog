@@ -66,9 +66,12 @@ class PostController extends Controller
             ->orderBy('id', 'asc')
             ->first();
 
-        // Popular posts for sidebar
+        // Popular & Recent posts for sidebar
         $popularPosts = Post::published()->orderByDesc('views_count')->take(4)->get();
+        $recentPosts = Post::published()->where('id', '!=', $post->id)->latest('published_at')->take(4)->get();
         $categories = Category::where('is_active', true)->withCount('publishedPosts')->get();
+        $topCategories = Category::where('is_active', true)->withCount('publishedPosts')->orderByDesc('published_posts_count')->take(6)->get();
+        $topComments = \App\Models\Comment::where('status', 'approved')->with(['post', 'user'])->latest()->take(4)->get();
 
         return view('frontend.blog.show', compact(
             'post',
@@ -77,7 +80,10 @@ class PostController extends Controller
             'previousPost',
             'nextPost',
             'popularPosts',
-            'categories'
+            'recentPosts',
+            'categories',
+            'topCategories',
+            'topComments'
         ));
     }
 }
