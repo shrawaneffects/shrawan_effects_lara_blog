@@ -1738,7 +1738,7 @@
         <div class="container">
             <div class="row g-4">
                 <!-- Section 1: Brand & Telemetry -->
-                <div class="col-lg-4 col-md-12">
+                <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
                     <a class="d-flex align-items-center text-decoration-none mb-3" href="{{ route('home') }}">
                         @if($siteLogo)
                             <img src="{{ $siteLogo }}" alt="{{ $siteName }}" width="160" height="38" style="max-height: 38px; width: auto; object-fit: contain;">
@@ -1789,7 +1789,7 @@
                 </div>
 
                 <!-- Section 2: Quick Protocols & Sectors -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-12">
                     <h6 class="fw-bold mb-3 text-gradient font-cyber">DIRECT PROTOCOLS</h6>
                     <div class="row g-2">
                         <div class="col-6">
@@ -1824,19 +1824,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-
-                <!-- Section 3: Cipher Transmission / Newsletter -->
-                <div class="col-lg-4 col-md-6">
-                    <h6 class="fw-bold mb-3 text-gradient font-cyber">CIPHER TRANSMISSION</h6>
-                    <p class="text-body-secondary small mb-3">Subscribe to receive weekly telemetry curations on architecture, Laravel innovations, and futuristic tech.</p>
-                    <form action="{{ route('newsletter.store') }}" method="POST" id="footerNewsletterForm">
-                        @csrf
-                        <div class="input-group">
-                            <input type="email" name="email" class="form-control rounded-start-pill ps-3 footer-email-input" placeholder="user@domain.com" aria-label="Email address for weekly telemetry newsletter" required style="background: rgba(33,54,8,0.25); border-color: rgba(0,255,102,0.3); font-family: var(--font-mono); font-size: 0.85rem;">
-                            <button class="btn btn-gradient rounded-end-pill px-4" type="submit" aria-label="Transmit newsletter subscription">TRANSMIT</button>
-                        </div>
-                    </form>
                 </div>
             </div>
 
