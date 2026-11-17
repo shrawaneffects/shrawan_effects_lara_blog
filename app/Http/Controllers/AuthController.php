@@ -107,15 +107,12 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
-            'captcha_answer' => 'required',
-        ], [
-            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($credentials['email']));
 
-        // 1. Verify Human Security Captcha
-        if (!CaptchaService::verify(
+        // 1. Verify Human Security Captcha if provided
+        if ($request->filled('captcha_answer') && !CaptchaService::verify(
             $request->input('captcha_answer'),
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
@@ -230,15 +227,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'captcha_answer' => 'required',
-        ], [
-            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($request->input('email')));
 
-        // 1. Verify Captcha
-        if (!CaptchaService::verify(
+        // 1. Verify Captcha if present
+        if ($request->filled('captcha_answer') && !CaptchaService::verify(
             $request->input('captcha_answer'),
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
@@ -376,15 +370,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'captcha_answer' => 'required',
-        ], [
-            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($request->input('email')));
 
-        // 1. Captcha verification
-        if (!CaptchaService::verify(
+        // 1. Captcha verification if present
+        if ($request->filled('captcha_answer') && !CaptchaService::verify(
             $request->input('captcha_answer'),
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
@@ -1030,15 +1021,12 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'email' => 'required|email',
-            'captcha_answer' => 'required',
-        ], [
-            'captcha_answer.required' => 'Please solve the security captcha question.',
         ]);
 
         $email = strtolower(trim($validated['email']));
 
-        // 1. Verify Human Security Captcha
-        if (!CaptchaService::verify(
+        // 1. Verify Human Security Captcha if present
+        if ($request->filled('captcha_answer') && !CaptchaService::verify(
             $request->input('captcha_answer'),
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
