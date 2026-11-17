@@ -62,15 +62,21 @@
 
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-4 mb-4 border-bottom">
                         <div class="d-flex align-items-center">
-                            <a href="{{ route('blog.author', $post->author->id) }}">
-                                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-3">
-                            </a>
-                            <div>
-                                <h6 class="mb-0 fw-bold">
-                                    <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body">
-                                        {{ $post->author->name }}
-                                    </a>
-                                </h6>
+                            @if($post->author && $post->author->id)
+                                <a href="{{ route('blog.author', $post->author->id) }}">
+                                    <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-3">
+                                </a>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">
+                                        <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body">
+                                            {{ $post->author->name }}
+                                        </a>
+                                    </h6>
+                            @else
+                                <img src="https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150" alt="Author" class="author-avatar me-3">
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-body">Shrawan Effects</h6>
+                            @endif
                                 <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
                                     {{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }} &bull;
                                     <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m read &bull;
@@ -187,16 +193,25 @@
                     <!-- Author Box -->
                     <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift mb-5">
                         <div class="d-flex gap-4 align-items-center">
-                            <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar-lg">
-                            <div>
-                                <span class="badge bg-primary-subtle text-primary rounded-pill mb-1">Written by</span>
-                                <h4 class="fw-bold mb-1">
-                                    <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body">
-                                        {{ $post->author->name }}
-                                    </a>
-                                </h4>
-                                <p class="text-body-secondary small mb-0">{{ $post->author->bio ?? 'Tech writer and software architect.' }}</p>
-                            </div>
+                            @if($post->author && $post->author->id)
+                                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar-lg">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-1">Written by</span>
+                                    <h4 class="fw-bold mb-1">
+                                        <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body">
+                                            {{ $post->author->name }}
+                                        </a>
+                                    </h4>
+                                    <p class="text-body-secondary small mb-0">{{ $post->author->bio ?? 'Tech writer and software architect.' }}</p>
+                                </div>
+                            @else
+                                <img src="https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150" alt="Author" class="author-avatar-lg">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-1">Written by</span>
+                                    <h4 class="fw-bold mb-1 text-body">Shrawan Effects</h4>
+                                    <p class="text-body-secondary small mb-0">Editorial Team &amp; Architecture Engineers.</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

@@ -46,8 +46,8 @@
                                     </p>
                                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" style="width: 32px; height: 32px;">
-                                            <span class="small fw-semibold">{{ $post->author->name }}</span>
+                                            <img src="{{ $post->author?->avatar_url ?? 'https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150' }}" alt="{{ $post->author?->name ?? 'Author' }}" class="author-avatar me-2" style="width: 32px; height: 32px;">
+                                            <span class="small fw-semibold">{{ $post->author?->name ?? 'Shrawan Effects' }}</span>
                                         </div>
                                         <div class="small text-body-secondary">
                                             <i class="bi bi-clock me-1 text-primary"></i>{{ $post->reading_time }} min

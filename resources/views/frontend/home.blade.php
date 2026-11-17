@@ -73,9 +73,9 @@
                                 </h2>
                                 <p class="card-text text-body-secondary mt-2">{{ $leadPost->excerpt }}</p>
                                 <div class="d-flex align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
-                                    <img src="{{ $leadPost->author->avatar_url }}" alt="{{ $leadPost->author->name }}" class="author-avatar me-3" width="40" height="40" loading="lazy" decoding="async">
+                                    <img src="{{ $leadPost->author?->avatar_url ?? 'https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150' }}" alt="{{ $leadPost->author?->name ?? 'Author' }}" class="author-avatar me-3" width="40" height="40" loading="lazy" decoding="async">
                                     <div class="d-flex flex-column">
-                                        <h6 class="mb-0 fw-semibold">{{ $leadPost->author->name }}</h6>
+                                        <h6 class="mb-0 fw-semibold">{{ $leadPost->author?->name ?? 'Shrawan Effects' }}</h6>
                                         <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
                                             {{ $leadPost->published_at ? $leadPost->published_at->format('M d, Y') : 'Recently' }} &bull; // {{ $leadPost->reading_time }} MIN READ
                                         </small>
@@ -142,8 +142,8 @@
                                 <span class="trend-number fs-1 fw-bold opacity-85 lh-1">0{{ $index + 1 }}</span>
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center gap-2 mb-1">
-                                        <img src="{{ $tPost->author->avatar_url }}" alt="{{ $tPost->author->name }}" class="rounded-circle author-avatar" width="22" height="22" loading="lazy" decoding="async" style="width: 22px; height: 22px;">
-                                        <span class="small fw-semibold">{{ $tPost->author->name }}</span>
+                                        <img src="{{ $tPost->author?->avatar_url ?? 'https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150' }}" alt="{{ $tPost->author?->name ?? 'Author' }}" class="rounded-circle author-avatar" width="22" height="22" loading="lazy" decoding="async" style="width: 22px; height: 22px;">
+                                        <span class="small fw-semibold">{{ $tPost->author?->name ?? 'Shrawan Effects' }}</span>
                                     </div>
                                     <h6 class="fw-bold mb-2">
                                         <a href="{{ route('blog.show', $tPost->slug) }}" class="text-decoration-none text-body">
@@ -237,8 +237,8 @@
                                         </p>
                                         <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" width="32" height="32" loading="lazy" decoding="async" style="width: 32px; height: 32px;">
-                                                <span class="small fw-semibold">{{ $post->author->name }}</span>
+                                                <img src="{{ $post->author?->avatar_url ?? 'https://ui-avatars.com/api/?name=Author&background=0d6efd&color=ffffff&size=150' }}" alt="{{ $post->author?->name ?? 'Author' }}" class="author-avatar me-2" width="32" height="32" loading="lazy" decoding="async" style="width: 32px; height: 32px;">
+                                                <span class="small fw-semibold">{{ $post->author?->name ?? 'Shrawan Effects' }}</span>
                                             </div>
                                             <div class="font-mono text-body-secondary" style="font-size: 0.75rem;">
                                                 <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m

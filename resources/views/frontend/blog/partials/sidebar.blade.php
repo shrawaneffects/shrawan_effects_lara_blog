@@ -15,17 +15,29 @@
         </div>
 
         <div class="text-center mb-3">
-            <a href="{{ route('blog.author', $post->author->id) }}" class="d-inline-block position-relative">
-                <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="rounded-circle shadow-sm" width="84" height="84" style="object-fit: cover; border: 2px solid var(--neon-green, #00ff66); padding: 2px;">
-            </a>
-            <h5 class="fw-bold mt-2 mb-1">
-                <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body hover-gradient">
-                    {{ $post->author->name }}
+            @if($post->author && $post->author->id)
+                <a href="{{ route('blog.author', $post->author->id) }}" class="d-inline-block position-relative">
+                    <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="rounded-circle shadow-sm" width="84" height="84" style="object-fit: cover; border: 2px solid var(--neon-green, #00ff66); padding: 2px;">
                 </a>
-            </h5>
-            <small class="text-body-secondary font-mono d-block" style="font-size: 0.75rem;">
-                {{ $post->author->posts_count ?? $post->author->posts()->published()->count() }} Published Transmissions
-            </small>
+                <h5 class="fw-bold mt-2 mb-1">
+                    <a href="{{ route('blog.author', $post->author->id) }}" class="text-decoration-none text-body hover-gradient">
+                        {{ $post->author->name }}
+                    </a>
+                </h5>
+                <small class="text-body-secondary font-mono d-block" style="font-size: 0.75rem;">
+                    {{ $post->author->posts_count ?? $post->author->posts()->published()->count() }} Published Transmissions
+                </small>
+            @else
+                <div class="d-inline-block position-relative">
+                    <img src="https://ui-avatars.com/api/?name=Shrawan+Effects&background=0d6efd&color=ffffff&size=150" alt="Shrawan Effects" class="rounded-circle shadow-sm" width="84" height="84" style="object-fit: cover; border: 2px solid var(--neon-green, #00ff66); padding: 2px;">
+                </div>
+                <h5 class="fw-bold mt-2 mb-1">
+                    <span class="text-body">Shrawan Effects</span>
+                </h5>
+                <small class="text-body-secondary font-mono d-block" style="font-size: 0.75rem;">
+                    Editorial &amp; Engineering Team
+                </small>
+            @endif
         </div>
 
         <!-- Brief Description / Bio -->
