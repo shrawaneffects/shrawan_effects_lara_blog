@@ -87,6 +87,9 @@
                                     @enderror
                                 </div>
 
+                                <!-- Security Math Captcha -->
+                                @include('components.captcha')
+
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
@@ -117,6 +120,9 @@
                                         <input type="email" name="email" class="form-control rounded-end-pill" placeholder="name@example.com" value="{{ old('email', session('otp_email')) }}" required>
                                     </div>
                                 </div>
+
+                                <!-- Security Math Captcha -->
+                                @include('components.captcha')
 
                                 <div class="form-check mb-4">
                                     <input class="form-check-input" type="checkbox" name="remember" id="magicRemember" checked>
@@ -179,6 +185,9 @@
                                             <input type="email" name="email" class="form-control rounded-end-pill" placeholder="name@example.com" value="{{ old('email') }}" required>
                                         </div>
                                     </div>
+
+                                    <!-- Security Math Captcha -->
+                                    @include('components.captcha')
 
                                     <div class="form-check mb-4">
                                         <input class="form-check-input" type="checkbox" name="remember" id="otpRemember" checked>

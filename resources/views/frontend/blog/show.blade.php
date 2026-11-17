@@ -374,6 +374,9 @@
                                     <textarea name="content" class="form-control rounded-4 p-3" rows="4" placeholder="Join the discussion... Share your insights or questions" required></textarea>
                                 </div>
 
+                                <!-- Security Math Captcha -->
+                                @include('components.captcha')
+
                                 <button type="submit" class="btn btn-gradient px-4 rounded-pill">
                                     <i class="bi bi-send-fill me-1"></i> Submit Comment
                                 </button>
@@ -417,6 +420,10 @@
                                                         <div class="mb-2">
                                                             <textarea name="content" class="form-control form-control-sm rounded-3" rows="2" placeholder="Write your reply..." required></textarea>
                                                         </div>
+
+                                                        <!-- Security Math Captcha -->
+                                                        @include('components.captcha')
+
                                                         <button type="submit" class="btn btn-gradient btn-sm rounded-pill px-3">Reply</button>
                                                     </form>
                                                 </div>

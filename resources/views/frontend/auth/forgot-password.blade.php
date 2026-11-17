@@ -37,6 +37,9 @@
                             @enderror
                         </div>
 
+                        <!-- Security Math Captcha -->
+                        @include('components.captcha')
+
                         <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm mt-3">
                             <i class="bi bi-send-fill me-2"></i> Send Password Reset Link
                         </button>
