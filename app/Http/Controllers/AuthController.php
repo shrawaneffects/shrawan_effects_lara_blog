@@ -122,8 +122,8 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        // 2. Check strict daily attempt limit for this email (exempt primary admin)
-        if ($email !== 'shrawaneffects@gmail.com' && AuthRateLimiterService::isDailyLockedOut($email, 'login')) {
+        // 2. Check strict daily attempt limit for this email
+        if (AuthRateLimiterService::isDailyLockedOut($email, 'login')) {
             AuditLog::record(
                 'login_daily_locked',
                 "Daily attempt limit reached for '{$email}'",
@@ -139,7 +139,7 @@ class AuthController extends Controller
         }
 
         $throttleKey = Str::transliterate($email . '|' . $request->ip());
-        if ($email !== 'shrawaneffects@gmail.com' && RateLimiter::tooManyAttempts($throttleKey, 5)) {
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
             return back()->withErrors([
                 'email' => "Too many attempts right now. Please wait {$seconds} seconds.",
