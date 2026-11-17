@@ -51,13 +51,6 @@
                                 <div>
                                     <strong class="d-block mb-1">Check Your Email!</strong>
                                     {{ session('magic_link_sent') }}
-                                    @if(session('direct_magic_url'))
-                                        <div class="mt-2 pt-2 border-top border-success-subtle">
-                                            <a href="{{ session('direct_magic_url') }}" class="btn btn-sm btn-success rounded-pill px-3 font-mono fw-bold">
-                                                <i class="bi bi-box-arrow-in-right me-1"></i> Instant One-Click Sign In
-                                            </a>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>

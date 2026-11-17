@@ -303,10 +303,8 @@ class AuthController extends Controller
             $request
         );
 
-        $directUrl = ($email === 'shrawaneffects@gmail.com' || config('app.debug')) ? $loginUrl : null;
         return redirect()->route('login.magic-link.get')
             ->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')
-            ->with('direct_magic_url', $directUrl)
             ->with('active_tab', 'magic-link');
     }
 
@@ -446,10 +444,7 @@ class AuthController extends Controller
             $request
         );
 
-        $infoMessage = "6-digit OTP code sent to {$email}. Please enter it below.";
-        if ($email === 'shrawaneffects@gmail.com' || config('app.debug')) {
-            $infoMessage .= " (Security Code: {$code})";
-        }
+        $infoMessage = "6-digit OTP code sent to {$email}. Please check your email inbox and enter the code below.";
 
         return redirect()->route('login.email-otp.get')->with('otp_sent', true)
             ->with('otp_email', $email)
@@ -718,8 +713,7 @@ class AuthController extends Controller
         }
 
         if (!$mailSent) {
-            session()->flash('fallback_otp', $code);
-            session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
+            session()->flash('email_error', "Unable to send email: {$mailError}");
         }
 
         return back()->with('success', 'A fresh verification code has been dispatched to your email.');
@@ -971,8 +965,7 @@ class AuthController extends Controller
         }
 
         if (!$mailSent) {
-            session()->flash('fallback_otp', $code);
-            session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
+            session()->flash('email_error', "Unable to send email: {$mailError}");
         }
 
         return back()->with('success', 'A new verification code has been dispatched to your email.');
@@ -1079,9 +1072,7 @@ class AuthController extends Controller
             $request
         );
 
-        $directReset = ($email === 'shrawaneffects@gmail.com' || config('app.debug')) ? $resetUrl : null;
-        return back()->with('status', 'We have emailed your password reset link! Please check your inbox.')
-            ->with('direct_reset_url', $directReset);
+        return back()->with('status', 'We have emailed your password reset link! Please check your inbox.');
     }
 
     /**

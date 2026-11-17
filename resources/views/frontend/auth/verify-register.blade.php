@@ -32,21 +32,7 @@
                         </div>
                     @endif
 
-                    @if(session('fallback_otp'))
-                        <div class="alert alert-warning border border-warning-subtle rounded-3 small p-3 mb-3">
-                            <div class="d-flex align-items-center mb-1 text-warning-emphasis fw-bold">
-                                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                                <span>Email Delivery Notice</span>
-                            </div>
-                            <div class="text-muted small mb-2">
-                                {{ session('email_error') }}
-                            </div>
-                            <div class="p-2 bg-body rounded border text-center">
-                                <span class="text-muted small d-block mb-1">Your Temporary Verification Code:</span>
-                                <span class="fs-4 fw-bold font-monospace text-success" style="letter-spacing: 4px;">{{ session('fallback_otp') }}</span>
-                            </div>
-                        </div>
-                    @endif
+
 
                     <!-- Remaining Daily Attempts Counter -->
                     <div class="telemetry-tag text-center py-2 px-3 rounded-pill small mb-4 font-mono w-100 justify-content-center">

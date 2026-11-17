@@ -21,13 +21,6 @@
                                 <i class="bi bi-check-circle-fill text-success fs-5 me-2 flex-shrink-0"></i>
                                 <div>{{ session('status') }}</div>
                             </div>
-                            @if(session('direct_reset_url'))
-                                <div class="mt-2 pt-2 border-top border-success-subtle">
-                                    <a href="{{ session('direct_reset_url') }}" class="btn btn-sm btn-success rounded-pill px-3 font-mono fw-bold">
-                                        <i class="bi bi-shield-lock me-1"></i> Reset Password Now
-                                    </a>
-                                </div>
-                            @endif
                         </div>
                     @endif
 
