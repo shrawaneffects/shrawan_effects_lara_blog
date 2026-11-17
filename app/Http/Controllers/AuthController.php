@@ -38,7 +38,7 @@ class AuthController extends Controller
     /**
      * Show standard login form.
      */
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
         if (Auth::check()) {
             return Auth::user()->isAdmin() || Auth::user()->isAuthor()
@@ -46,8 +46,43 @@ class AuthController extends Controller
                 : redirect()->route('home');
         }
 
+        $activeTab = $request->query('tab', session('active_tab', 'password'));
         $captcha = CaptchaService::generate();
-        return view('frontend.auth.login', compact('captcha'));
+        return view('frontend.auth.login', compact('captcha', 'activeTab'));
+    }
+
+    /**
+     * Direct GET route to display Login page with Email OTP tab active.
+     */
+    public function showEmailOtpLogin(Request $request)
+    {
+        if (Auth::check()) {
+            return Auth::user()->isAdmin() || Auth::user()->isAuthor()
+                ? redirect()->route('admin.dashboard')
+                : redirect()->route('home');
+        }
+
+        session()->flash('active_tab', 'email-otp');
+        $activeTab = 'email-otp';
+        $captcha = CaptchaService::generate();
+        return view('frontend.auth.login', compact('captcha', 'activeTab'));
+    }
+
+    /**
+     * Direct GET route to display Login page with Magic Link tab active.
+     */
+    public function showMagicLinkLogin(Request $request)
+    {
+        if (Auth::check()) {
+            return Auth::user()->isAdmin() || Auth::user()->isAuthor()
+                ? redirect()->route('admin.dashboard')
+                : redirect()->route('home');
+        }
+
+        session()->flash('active_tab', 'magic-link');
+        $activeTab = 'magic-link';
+        $captcha = CaptchaService::generate();
+        return view('frontend.auth.login', compact('captcha', 'activeTab'));
     }
 
     /**
@@ -260,7 +295,7 @@ class AuthController extends Controller
             $request
         );
 
-        return back()->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')->with('active_tab', 'magic-link');
+        return redirect()->route('login.magic-link.get')->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')->with('active_tab', 'magic-link');
     }
 
     /**
@@ -336,7 +371,7 @@ class AuthController extends Controller
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
         )) {
-            return back()->withErrors([
+            return redirect()->route('login.email-otp.get')->withErrors([
                 'captcha_answer' => 'Security Captcha verification failed. Please try again.',
             ])->with('active_tab', 'email-otp')->onlyInput('email');
         }
@@ -345,7 +380,7 @@ class AuthController extends Controller
         $throttleKey = 'otp_' . Str::transliterate($email . '|' . $request->ip());
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
-            return back()->withErrors([
+            return redirect()->route('login.email-otp.get')->withErrors([
                 'email' => "Too many OTP requests. Please wait {$seconds} seconds.",
             ])->with('active_tab', 'email-otp')->onlyInput('email');
         }
@@ -365,7 +400,7 @@ class AuthController extends Controller
         }
 
         if (!$user->is_active) {
-            return back()->withErrors([
+            return redirect()->route('login.email-otp.get')->withErrors([
                 'email' => 'Your account has been deactivated. Please contact support.',
             ])->with('active_tab', 'email-otp');
         }
@@ -402,7 +437,7 @@ class AuthController extends Controller
             $request
         );
 
-        return back()->with('otp_sent', true)
+        return redirect()->route('login.email-otp.get')->with('otp_sent', true)
             ->with('otp_email', $email)
             ->with('active_tab', 'email-otp')
             ->with('info', "6-digit OTP code sent to {$email}. Please enter it below.");
@@ -430,14 +465,14 @@ class AuthController extends Controller
             ->first();
 
         if (!$verification || $verification->isExpired()) {
-            return back()->withErrors([
+            return redirect()->route('login.email-otp.get')->withErrors([
                 'otp_code' => 'The verification OTP code has expired or is invalid. Please request a new code.',
             ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
         }
 
         if (!hash_equals((string) $verification->code, (string) $code)) {
             $verification->increment('attempts');
-            return back()->withErrors([
+            return redirect()->route('login.email-otp.get')->withErrors([
                 'otp_code' => 'Incorrect verification code. Please check your email and try again.',
             ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
         }

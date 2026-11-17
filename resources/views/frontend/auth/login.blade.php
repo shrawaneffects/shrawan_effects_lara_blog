@@ -16,7 +16,7 @@
                     </div>
 
                     @php
-                        $activeTab = session('active_tab', (session('magic_link_sent') ? 'magic-link' : (session('otp_sent') ? 'email-otp' : 'password')));
+                        $activeTab = $activeTab ?? request('tab', session('active_tab', (session('magic_link_sent') ? 'magic-link' : (session('otp_sent') ? 'email-otp' : 'password'))));
                     @endphp
 
                     <!-- 3 Flexible Login Methods (Tabs) -->
@@ -210,3 +210,23 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('#authMethodTabs button[data-bs-toggle="pill"]');
+        tabButtons.forEach(function(btn) {
+            btn.addEventListener('shown.bs.tab', function(e) {
+                const targetId = e.target.getAttribute('data-bs-target');
+                if (targetId === '#otp-pane') {
+                    window.history.replaceState(null, '', '{{ route("login.email-otp.get") }}');
+                } else if (targetId === '#magic-pane') {
+                    window.history.replaceState(null, '', '{{ route("login.magic-link.get") }}');
+                } else {
+                    window.history.replaceState(null, '', '{{ route("login") }}');
+                }
+            });
+        });
+    });
+</script>
+@endpush
