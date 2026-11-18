@@ -55,7 +55,7 @@ class MediaUploadService
         $title = $meta['title'] ?? ucwords(str_replace(['-', '_'], ' ', $baseName));
         $altText = $meta['alt_text'] ?? ($mediaType === 'image' ? $title : null);
 
-        return Media::create([
+        return $this->createMediaRecordSafely([
             'user_id' => $user ? $user->id : (auth()->check() ? auth()->id() : null),
             'file_name' => $fileName,
             'original_name' => $originalName,
@@ -142,7 +142,7 @@ class MediaUploadService
         $title = ucwords(str_replace(['-', '_'], ' ', $baseName));
         $altText = $mediaType === 'image' ? $title : null;
 
-        return Media::create([
+        return $this->createMediaRecordSafely([
             'user_id' => $user ? $user->id : (auth()->check() ? auth()->id() : 1),
             'file_name' => $fileName,
             'original_name' => $originalName,
@@ -158,6 +158,25 @@ class MediaUploadService
             'caption' => null,
             'description' => null,
         ]);
+    }
+
+    /**
+     * Safely create a Media record, stripping any columns that might not exist in the database table.
+     */
+    protected function createMediaRecordSafely(array $attributes): Media
+    {
+        try {
+            $columns = \Illuminate\Support\Facades\Schema::getColumnListing('media');
+            if (!empty($columns)) {
+                $attributes = array_intersect_key($attributes, array_flip($columns));
+            }
+        } catch (\Throwable $e) {
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('media', 'user_id')) {
+                unset($attributes['user_id']);
+            }
+        }
+
+        return Media::create($attributes);
     }
 
     /**
