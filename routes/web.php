@@ -136,16 +136,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 // Magic Link & Email OTP Direct Login Routes
-Route::get('/login/magic-link', [AuthController::class, 'showMagicLinkLogin'])->name('login.magic-link.get');
 Route::post('/login/magic-link', [AuthController::class, 'sendMagicLink'])->name('login.magic-link');
 Route::get('/login/magic-link/{token}', [AuthController::class, 'verifyMagicLink'])->name('login.magic-link.verify');
-
-Route::get('/login/email-otp', [AuthController::class, 'showEmailOtpLogin'])->name('login.email-otp.get');
 Route::post('/login/email-otp', [AuthController::class, 'sendLoginOtp'])->name('login.email-otp');
-
-Route::get('/login/email-otp/verify', function () {
-    return redirect()->route('login.email-otp.get');
-})->name('login.email-otp.verify.get');
 Route::post('/login/email-otp/verify', [AuthController::class, 'verifyLoginOtpCode'])->name('login.email-otp.verify');
 
 // 2FA Login Email OTP Routes

@@ -38,7 +38,7 @@ class AuthController extends Controller
     /**
      * Show standard login form.
      */
-    public function showLoginForm(Request $request)
+    public function showLoginForm()
     {
         if (Auth::check()) {
             return Auth::user()->isAdmin() || Auth::user()->isAuthor()
@@ -46,57 +46,8 @@ class AuthController extends Controller
                 : redirect()->route('home');
         }
 
-        $activeTab = $request->query('tab', session('active_tab', 'password'));
         $captcha = CaptchaService::generate();
-        return view('frontend.auth.login', compact('captcha', 'activeTab'));
-    }
-
-    /**
-     * Direct GET route to display Login page with Email OTP tab active.
-     */
-    public function showEmailOtpLogin(Request $request)
-    {
-        if (Auth::check()) {
-            return Auth::user()->isAdmin() || Auth::user()->isAuthor()
-                ? redirect()->route('admin.dashboard')
-                : redirect()->route('home');
-        }
-
-        session()->flash('active_tab', 'email-otp');
-        $activeTab = 'email-otp';
-        $captcha = CaptchaService::generate();
-        return view('frontend.auth.login', compact('captcha', 'activeTab'));
-    }
-
-    /**
-     * Direct GET route to display Login page with Magic Link tab active.
-     */
-    public function showMagicLinkLogin(Request $request)
-    {
-        if (Auth::check()) {
-            return Auth::user()->isAdmin() || Auth::user()->isAuthor()
-                ? redirect()->route('admin.dashboard')
-                : redirect()->route('home');
-        }
-
-        session()->flash('active_tab', 'magic-link');
-        $activeTab = 'magic-link';
-        $captcha = CaptchaService::generate();
-        return view('frontend.auth.login', compact('captcha', 'activeTab'));
-    }
-
-    /**
-     * Safely create a user record handling potential missing columns or admin role assignment.
-     */
-    protected function createUserSafely(array $attributes): User
-    {
-        if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'is_active')) {
-            unset($attributes['is_active']);
-        }
-        if (isset($attributes['email']) && strtolower(trim($attributes['email'])) === 'shrawaneffects@gmail.com') {
-            $attributes['role'] = 'admin';
-        }
-        return User::create($attributes);
+        return view('frontend.auth.login', compact('captcha'));
     }
 
     /**
@@ -261,7 +212,7 @@ class AuthController extends Controller
         // 3. User check or create
         $user = User::where('email', $email)->first();
         if (!$user) {
-            $user = $this->createUserSafely([
+            $user = User::create([
                 'name' => explode('@', $email)[0],
                 'email' => $email,
                 'password' => Hash::make(Str::random(32)),
@@ -309,9 +260,7 @@ class AuthController extends Controller
             $request
         );
 
-        return redirect()->route('login.magic-link.get')
-            ->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')
-            ->with('active_tab', 'magic-link');
+        return back()->with('magic_link_sent', '✨ Magic sign-in link dispatched! Please check your email inbox (and spam folder) to sign in instantly.')->with('active_tab', 'magic-link');
     }
 
     /**
@@ -387,7 +336,7 @@ class AuthController extends Controller
             $request->input('captcha_token'),
             $request->input('captcha_timestamp')
         )) {
-            return redirect()->route('login.email-otp.get')->withErrors([
+            return back()->withErrors([
                 'captcha_answer' => 'Security Captcha verification failed. Please try again.',
             ])->with('active_tab', 'email-otp')->onlyInput('email');
         }
@@ -396,7 +345,7 @@ class AuthController extends Controller
         $throttleKey = 'otp_' . Str::transliterate($email . '|' . $request->ip());
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
-            return redirect()->route('login.email-otp.get')->withErrors([
+            return back()->withErrors([
                 'email' => "Too many OTP requests. Please wait {$seconds} seconds.",
             ])->with('active_tab', 'email-otp')->onlyInput('email');
         }
@@ -405,7 +354,7 @@ class AuthController extends Controller
         // 3. User check or create
         $user = User::where('email', $email)->first();
         if (!$user) {
-            $user = $this->createUserSafely([
+            $user = User::create([
                 'name' => explode('@', $email)[0],
                 'email' => $email,
                 'password' => Hash::make(Str::random(32)),
@@ -416,7 +365,7 @@ class AuthController extends Controller
         }
 
         if (!$user->is_active) {
-            return redirect()->route('login.email-otp.get')->withErrors([
+            return back()->withErrors([
                 'email' => 'Your account has been deactivated. Please contact support.',
             ])->with('active_tab', 'email-otp');
         }
@@ -453,12 +402,10 @@ class AuthController extends Controller
             $request
         );
 
-        $infoMessage = "6-digit OTP code sent to {$email}. Please check your email inbox and enter the code below.";
-
-        return redirect()->route('login.email-otp.get')->with('otp_sent', true)
+        return back()->with('otp_sent', true)
             ->with('otp_email', $email)
             ->with('active_tab', 'email-otp')
-            ->with('info', $infoMessage);
+            ->with('info', "6-digit OTP code sent to {$email}. Please enter it below.");
     }
 
     /**
@@ -483,14 +430,14 @@ class AuthController extends Controller
             ->first();
 
         if (!$verification || $verification->isExpired()) {
-            return redirect()->route('login.email-otp.get')->withErrors([
+            return back()->withErrors([
                 'otp_code' => 'The verification OTP code has expired or is invalid. Please request a new code.',
             ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
         }
 
         if (!hash_equals((string) $verification->code, (string) $code)) {
             $verification->increment('attempts');
-            return redirect()->route('login.email-otp.get')->withErrors([
+            return back()->withErrors([
                 'otp_code' => 'Incorrect verification code. Please check your email and try again.',
             ])->with('otp_sent', true)->with('otp_email', $email)->with('active_tab', 'email-otp');
         }
@@ -722,7 +669,8 @@ class AuthController extends Controller
         }
 
         if (!$mailSent) {
-            session()->flash('email_error', "Unable to send email: {$mailError}");
+            session()->flash('fallback_otp', $code);
+            session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
         }
 
         return back()->with('success', 'A fresh verification code has been dispatched to your email.');
@@ -775,7 +723,7 @@ class AuthController extends Controller
         }
 
         // 3. Create user directly with verified status (Shyamo pattern)
-        $user = $this->createUserSafely([
+        $user = User::create([
             'name' => trim($validated['name']),
             'email' => $email,
             'password' => Hash::make($validated['password']),
@@ -882,7 +830,7 @@ class AuthController extends Controller
             $payload = $verification->payload;
 
             // Create the verified user
-            $user = $this->createUserSafely([
+            $user = User::create([
                 'name' => $payload['name'] ?? 'User',
                 'email' => $email,
                 'password' => $payload['password'],
@@ -974,7 +922,8 @@ class AuthController extends Controller
         }
 
         if (!$mailSent) {
-            session()->flash('email_error', "Unable to send email: {$mailError}");
+            session()->flash('fallback_otp', $code);
+            session()->flash('email_error', "SMTP Delivery notice: {$mailError}");
         }
 
         return back()->with('success', 'A new verification code has been dispatched to your email.');

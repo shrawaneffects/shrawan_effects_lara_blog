@@ -1738,7 +1738,7 @@
         <div class="container">
             <div class="row g-4">
                 <!-- Section 1: Brand & Telemetry -->
-                <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+                <div class="col-lg-6 col-md-12">
                     <a class="d-flex align-items-center text-decoration-none mb-3" href="{{ route('home') }}">
                         @if($siteLogo)
                             <img src="{{ $siteLogo }}" alt="{{ $siteName }}" width="160" height="38" style="max-height: 38px; width: auto; object-fit: contain;">

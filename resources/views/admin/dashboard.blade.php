@@ -228,7 +228,7 @@
                                                 <a href="{{ route('admin.posts.edit', $post->id) }}" class="fw-semibold text-decoration-none text-body small">
                                                     {{ Str::limit($post->title, 40) }}
                                                 </a>
-                                                <div class="text-muted" style="font-size: 0.75rem;">By {{ $post->author?->name ?? 'Shrawan Effects' }}</div>
+                                                <div class="text-muted" style="font-size: 0.75rem;">By {{ $post->author->name }}</div>
                                             </div>
                                         </div>
                                     </td>

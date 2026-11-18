@@ -16,11 +16,9 @@
                     </div>
 
                     @if(session('status'))
-                        <div class="alert alert-success border-0 rounded-4 p-3 mb-4 small shadow-xs">
-                            <div class="d-flex align-items-center mb-1">
-                                <i class="bi bi-check-circle-fill text-success fs-5 me-2 flex-shrink-0"></i>
-                                <div>{{ session('status') }}</div>
-                            </div>
+                        <div class="alert alert-success border-0 rounded-4 p-3 mb-4 small d-flex align-items-center shadow-xs">
+                            <i class="bi bi-check-circle-fill text-success fs-5 me-2 flex-shrink-0"></i>
+                            <div>{{ session('status') }}</div>
                         </div>
                     @endif
 
@@ -37,7 +35,7 @@
                             @enderror
                         </div>
 
-                        <!-- Security Math Captcha -->
+                        <!-- Shyamo-style Math Captcha -->
                         @include('components.captcha')
 
                         <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm mt-3">

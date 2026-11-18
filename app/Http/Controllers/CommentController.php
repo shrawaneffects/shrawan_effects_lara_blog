@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Services\SecurityService;
-use App\Services\Security\CaptchaService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -22,7 +21,6 @@ class CommentController extends Controller
         $rules = [
             'content' => 'required|string|min:3|max:2000',
             'parent_id' => 'nullable|exists:comments,id',
-            'captcha_answer' => 'required',
         ];
 
         if (!auth()->check()) {
@@ -30,19 +28,7 @@ class CommentController extends Controller
             $rules['guest_email'] = 'required|email|max:150';
         }
 
-        $validated = $request->validate($rules, [
-            'captcha_answer.required' => 'Please solve the security captcha question before submitting your comment.',
-        ]);
-
-        if (!CaptchaService::verify(
-            $request->input('captcha_answer'),
-            $request->input('captcha_token'),
-            $request->input('captcha_timestamp')
-        )) {
-            return redirect()->back()->withErrors([
-                'captcha_answer' => 'Security Captcha verification failed. Please try again.',
-            ])->withInput();
-        }
+        $validated = $request->validate($rules);
 
         $comment = new Comment();
         $comment->post_id = $post->id;

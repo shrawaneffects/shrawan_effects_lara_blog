@@ -44,24 +44,12 @@ class Post extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')->withDefault([
-            'id' => 1,
-            'name' => 'Shrawan Choudhary',
-            'role' => 'Admin',
-            'avatar' => null,
-            'bio' => 'Senior Full-Stack Architect & Founder at Shrawan Effects.'
-        ]);
+        return $this->belongsTo(User::class);
     }
 
     public function author()
     {
-        return $this->belongsTo(User::class, 'user_id')->withDefault([
-            'id' => 1,
-            'name' => 'Shrawan Choudhary',
-            'role' => 'Admin',
-            'avatar' => null,
-            'bio' => 'Senior Full-Stack Architect & Founder at Shrawan Effects.'
-        ]);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function category()

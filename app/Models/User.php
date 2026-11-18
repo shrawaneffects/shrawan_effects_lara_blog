@@ -62,11 +62,6 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function getIsActiveAttribute($value): bool
-    {
-        return $value !== null ? (bool) $value : true;
-    }
-
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
