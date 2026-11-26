@@ -205,7 +205,7 @@ class BulkIpCheckerTest extends TestCase
                         'ipv6' => ['2a07:7800::189'],
                         'cname' => null,
                     ],
-                    'shyamoengineers.com' => [
+                    'www.shrawaneffects.com' => [
                         'ipv4' => ['185.151.30.189'],
                         'ipv6' => ['2a07:7800::189'],
                         'cname' => null,
@@ -282,7 +282,7 @@ class BulkIpCheckerTest extends TestCase
         $response = $this->postJson(route('services.bulk-ip-checker.resolve'), [
             'domains' => [
                 'https://shrawaneffects.com/services',
-                'shyamoengineers.com',
+                'www.shrawaneffects.com',
                 'sibling.example.com',
                 'cf-site.example.com',
                 'ipv6only.example.com',
@@ -332,7 +332,7 @@ class BulkIpCheckerTest extends TestCase
         $this->assertSame(1, $payload['meta']['shared_ip_groups_count']);
         $this->assertSame(1, $payload['meta']['shared_class_c_groups_count']);
 
-        // shrawaneffects.com & shyamoengineers.com share 185.151.30.189 (2 sites) and Class C 185.151.30.0/24 (3 sites)
+        // shrawaneffects.com & www.shrawaneffects.com share 185.151.30.189 (2 sites) and Class C 185.151.30.0/24 (3 sites)
         $first = $payload['results'][0];
         $this->assertSame('shrawaneffects.com', $first['host']);
         $this->assertSame('185.151.30.189', $first['ipv4']);
@@ -374,7 +374,7 @@ class BulkIpCheckerTest extends TestCase
         // Shared cluster assertions
         $this->assertCount(1, $payload['clusters']['by_ip']);
         $this->assertSame('185.151.30.189', $payload['clusters']['by_ip'][0]['ip']);
-        $this->assertSame(['shrawaneffects.com', 'shyamoengineers.com'], $payload['clusters']['by_ip'][0]['hosts']);
+        $this->assertSame(['shrawaneffects.com', 'www.shrawaneffects.com'], $payload['clusters']['by_ip'][0]['hosts']);
 
         $this->assertCount(1, $payload['clusters']['by_class_c']);
         $this->assertSame('185.151.30.0/24', $payload['clusters']['by_class_c'][0]['class_c']);

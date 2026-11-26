@@ -27,7 +27,7 @@ class BulkIpCheckerController extends Controller
             'ipTypeLabels' => BulkIpCheckerService::TYPE_LABELS,
             'sampleDomains' => [
                 'https://shrawaneffects.com',
-                'https://shyamoengineers.com',
+                'https://www.shrawaneffects.com',
                 'https://google.com',
                 'https://cloudflare.com',
                 'https://github.com',
