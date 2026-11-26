@@ -168,16 +168,19 @@
         color: #ffffff !important;
     }
 
+    .bulk-table {
+        font-size: 0.82rem;
+    }
     .bulk-table th {
         font-family: var(--font-mono);
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         text-transform: uppercase;
-        letter-spacing: 0.7px;
+        letter-spacing: 0.4px;
         white-space: nowrap;
         background: rgba(18, 30, 5, 0.85) !important;
         color: #94a3b8;
         border-color: rgba(0, 255, 102, 0.16);
-        padding: 0.8rem 0.75rem;
+        padding: 0.65rem 0.48rem;
         user-select: none;
     }
     .bulk-table th[data-sort] {
@@ -187,7 +190,7 @@
         color: #00ff66;
     }
     .bulk-table td {
-        padding: 0.7rem 0.75rem;
+        padding: 0.55rem 0.48rem;
         vertical-align: middle;
         border-color: rgba(0, 255, 102, 0.1);
     }
@@ -207,8 +210,8 @@
         opacity: 0.82;
     }
     .bulk-subtext {
-        font-size: 0.72rem;
-        max-width: 220px;
+        font-size: 0.7rem;
+        max-width: 170px;
     }
 
     /* IP Type Badges */
@@ -590,16 +593,16 @@
             <div id="resultsTabPane" class="bulk-hud-panel p-3 p-md-4">
                 <!-- Search + Filter Chips + Per Page -->
                 <div class="row g-3 align-items-center mb-3">
-                    <div class="col-md-5 col-lg-4">
+                    <div class="col-md-6 col-lg-5">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                            <input type="text" id="tableSearchInput" class="form-control font-mono" placeholder="Search host, IP, /24, ASN, org, provider...">
+                            <input type="text" id="tableSearchInput" class="form-control font-mono" placeholder="Search host, IP, /24, ASN, org...">
                             <button type="button" id="clearSearchBtn" class="btn btn-outline-secondary" title="Clear search">
                                 <i class="bi bi-x-lg"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-7 col-lg-8 d-flex flex-wrap justify-content-md-end align-items-center gap-2">
+                    <div class="col-md-6 col-lg-7 d-flex flex-wrap justify-content-md-end align-items-center gap-2">
                         <label for="perPageSelect" class="font-mono small text-body-secondary mb-0">Rows/page:</label>
                         <select id="perPageSelect" class="form-select form-select-sm font-mono w-auto">
                             <option value="25">25</option>

@@ -32,6 +32,8 @@
         'address', 'target', 'id', 'no', 'sr', 'index', 'rank'
     ]);
 
+    const UNSUPPORTED_SCHEME_RE = /^(javascript|data|vbscript|mailto|tel|file|about|blob):/i;
+
     const state = {
         status: 'idle', // idle | running | paused | stopped | completed
         batches: [],
@@ -229,6 +231,7 @@
         let s = String(raw).trim();
         s = s.replace(/^["'`]+|["'`,;]+$/g, '').trim();
         if (!s) return '';
+        if (UNSUPPORTED_SCHEME_RE.test(s)) return '';
 
         // Strip protocol
         s = s.replace(/^[a-zA-Z][a-zA-Z0-9+\-.]*:\/\//, '');
@@ -283,6 +286,7 @@
     function isLikelyHostOrUrl(token) {
         const cleaned = token.replace(/^["'`]+|["'`]+$/g, '').trim();
         if (!cleaned || /\s/.test(cleaned)) return false;
+        if (UNSUPPORTED_SCHEME_RE.test(cleaned)) return false;
         const lower = cleaned.toLowerCase();
         if (CSV_HEADER_WORDS.has(lower)) return false;
         if (/^https?:\/\//i.test(cleaned)) return true;
@@ -325,6 +329,16 @@
             const line = lines[i].trim();
             if (!line || line.startsWith('#') || line.startsWith('//')) continue;
             if (CSV_HEADER_WORDS.has(line.replace(/^["']+|["']+$/g, '').toLowerCase())) continue;
+
+            if (UNSUPPORTED_SCHEME_RE.test(line)) {
+                const key = line.toLowerCase();
+                entries.push({ raw: line, host: key });
+                if (!uniqueSet.has(key)) {
+                    uniqueSet.add(key);
+                    uniqueHosts.push(line);
+                }
+                continue;
+            }
 
             if (line.indexOf(',') !== -1 || line.indexOf(';') !== -1 || line.indexOf('\t') !== -1) {
                 const cells = splitCsvRow(line);
@@ -1301,14 +1315,16 @@
 
             // 2. Website / Host
             const tdHost = el('td');
-            const hostWrap = el('div', 'd-flex align-items-center gap-1 flex-wrap');
+            const hostWrap = el('div', 'd-flex align-items-center gap-1 flex-nowrap');
             const displayHost = r.host || r.input || '—';
-            const hostSpan = el('span', 'fw-semibold font-mono text-body', displayHost);
+            const hostSpan = el('span', 'fw-semibold font-mono text-body text-truncate d-inline-block', displayHost);
+            hostSpan.style.maxWidth = '185px';
+            hostSpan.title = displayHost;
             hostWrap.appendChild(hostSpan);
 
             const extUrl = r.valid ? safeExternalUrl(r.host) : null;
             if (extUrl) {
-                const link = el('a', 'text-body-secondary small ms-1', '');
+                const link = el('a', 'text-body-secondary small flex-shrink-0', '');
                 link.href = extUrl;
                 link.target = '_blank';
                 link.rel = 'noopener noreferrer';
@@ -1319,18 +1335,24 @@
             tdHost.appendChild(hostWrap);
 
             if (r.input && r.host && r.input.toLowerCase() !== r.host.toLowerCase()) {
-                tdHost.appendChild(el('div', 'small text-body-secondary font-mono text-truncate bulk-subtext', 'Input: ' + r.input));
+                const inDiv = el('div', 'small text-body-secondary font-mono text-truncate bulk-subtext', 'Input: ' + r.input);
+                inDiv.title = r.input;
+                tdHost.appendChild(inDiv);
             }
             if (r.cname) {
-                tdHost.appendChild(el('div', 'small text-info font-mono text-truncate bulk-subtext', 'CNAME: ' + r.cname));
+                const cnDiv = el('div', 'small text-info font-mono text-truncate bulk-subtext', 'CNAME: ' + r.cname);
+                cnDiv.title = r.cname;
+                tdHost.appendChild(cnDiv);
             }
             if (r.error) {
-                tdHost.appendChild(el('div', 'small text-danger font-mono bulk-subtext', r.error));
+                const errDiv = el('div', 'small text-danger font-mono text-truncate bulk-subtext', r.error);
+                errDiv.title = r.error;
+                tdHost.appendChild(errDiv);
             }
             tr.appendChild(tdHost);
 
             // 3. IPv4
-            const tdV4 = el('td', 'font-mono small');
+            const tdV4 = el('td', 'font-mono small text-nowrap');
             if (r.ipv4) {
                 const v4Btn = el('button', 'btn btn-link btn-sm p-0 font-mono text-decoration-none text-body fw-semibold', r.ipv4);
                 v4Btn.type = 'button';
@@ -1353,7 +1375,7 @@
             const tdV6 = el('td', 'font-mono small');
             if (r.ipv6) {
                 const v6Span = el('span', 'text-body-secondary d-inline-block text-truncate', r.ipv6);
-                v6Span.style.maxWidth = '155px';
+                v6Span.style.maxWidth = '115px';
                 v6Span.title = Array.isArray(r.ipv6_all) && r.ipv6_all.length ? r.ipv6_all.join(', ') : r.ipv6;
                 tdV6.appendChild(v6Span);
             } else {
@@ -1369,12 +1391,12 @@
             typeBadge.appendChild(document.createTextNode(r.ip_type_label || meta.text));
             tdType.appendChild(typeBadge);
             if (r.provider) {
-                tdType.appendChild(el('div', 'small font-mono text-body-secondary mt-1 bulk-subtext', r.provider));
+                tdType.appendChild(el('div', 'small font-mono text-body-secondary mt-1 text-truncate bulk-subtext', r.provider));
             }
             tr.appendChild(tdType);
 
             // 6. Class / Version
-            const tdClass = el('td', 'font-mono small');
+            const tdClass = el('td', 'font-mono small text-nowrap');
             if (r.ip_version_label || r.ip_class) {
                 if (r.ip_version_label) {
                     tdClass.appendChild(el('div', 'fw-semibold text-body', r.ip_version_label));
@@ -1388,7 +1410,7 @@
             tr.appendChild(tdClass);
 
             // 7. Class C (/24)
-            const tdCc = el('td', 'font-mono small');
+            const tdCc = el('td', 'font-mono small text-nowrap');
             if (r.class_c) {
                 const ccBtn = el('button', 'btn btn-link btn-sm p-0 font-mono text-decoration-none text-body', r.class_c);
                 ccBtn.type = 'button';
@@ -1399,7 +1421,7 @@
                 tdCc.appendChild(ccBtn);
             } else if (r.ipv6_subnet_64) {
                 const v6Net = el('span', 'text-body-secondary d-inline-block text-truncate', r.ipv6_subnet_64);
-                v6Net.style.maxWidth = '140px';
+                v6Net.style.maxWidth = '110px';
                 v6Net.title = 'IPv6 /64: ' + r.ipv6_subnet_64;
                 tdCc.appendChild(v6Net);
             } else {
@@ -1409,24 +1431,26 @@
 
             // 8. ASN / ISP / Org
             const tdOrg = el('td', 'small');
-            if (r.asn || r.org || r.country) {
-                const topLine = el('div', 'd-flex align-items-center gap-1 flex-wrap');
-                if (r.asn) {
-                    topLine.appendChild(el('span', 'badge bg-secondary bg-opacity-25 text-body font-mono', r.asn));
+            if (r.asn || r.org || r.country || r.rdns) {
+                if (r.asn || r.country) {
+                    const topLine = el('div', 'd-flex align-items-center gap-1 flex-wrap');
+                    if (r.asn) {
+                        topLine.appendChild(el('span', 'badge bg-secondary bg-opacity-25 text-body font-mono', r.asn));
+                    }
+                    if (r.country) {
+                        topLine.appendChild(el('span', 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono', r.country));
+                    }
+                    tdOrg.appendChild(topLine);
                 }
-                if (r.country) {
-                    topLine.appendChild(el('span', 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono', r.country));
-                }
-                tdOrg.appendChild(topLine);
                 if (r.org) {
                     const orgDiv = el('div', 'text-body-secondary font-mono text-truncate mt-1 bulk-subtext', r.org);
-                    orgDiv.style.maxWidth = '210px';
+                    orgDiv.style.maxWidth = '165px';
                     orgDiv.title = r.org;
                     tdOrg.appendChild(orgDiv);
                 }
                 if (r.rdns) {
                     const rdnsDiv = el('div', 'text-body-secondary font-mono text-truncate bulk-subtext', 'PTR: ' + r.rdns);
-                    rdnsDiv.style.maxWidth = '210px';
+                    rdnsDiv.style.maxWidth = '165px';
                     rdnsDiv.title = r.rdns;
                     tdOrg.appendChild(rdnsDiv);
                 }

@@ -207,14 +207,14 @@
                                         @if($isServicesMenuItem)
                                             @if(!$hasAllServicesChild)
                                                 <li>
-                                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'active text-success fw-bold' : '' }}" href="{{ route('services.index') }}">
+                                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ route('services.index') }}" @if(request()->routeIs('services.index')) aria-current="page" @endif>
                                                         <i class="bi bi-grid-3x3-gap-fill text-success me-2"></i> All Services
                                                     </a>
                                                 </li>
                                             @endif
                                             @if(!$hasBulkIpChild)
                                                 <li>
-                                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'active text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}">
+                                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}" @if($isBulkIpCheckerActive) aria-current="page" @endif>
                                                         <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
                                                         <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
                                                     </a>
@@ -293,12 +293,12 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
                                 <li>
-                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'active text-success fw-bold' : '' }}" href="{{ route('services.index') }}">
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ route('services.index') }}" @if(request()->routeIs('services.index')) aria-current="page" @endif>
                                         <i class="bi bi-grid-3x3-gap-fill text-success me-2"></i> All Services
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'active text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}">
+                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}" @if($isBulkIpCheckerActive) aria-current="page" @endif>
                                         <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
                                         <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
                                     </a>
