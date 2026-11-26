@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\BulkIpCheckerController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -61,6 +62,8 @@ Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsle
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/bulk-website-ip-checker', [BulkIpCheckerController::class, 'index'])->name('services.bulk-ip-checker');
+Route::post('/services/bulk-website-ip-checker/resolve', [BulkIpCheckerController::class, 'resolve'])->name('services.bulk-ip-checker.resolve');
 Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
