@@ -22,6 +22,12 @@
 @section('twitter_description', $seo->twitter_description ?: ($seo->og_description ?: $seo->effective_description))
 @section('twitter_image', $twImg)
 
+@section('lcp_preload')
+@if($post->image_url)
+    <link rel="preload" as="image" href="{{ $post->image_url }}" fetchpriority="high">
+@endif
+@endsection
+
 @push('schema')
 {!! \App\Services\Seo\SeoSchemaService::generate($post) !!}
 @endpush
@@ -102,7 +108,7 @@
 
                     <!-- Featured Image -->
                     <div class="mb-5 text-center post-thumb-container">
-                        <img src="{{ $post->image_url }}" alt="{{ $post->title }}" itemprop="image" fetchpriority="high" loading="eager" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover hover-lift" style="max-height: 480px;">
+                        <img src="{{ $post->image_url }}" alt="{{ $post->title }}" itemprop="image" width="1200" height="675" fetchpriority="high" loading="eager" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover hover-lift" style="max-height: 480px; aspect-ratio: 16 / 9;">
                     </div>
 
                     <!-- Table of Contents (TOC) Component -->

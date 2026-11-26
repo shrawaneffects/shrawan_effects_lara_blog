@@ -28,6 +28,12 @@
 @section('meta_description', $hpMetaDesc)
 @section('meta_keywords', $hpMetaKeywords)
 @section('og_title', $hpMetaTitle)
+
+@section('lcp_preload')
+@if(isset($leadPost) && $leadPost->image_url)
+    <link rel="preload" as="image" href="{{ $leadPost->image_url }}" fetchpriority="high">
+@endif
+@endsection
 @section('og_description', $hpMetaDesc)
 @section('twitter_title', $hpMetaTitle)
 @section('twitter_description', $hpMetaDesc)

@@ -4,16 +4,47 @@ set -e
 REPO_DIR="/home/sites/25b/c/c4cef84f1f/repo_git"
 HOME_DIR="/home/sites/25b/c/c4cef84f1f"
 
-echo "=== Shrawan Effects Top-Level Post Clean URLs Deployment Started ==="
-echo "Syncing app, routes, resources to $HOME_DIR..."
+echo "=== Shrawan Effects Full Performance Deployment Started ==="
 
+# 1. Sync App, Routes, Resources
+echo "Syncing app, routes, resources to $HOME_DIR..."
 cp -rf "$REPO_DIR/app" "$HOME_DIR/"
 cp -rf "$REPO_DIR/routes" "$HOME_DIR/"
 cp -rf "$REPO_DIR/resources" "$HOME_DIR/"
 
+# 2. Sync Public Assets (CSS, .htaccess)
+echo "Syncing public assets to public_html and public..."
+mkdir -p "$HOME_DIR/public_html/css" "$HOME_DIR/public/css"
+cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public_html/css/" 2>/dev/null || true
+cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public/css/" 2>/dev/null || true
+
+cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public_html/.htaccess" 2>/dev/null || true
+cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public/.htaccess" 2>/dev/null || true
+
+# 3. Sync Storage Assets & WebP Images
+echo "Syncing storage images and cache .htaccess..."
+mkdir -p "$HOME_DIR/storage/app/public" "$HOME_DIR/public_html/storage" "$HOME_DIR/public/storage"
+
+if [ -d "$REPO_DIR/storage/app/public" ]; then
+    cp -rf "$REPO_DIR/storage/app/public/"* "$HOME_DIR/storage/app/public/" 2>/dev/null || true
+    cp -rf "$REPO_DIR/storage/app/public/"* "$HOME_DIR/public_html/storage/" 2>/dev/null || true
+    cp -rf "$REPO_DIR/storage/app/public/"* "$HOME_DIR/public/storage/" 2>/dev/null || true
+fi
+
+if [ -f "$REPO_DIR/public/storage/.htaccess" ]; then
+    cp -f "$REPO_DIR/public/storage/.htaccess" "$HOME_DIR/storage/app/public/.htaccess" 2>/dev/null || true
+    cp -f "$REPO_DIR/public/storage/.htaccess" "$HOME_DIR/public_html/storage/.htaccess" 2>/dev/null || true
+    cp -f "$REPO_DIR/public/storage/.htaccess" "$HOME_DIR/public/storage/.htaccess" 2>/dev/null || true
+fi
+
 cd "$HOME_DIR"
 
-# Clean up any post_seo database canonical URLs and post content internal links containing /blog/
+# 4. Ensure storage symlink is active
+if [ -f "artisan" ]; then
+    php artisan storage:link || true
+fi
+
+# 5. Clean up any post_seo database canonical URLs and post content internal links containing /blog/
 if [ -f "bootstrap/app.php" ]; then
     echo "Updating canonical_url and internal links in database..."
     php -r '
@@ -39,11 +70,12 @@ if [ -f "bootstrap/app.php" ]; then
     ' || true
 fi
 
-# Clear Laravel route and view caches
+# 6. Clear & warm Laravel caches
 if [ -f "artisan" ]; then
-    echo "Clearing Laravel caches..."
+    echo "Optimizing Laravel caches..."
     php artisan route:clear || true
     php artisan view:clear || true
+    php artisan config:clear || true
 fi
 
 echo "=== Shrawan Effects Deployment Completed Successfully ==="
