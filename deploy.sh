@@ -13,21 +13,26 @@ cp -rf "$REPO_DIR/resources" "$HOME_DIR/"
 
 cd "$HOME_DIR"
 
-# Clean up any post_seo database canonical URLs containing /blog/
+# Clean up any post_seo database canonical URLs and post content internal links containing /blog/
 if [ -f "bootstrap/app.php" ]; then
-    echo "Updating canonical_url in database..."
+    echo "Updating canonical_url and internal links in database..."
     php -r '
     require __DIR__ . "/vendor/autoload.php";
     $app = require_once __DIR__ . "/bootstrap/app.php";
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
     $kernel->bootstrap();
     try {
-        $count = Illuminate\Support\Facades\DB::table("post_seo")
+        $countSeo = Illuminate\Support\Facades\DB::table("post_seo")
             ->where("canonical_url", "LIKE", "%/blog/%")
             ->update([
                 "canonical_url" => Illuminate\Support\Facades\DB::raw("REPLACE(canonical_url, \"/blog/\", \"/\")")
             ]);
-        echo "Updated $count canonical URLs in post_seo.\n";
+        $countContent = Illuminate\Support\Facades\DB::table("posts")
+            ->where("content", "LIKE", "%/blog/%")
+            ->update([
+                "content" => Illuminate\Support\Facades\DB::raw("REPLACE(REPLACE(content, \"https://shrawaneffects.com/blog/\", \"https://shrawaneffects.com/\"), \"href=\\\"/blog/\", \"href=\\\"/\")")
+            ]);
+        echo "Updated $countSeo canonical URLs and $countContent post content internal links in database.\n";
     } catch (\Throwable $e) {
         echo "Note: " . $e->getMessage() . "\n";
     }
