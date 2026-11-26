@@ -6,13 +6,15 @@ HOME_DIR="/home/sites/25b/c/c4cef84f1f"
 
 echo "=== Shrawan Effects Full Performance Deployment Started ==="
 
-# 1. Sync App, Routes, Resources
+# 1. Sync App, Routes, Resources, Database
 echo "Syncing app, routes, resources to $HOME_DIR..."
 cp -rf "$REPO_DIR/app" "$HOME_DIR/"
 cp -rf "$REPO_DIR/routes" "$HOME_DIR/"
 cp -rf "$REPO_DIR/resources" "$HOME_DIR/"
+mkdir -p "$HOME_DIR/database"
+cp -rf "$REPO_DIR/database/deploy_updates.php" "$HOME_DIR/database/" 2>/dev/null || true
 
-# 2. Sync Public Assets (CSS, .htaccess)
+# 2. Sync Public Assets (CSS, .htaccess, robots.txt)
 echo "Syncing public assets to public_html and public..."
 mkdir -p "$HOME_DIR/public_html/css" "$HOME_DIR/public/css"
 cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public_html/css/" 2>/dev/null || true
@@ -46,41 +48,10 @@ if [ -f "artisan" ]; then
     php artisan storage:link || true
 fi
 
-# 5. Clean up any post_seo database canonical URLs and post content internal links containing /blog/
-if [ -f "bootstrap/app.php" ]; then
-    echo "Updating canonical_url and internal links in database..."
-    php -r '
-    require __DIR__ . "/vendor/autoload.php";
-    $app = require_once __DIR__ . "/bootstrap/app.php";
-    $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-    $kernel->bootstrap();
-    try {
-        $countSeo = Illuminate\Support\Facades\DB::table("post_seo")
-            ->where("canonical_url", "LIKE", "%/blog/%")
-            ->update([
-                "canonical_url" => Illuminate\Support\Facades\DB::raw("REPLACE(canonical_url, \"/blog/\", \"/\")")
-            ]);
-        $countContent = Illuminate\Support\Facades\DB::table("posts")
-            ->where("content", "LIKE", "%/blog/%")
-            ->update([
-                "content" => Illuminate\Support\Facades\DB::raw("REPLACE(REPLACE(content, \"https://shrawaneffects.com/blog/\", \"https://shrawaneffects.com/\"), \"href=\\\"/blog/\", \"href=\\\"/\")")
-            ]);
-        echo "Updated $countSeo canonical URLs and $countContent post content internal links in database.\n";
-
-        // Promote h4 to h3, and h3 to h2 for vivo-x500-series
-        $vivoPost = Illuminate\Support\Facades\DB::table("posts")->where("slug", "vivo-x500-series")->first();
-        if ($vivoPost) {
-            $updated = preg_replace('/<h3(\s+[^>]*)?>/i', '<h2$1>', $vivoPost->content);
-            $updated = preg_replace('/<\/h3>/i', '</h2>', $updated);
-            $updated = preg_replace('/<h4(\s+[^>]*)?>/i', '<h3$1>', $updated);
-            $updated = preg_replace('/<\/h4>/i', '</h3>', $updated);
-            Illuminate\Support\Facades\DB::table("posts")->where("id", $vivoPost->id)->update(["content" => $updated]);
-            echo "Promoted vivo-x500-series headings to semantic H2 and H3.\n";
-        }
-    } catch (\Throwable $e) {
-        echo "Note: " . $e->getMessage() . "\n";
-    }
-    ' || true
+# 5. Clean up database canonical URLs, internal links, and semantic headings
+if [ -f "database/deploy_updates.php" ]; then
+    echo "Running database updates..."
+    php database/deploy_updates.php || true
 fi
 
 # 6. Clear & warm Laravel caches
