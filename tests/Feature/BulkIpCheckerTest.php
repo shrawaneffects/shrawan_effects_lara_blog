@@ -441,4 +441,109 @@ class BulkIpCheckerTest extends TestCase
         $this->assertCount(1, $dnsCallHosts);
         $this->assertCount(1, $metaCallIps);
     }
+
+    public function test_failed_asn_lookup_does_not_poison_persistent_cache(): void
+    {
+        $firstCallCount = 0;
+        $firstService = (new BulkIpCheckerService())
+            ->setDnsResolver(fn (array $hosts): array => [
+                'flaky-meta.example' => ['ipv4' => ['8.8.4.4'], 'ipv6' => [], 'cname' => null],
+            ])
+            ->setIpMetadataResolver(function (array $ips) use (&$firstCallCount): array {
+                $firstCallCount++;
+                // Simulate transient Cymru outage returning null ASN
+                return ['8.8.4.4' => ['asn_number' => null, 'org' => null, 'rdns' => 'dns.google']];
+            });
+
+        $res1 = $firstService->resolveBatch(['flaky-meta.example']);
+        $this->assertSame(1, $firstCallCount);
+        $this->assertNull($res1['results'][0]['asn_number']);
+
+        // A fresh instance (next HTTP batch) must NOT read a poisoned null-ASN cache entry
+        $secondCallCount = 0;
+        $secondService = (new BulkIpCheckerService())
+            ->setDnsResolver(fn (array $hosts): array => [
+                'flaky-meta.example' => ['ipv4' => ['8.8.4.4'], 'ipv6' => [], 'cname' => null],
+            ])
+            ->setIpMetadataResolver(function (array $ips) use (&$secondCallCount): array {
+                $secondCallCount++;
+                return [
+                    '8.8.4.4' => [
+                        'asn_number' => 15169,
+                        'bgp_prefix' => '8.8.4.0/24',
+                        'country' => 'US',
+                        'org' => 'GOOGLE - Google LLC',
+                        'rdns' => 'dns.google',
+                    ],
+                ];
+            });
+
+        $res2 = $secondService->resolveBatch(['flaky-meta.example']);
+        $this->assertSame(1, $secondCallCount);
+        $this->assertSame(15169, $res2['results'][0]['asn_number']);
+        $this->assertSame('AS15169', $res2['results'][0]['asn']);
+        $this->assertSame('GOOGLE - Google LLC', $res2['results'][0]['org']);
+
+        // Third instance should now hit the persistent cache for 8.8.4.4 without calling metadata resolver
+        $thirdCallCount = 0;
+        $thirdService = (new BulkIpCheckerService())
+            ->setIpMetadataResolver(function (array $ips) use (&$thirdCallCount): array {
+                $thirdCallCount++;
+                return [];
+            });
+
+        $res3 = $thirdService->resolveBatch(['8.8.4.4']);
+        $this->assertSame(0, $thirdCallCount);
+        $this->assertSame(15169, $res3['results'][0]['asn_number']);
+    }
+
+    public function test_cymru_doh_failure_falls_back_to_native_dns_txt_for_origin_and_asn_name(): void
+    {
+        $service = new class extends BulkIpCheckerService {
+            public array $nativeTxtCalls = [];
+
+            protected function executeDohWithFailover(array $queries, string $primary = 'cloudflare', string $fallback = 'google'): array
+            {
+                // Simulate DoH SERVFAIL / EDE(22) throttling on Cymru TXT queries while PTR succeeds
+                $out = [];
+                foreach ($queries as $q) {
+                    if ($q['type'] === 'PTR') {
+                        $out[$q['key']] = [
+                            'ok' => true,
+                            'status' => 0,
+                            'answers' => [
+                                ['type' => 12, 'data' => '185-151-30-189.ptr4.stackcp.net.'],
+                            ],
+                        ];
+                    } else {
+                        $out[$q['key']] = ['ok' => false, 'status' => 2, 'answers' => []];
+                    }
+                }
+                return $out;
+            }
+
+            protected function resolveTxtRecordsNative(string $hostname): array
+            {
+                $this->nativeTxtCalls[] = $hostname;
+                return match ($hostname) {
+                    '189.30.151.185.origin.asn.cymru.com' => ['48254 | 185.151.30.0/24 | GB | ripencc | 2016-05-06'],
+                    'AS48254.asn.cymru.com' => ['48254 | GB | ripencc | 2018-09-20 | TWENTYI - 20i Limited, GB'],
+                    default => [],
+                };
+            }
+        };
+
+        $result = $service->resolveBatch(['185.151.30.189']);
+        $row = $result['results'][0];
+
+        $this->assertSame('resolved', $row['status']);
+        $this->assertSame(48254, $row['asn_number']);
+        $this->assertSame('AS48254', $row['asn']);
+        $this->assertSame('185.151.30.0/24', $row['bgp_prefix']);
+        $this->assertSame('GB', $row['country']);
+        $this->assertSame('TWENTYI - 20i Limited', $row['org']);
+        $this->assertSame('185-151-30-189.ptr4.stackcp.net', $row['rdns']);
+        $this->assertContains('189.30.151.185.origin.asn.cymru.com', $service->nativeTxtCalls);
+        $this->assertContains('AS48254.asn.cymru.com', $service->nativeTxtCalls);
+    }
 }

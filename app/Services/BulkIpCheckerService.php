@@ -977,7 +977,7 @@ class BulkIpCheckerService
             }
 
             $cached = $this->cacheGet("bulk_ip:meta:{$ip}");
-            if (is_array($cached)) {
+            if (is_array($cached) && !empty($cached['asn_number'])) {
                 $this->memoryIpMetaCache[$ip] = $cached;
                 $enriched[$ip] = $cached;
                 continue;
@@ -995,8 +995,10 @@ class BulkIpCheckerService
                 $meta = $this->normalizeMetadataPayload($fresh[$ip] ?? []);
                 $this->memoryIpMetaCache[$ip] = $meta;
 
-                // Cache enriched metadata even if partial so repeated IPs across 10K domains never re-query
-                $this->cachePut("bulk_ip:meta:{$ip}", $meta, self::IP_META_CACHE_TTL_SECONDS);
+                // Never poison the 24h persistent cache when ASN lookup failed transiently
+                if ($meta['asn_number'] !== null) {
+                    $this->cachePut("bulk_ip:meta:{$ip}", $meta, self::IP_META_CACHE_TTL_SECONDS);
+                }
                 $enriched[$ip] = $meta;
             }
         }
@@ -1005,7 +1007,7 @@ class BulkIpCheckerService
     }
 
     /**
-     * Perform concurrent Team Cymru ASN TXT + rDNS PTR lookups via DoH for uncached public IPs.
+     * Perform concurrent Team Cymru ASN TXT + rDNS PTR lookups via DoH with native DNS TXT fallback.
      *
      * @param  array<int, string>  $ips
      * @return array<string, array<string, mixed>>
@@ -1017,16 +1019,15 @@ class BulkIpCheckerService
             $out[$ip] = $this->emptyIpMetadata();
         }
 
-        if (!function_exists('curl_multi_init')) {
-            return $out;
-        }
-
-        // Batch 1: Cymru origin TXT + PTR for all uncached IPs concurrently
+        // Batch 1: Cymru origin TXT + PTR for all uncached IPs concurrently via DoH
         $queries = [];
+        $cymruQueries = [];
         foreach ($ips as $ip) {
             $cymruName = $this->formatReverseIpHost($ip, 'origin.asn.cymru.com', 'origin6.asn.cymru.com');
             if ($cymruName !== null) {
-                $queries[] = ['key' => "{$ip}|CYMRU", 'ip' => $ip, 'kind' => 'CYMRU', 'name' => $cymruName, 'type' => 'TXT'];
+                $q = ['key' => "{$ip}|CYMRU", 'ip' => $ip, 'kind' => 'CYMRU', 'name' => $cymruName, 'type' => 'TXT'];
+                $queries[] = $q;
+                $cymruQueries[] = $q;
             }
             $ptrName = $this->formatReverseIpHost($ip, 'in-addr.arpa', 'ip6.arpa');
             if ($ptrName !== null) {
@@ -1035,37 +1036,42 @@ class BulkIpCheckerService
         }
 
         $responses = $this->executeDohWithFailover($queries, 'google', 'cloudflare');
-        $asnNumbersNeeded = [];
 
         foreach ($queries as $q) {
+            if ($q['kind'] !== 'PTR') {
+                continue;
+            }
             $res = $responses[$q['key']] ?? null;
             if ($res === null || !$res['ok'] || empty($res['answers'])) {
                 continue;
             }
-
-            if ($q['kind'] === 'CYMRU') {
-                foreach ($res['answers'] as $ans) {
-                    if (($ans['type'] ?? 0) !== 16 || empty($ans['data'])) {
-                        continue;
-                    }
-                    $parsed = $this->parseCymruOriginTxt((string) $ans['data']);
-                    if ($parsed !== null) {
-                        $out[$q['ip']]['asn_number'] = $parsed['asn_number'];
-                        $out[$q['ip']]['asn'] = 'AS' . $parsed['asn_number'];
-                        $out[$q['ip']]['bgp_prefix'] = $parsed['bgp_prefix'];
-                        $out[$q['ip']]['country'] = $parsed['country'];
-                        $asnNumbersNeeded[$parsed['asn_number']] = true;
-                        break;
-                    }
-                }
-            } elseif ($q['kind'] === 'PTR') {
-                foreach ($res['answers'] as $ans) {
-                    if (($ans['type'] ?? 0) === 12 && !empty($ans['data'])) {
-                        $out[$q['ip']]['rdns'] = rtrim(strtolower((string) $ans['data']), '.');
-                        break;
-                    }
+            foreach ($res['answers'] as $ans) {
+                if (($ans['type'] ?? 0) === 12 && !empty($ans['data'])) {
+                    $out[$q['ip']]['rdns'] = rtrim(strtolower((string) $ans['data']), '.');
+                    break;
                 }
             }
+        }
+
+        $parsedOrigins = $this->parseTxtResultsWithNativeFallback(
+            $cymruQueries,
+            $responses,
+            fn (string $txt): ?array => $this->parseCymruOriginTxt($txt),
+            15.0
+        );
+
+        $asnNumbersNeeded = [];
+        foreach ($cymruQueries as $q) {
+            $parsed = $parsedOrigins[$q['key']] ?? null;
+            if ($parsed === null) {
+                continue;
+            }
+            $ip = $q['ip'];
+            $out[$ip]['asn_number'] = $parsed['asn_number'];
+            $out[$ip]['asn'] = 'AS' . $parsed['asn_number'];
+            $out[$ip]['bgp_prefix'] = $parsed['bgp_prefix'];
+            $out[$ip]['country'] = $parsed['country'];
+            $asnNumbersNeeded[$parsed['asn_number']] = true;
         }
 
         // Batch 2: Resolve AS<num>.asn.cymru.com organization names (cached per ASN)
@@ -1109,7 +1115,7 @@ class BulkIpCheckerService
             $uncached[] = $asn;
         }
 
-        if (empty($uncached) || !function_exists('curl_multi_init')) {
+        if (empty($uncached)) {
             return $names;
         }
 
@@ -1121,28 +1127,112 @@ class BulkIpCheckerService
         ], $uncached);
 
         $responses = $this->executeDohWithFailover($queries, 'google', 'cloudflare');
+        $parsedOrgs = $this->parseTxtResultsWithNativeFallback(
+            $queries,
+            $responses,
+            fn (string $txt): ?string => $this->parseCymruAsnTxt($txt),
+            10.0
+        );
 
         foreach ($queries as $q) {
-            $res = $responses[$q['key']] ?? null;
-            if ($res === null || !$res['ok'] || empty($res['answers'])) {
-                continue;
+            $asn = $q['asn'];
+            $org = $parsedOrgs[$q['key']] ?? null;
+            if ($org !== null) {
+                $this->memoryAsnOrgCache[$asn] = $org;
+                $this->cachePut("bulk_ip:asn:{$asn}", $org, self::ASN_CACHE_TTL_SECONDS);
+                $names[$asn] = $org;
             }
-            foreach ($res['answers'] as $ans) {
-                if (($ans['type'] ?? 0) !== 16 || empty($ans['data'])) {
-                    continue;
+        }
+
+        return $names;
+    }
+
+    /**
+     * Parse TXT records from DoH responses and fall back to native dns_get_record(..., DNS_TXT) when DoH is throttled.
+     *
+     * @param  array<int, array<string, mixed>>  $queries
+     * @param  array<string, array<string, mixed>>  $dohResponses
+     * @return array<string, mixed>
+     */
+    protected function parseTxtResultsWithNativeFallback(
+        array $queries,
+        array $dohResponses,
+        callable $parser,
+        float $nativeBudgetSeconds = 12.0
+    ): array {
+        $parsedByKey = [];
+        $missing = [];
+
+        foreach ($queries as $q) {
+            $key = $q['key'];
+            $res = $dohResponses[$key] ?? null;
+            $parsed = null;
+
+            if ($res !== null && !empty($res['ok']) && !empty($res['answers'])) {
+                foreach ($res['answers'] as $ans) {
+                    if (($ans['type'] ?? 0) !== 16 || empty($ans['data'])) {
+                        continue;
+                    }
+                    $parsed = $parser((string) $ans['data']);
+                    if ($parsed !== null) {
+                        break;
+                    }
                 }
-                $org = $this->parseCymruAsnTxt((string) $ans['data']);
-                if ($org !== null) {
-                    $asn = $q['asn'];
-                    $this->memoryAsnOrgCache[$asn] = $org;
-                    $this->cachePut("bulk_ip:asn:{$asn}", $org, self::ASN_CACHE_TTL_SECONDS);
-                    $names[$asn] = $org;
+            }
+
+            if ($parsed !== null) {
+                $parsedByKey[$key] = $parsed;
+            } else {
+                $missing[] = $q;
+            }
+        }
+
+        $deadline = microtime(true) + $nativeBudgetSeconds;
+        foreach ($missing as $q) {
+            if (microtime(true) >= $deadline) {
+                break;
+            }
+            foreach ($this->resolveTxtRecordsNative((string) $q['name']) as $txt) {
+                $parsed = $parser($txt);
+                if ($parsed !== null) {
+                    $parsedByKey[$q['key']] = $parsed;
                     break;
                 }
             }
         }
 
-        return $names;
+        return $parsedByKey;
+    }
+
+    /**
+     * Native PHP DNS TXT lookup fallback (used when DoH servers are throttled by Team Cymru).
+     *
+     * @return array<int, string>
+     */
+    protected function resolveTxtRecordsNative(string $hostname): array
+    {
+        if (!function_exists('dns_get_record')) {
+            return [];
+        }
+
+        $records = @dns_get_record($hostname, DNS_TXT);
+        if (!is_array($records)) {
+            return [];
+        }
+
+        $texts = [];
+        foreach ($records as $rec) {
+            if (!empty($rec['txt']) && is_string($rec['txt'])) {
+                $texts[] = $rec['txt'];
+            } elseif (!empty($rec['entries']) && is_array($rec['entries'])) {
+                $joined = implode('', array_filter($rec['entries'], 'is_string'));
+                if ($joined !== '') {
+                    $texts[] = $joined;
+                }
+            }
+        }
+
+        return $texts;
     }
 
     /**
