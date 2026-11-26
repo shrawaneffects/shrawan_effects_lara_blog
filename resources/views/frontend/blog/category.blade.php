@@ -3,6 +3,15 @@
 @section('title', $category->name . ' - Articles')
 @section('canonical_url', route('blog.category', $category->slug))
 
+@php
+    $catLeadPost = (isset($posts) && $posts->count() > 0) ? $posts->first() : null;
+@endphp
+@section('lcp_preload')
+@if($catLeadPost && $catLeadPost->image_url)
+    <link rel="preload" as="image" href="{{ $catLeadPost->image_url }}" fetchpriority="high">
+@endif
+@endsection
+
 @section('content')
     <div class="py-5 hero-banner mb-5">
         <div class="container position-relative" style="z-index: 1;">

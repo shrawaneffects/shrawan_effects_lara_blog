@@ -29,9 +29,12 @@
 @section('meta_keywords', $hpMetaKeywords)
 @section('og_title', $hpMetaTitle)
 
+@php
+    $leadHeroPost = (isset($featuredPosts) && $featuredPosts->count() > 0) ? $featuredPosts->first() : null;
+@endphp
 @section('lcp_preload')
-@if(isset($leadPost) && $leadPost->image_url)
-    <link rel="preload" as="image" href="{{ $leadPost->image_url }}" fetchpriority="high">
+@if($leadHeroPost && $leadHeroPost->image_url)
+    <link rel="preload" as="image" href="{{ $leadHeroPost->image_url }}" fetchpriority="high">
 @endif
 @endsection
 @section('og_description', $hpMetaDesc)
