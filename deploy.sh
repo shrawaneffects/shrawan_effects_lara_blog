@@ -67,11 +67,14 @@ if [ -f "bootstrap/app.php" ]; then
             ]);
         echo "Updated $countSeo canonical URLs and $countContent post content internal links in database.\n";
 
-        // Promote h4 to h3, and h3 to h2 for vivo-x500-series if it lacks h2
+        // Promote h4 to h3, and h3 to h2 for vivo-x500-series
         $vivoPost = Illuminate\Support\Facades\DB::table("posts")->where("slug", "vivo-x500-series")->first();
-        if ($vivoPost && !str_contains($vivoPost->content, "<h2")) {
-            $updatedContent = str_replace(["<h3>", "</h3>", "<h4>", "</h4>"], ["<h2>", "</h2>", "<h3>", "</h3>"], $vivoPost->content);
-            Illuminate\Support\Facades\DB::table("posts")->where("id", $vivoPost->id)->update(["content" => $updatedContent]);
+        if ($vivoPost) {
+            $updated = preg_replace('/<h3(\s+[^>]*)?>/i', '<h2$1>', $vivoPost->content);
+            $updated = preg_replace('/<\/h3>/i', '</h2>', $updated);
+            $updated = preg_replace('/<h4(\s+[^>]*)?>/i', '<h3$1>', $updated);
+            $updated = preg_replace('/<\/h4>/i', '</h3>', $updated);
+            Illuminate\Support\Facades\DB::table("posts")->where("id", $vivoPost->id)->update(["content" => $updated]);
             echo "Promoted vivo-x500-series headings to semantic H2 and H3.\n";
         }
     } catch (\Throwable $e) {
