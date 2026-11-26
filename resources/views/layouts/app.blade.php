@@ -75,6 +75,7 @@
         $appDesc = View::getSection('meta_description', $defaultMetaDesc);
     @endphp
     <link rel="canonical" href="{{ $cleanCanonical }}">
+    @yield('lcp_preload')
 
     <!-- OpenGraph Social Metadata -->
     <meta property="og:title" content="@yield('og_title', $appTitle)">
@@ -125,17 +126,17 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap"></noscript>
 
-    <!-- Bootstrap 5.3 CSS -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS (Locally hosted, 1-Year Immutable Cached, Zero 3rd Party Handshake) -->
+    <link rel="preload" href="{{ asset('css/bootstrap.min.css') }}" as="style">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Bootstrap Icons (Non-blocking Preload) -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
 
     <!-- Cyberpunk HUD Theme Stylesheet (Cached 1 Year) -->
+    <link rel="preload" href="{{ asset('css/cyberpunk-hud.min.css') }}" as="style">
     <link rel="stylesheet" href="{{ asset('css/cyberpunk-hud.min.css') }}">
-    @yield('lcp_preload')
 
     <style>
         :root{--font-main:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;--neon-green:#00ff66;--cyber-dark:#050804}
