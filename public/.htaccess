@@ -25,7 +25,18 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # 4. Send Requests To Front Controller
+    # 3.5. DirectoryIndex Priority: Next.js Frontend (index.html), Laravel fallback (index.php)
+    DirectoryIndex index.html index.php
+
+    # 4. Route backend, admin & API endpoints directly to Laravel Front Controller
+    RewriteCond %{REQUEST_URI} ^/(admin|api|login|register|logout|forgot-password|reset-password|openseo|captcha|sitemap\.xml) [NC]
+    RewriteRule ^ index.php [L]
+
+    # 4.2. Next.js Static Pages Resolution for Clean URLs
+    RewriteCond %{REQUEST_FILENAME}/index.html -f
+    RewriteRule ^(.*)$ $1/index.html [L]
+
+    # 4.3. Send Remaining Unmatched Requests To Laravel Front Controller
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

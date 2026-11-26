@@ -22,3 +22,9 @@ yarn-error.log
 /.vscode
 /.zed
 *.zip
+
+# Next.js Frontend
+/frontend/node_modules
+/frontend/.next
+/frontend/out
+
