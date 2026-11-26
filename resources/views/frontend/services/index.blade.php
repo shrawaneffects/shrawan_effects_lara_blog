@@ -27,15 +27,81 @@
             </p>
 
             <div class="d-flex flex-wrap gap-3 align-items-center">
-                <a href="#all-services" class="btn btn-gradient rounded-pill px-4 py-2.5">
+                <a href="#all-services" class="btn btn-gradient rounded-pill px-4 py-2">
                     <i class="bi bi-grid-3x3-gap-fill me-2"></i> Explore Services
                 </a>
-                <a href="{{ route('contact.index') }}" class="btn btn-tactical rounded-pill px-4 py-2.5">
+                <a href="{{ \Illuminate\Support\Facades\Route::has('services.bulk-ip-checker') ? route('services.bulk-ip-checker') : url('/services/bulk-website-ip-checker') }}" class="btn btn-gradient-cyan rounded-pill px-4 py-2">
+                    <i class="bi bi-hdd-network me-2"></i> Bulk Website IP Checker
+                </a>
+                <a href="{{ route('contact.index') }}" class="btn btn-tactical rounded-pill px-4 py-2">
                     <i class="bi bi-chat-square-dots me-2"></i> Request Consultation
                 </a>
-                <a href="tel:+919555277347" class="btn btn-outline-secondary rounded-pill px-3 py-2.5 font-mono small d-none d-sm-inline-flex align-items-center">
+                <a href="tel:+919555277347" class="btn btn-outline-secondary rounded-pill px-3 py-2 font-mono small d-none d-sm-inline-flex align-items-center">
                     <i class="bi bi-telephone text-success me-2"></i> +91 95552 77347
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Free Utility Showcase: Bulk Website IP Checker -->
+    @php
+        $bulkIpToolUrl = \Illuminate\Support\Facades\Route::has('services.bulk-ip-checker')
+            ? route('services.bulk-ip-checker')
+            : url('/services/bulk-website-ip-checker');
+    @endphp
+    <div class="container mb-5">
+        <div class="card card-post spotlight-card p-4 p-md-5 rounded-4 shadow-lg border border-success border-opacity-25">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-7">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                        <span class="telemetry-tag"><i class="bi bi-hdd-network"></i> FREE INFRASTRUCTURE TOOL // 10,000+ DOMAINS</span>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono small">
+                            <span class="cyber-beacon me-1"></span> LIVE ENGINE
+                        </span>
+                    </div>
+                    <h2 class="fw-bold font-cyber mb-2">
+                        Bulk Website <span class="text-gradient">IP &amp; Class-C Subnet Checker</span>
+                    </h2>
+                    <p class="text-body-secondary small leading-relaxed mb-3">
+                        Audit up to 10,000+ domains at once with zero timeouts. Resolve IPv4 &amp; IPv6 addresses, classify CDN/Proxy, Cloud, VPS/Datacenter &amp; Hosting IP types, identify shared <strong>Same-IP</strong> and <strong>Same Class-C (/24)</strong> footprints, and export full CSV or JSON reports.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 mb-4 font-mono small">
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-lightning-charge-fill text-success me-1"></i> Concurrent Batch Queue</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-shield-shaded text-info me-1"></i> CDN / Cloud / Hosting Detection</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-diagram-3-fill text-warning me-1"></i> Same-IP &amp; /24 Clustering</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-filetype-csv text-success me-1"></i> CSV / JSON Export</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ $bulkIpToolUrl }}" class="btn btn-gradient rounded-pill px-4 py-2">
+                            <i class="bi bi-rocket-takeoff-fill me-2"></i> Open Bulk IP Checker
+                        </a>
+                        <a href="{{ $bulkIpToolUrl }}?domains=shrawaneffects.com,shyamoengineers.com,google.com,cloudflare.com&autorun=1" class="btn btn-tactical rounded-pill px-3 py-2">
+                            <i class="bi bi-play-circle me-1"></i> Run Live Sample Scan
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 position-relative" style="z-index: 3;">
+                    <form action="{{ $bulkIpToolUrl }}" method="GET" class="p-3 p-md-4 rounded-4 bg-body-tertiary border border-success border-opacity-25">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label for="quickBulkDomains" class="font-mono small fw-bold text-body mb-0">
+                                <i class="bi bi-terminal text-success me-1"></i> Quick Launch Check
+                            </label>
+                            <span class="badge bg-success bg-opacity-10 text-success font-mono" style="font-size: 0.68rem;">NO LOGIN REQUIRED</span>
+                        </div>
+                        <textarea
+                            id="quickBulkDomains"
+                            name="domains"
+                            rows="4"
+                            class="form-control form-control-sm font-mono mb-2"
+                            placeholder="shrawaneffects.com&#10;shyamoengineers.com&#10;cloudflare.com&#10;google.com"
+                        ></textarea>
+                        <input type="hidden" name="autorun" value="1">
+                        <button type="submit" class="btn btn-gradient-cyan btn-sm w-100 rounded-pill py-2">
+                            <i class="bi bi-search me-1"></i> Check Website IPs Now
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

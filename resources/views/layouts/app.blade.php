@@ -178,15 +178,52 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     @php
                         $headerMenuItems = \App\Models\MenuItem::getMenuTree('header');
+                        $bulkIpCheckerUrl = \Illuminate\Support\Facades\Route::has('services.bulk-ip-checker')
+                            ? route('services.bulk-ip-checker')
+                            : url('/services/bulk-website-ip-checker');
+                        $isBulkIpCheckerActive = request()->routeIs('services.bulk-ip-checker')
+                            || request()->is('services/bulk-website-ip-checker');
                     @endphp
                     @if($headerMenuItems->count() > 0)
                         @foreach($headerMenuItems as $mItem)
-                            @if($mItem->children->count() > 0)
+                            @php
+                                $mItemUrlLower = strtolower(trim($mItem->url ?? ''));
+                                $isServicesMenuItem = str_contains($mItemUrlLower, '/services')
+                                    || strtolower(trim($mItem->title ?? '')) === 'services';
+                                $hasAllServicesChild = $mItem->children->contains(function ($c) {
+                                    $u = rtrim(strtolower(trim($c->url ?? '')), '/');
+                                    return $u === '/services' || str_ends_with($u, '/services');
+                                });
+                                $hasBulkIpChild = $mItem->children->contains(function ($c) {
+                                    return str_contains(strtolower($c->url ?? ''), 'bulk-website-ip-checker');
+                                });
+                            @endphp
+                            @if($mItem->children->count() > 0 || $isServicesMenuItem)
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {{ request()->is(ltrim($mItem->url, '/')) ? 'active text-gradient fw-bold' : '' }}" href="{{ $mItem->url }}" role="button" data-bs-toggle="dropdown" aria-expanded="false" target="{{ $mItem->target }}">
+                                    <a class="nav-link dropdown-toggle {{ (request()->is(ltrim($mItem->url, '/')) || ($isServicesMenuItem && (request()->routeIs('services.*') || $isBulkIpCheckerActive))) ? 'active text-gradient fw-bold' : '' }}" href="{{ $mItem->url }}" role="button" data-bs-toggle="dropdown" aria-expanded="false" target="{{ $mItem->target }}">
                                         @if($mItem->icon) <i class="{{ $mItem->icon }} me-1"></i> @endif {{ $mItem->title }}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
+                                        @if($isServicesMenuItem)
+                                            @if(!$hasAllServicesChild)
+                                                <li>
+                                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'active text-success fw-bold' : '' }}" href="{{ route('services.index') }}">
+                                                        <i class="bi bi-grid-3x3-gap-fill text-success me-2"></i> All Services
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @if(!$hasBulkIpChild)
+                                                <li>
+                                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'active text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}">
+                                                        <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
+                                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @if($mItem->children->count() > 0)
+                                                <li><hr class="dropdown-divider border-secondary border-opacity-50"></li>
+                                            @endif
+                                        @endif
                                         @foreach($mItem->children as $child)
                                             @if($child->children->count() > 0)
                                                 <li class="dropdown-submenu dropend">
@@ -249,10 +286,30 @@
                                 <i class="bi bi-grid me-1"></i> Articles
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('services.*') ? 'active text-gradient fw-bold' : '' }}" href="{{ route('services.index') }}">
+                        <!-- Services Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ (request()->routeIs('services.*') || $isBulkIpCheckerActive) ? 'active text-gradient fw-bold' : '' }}" href="{{ route('services.index') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-briefcase me-1"></i> Services
                             </a>
+                            <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ request()->routeIs('services.index') ? 'active text-success fw-bold' : '' }}" href="{{ route('services.index') }}">
+                                        <i class="bi bi-grid-3x3-gap-fill text-success me-2"></i> All Services
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'active text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}">
+                                        <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
+                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider border-secondary border-opacity-50"></li>
+                                <li>
+                                    <a class="dropdown-item font-mono py-2" href="{{ route('services.index') }}#web-development">
+                                        <i class="bi bi-code-slash text-primary me-2"></i> Web Development
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <!-- OpenSEO Suite Dropdown -->
                         <li class="nav-item dropdown">
