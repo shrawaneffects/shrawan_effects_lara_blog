@@ -16,9 +16,11 @@ cp -rf "$REPO_DIR/database/deploy_updates.php" "$HOME_DIR/database/" 2>/dev/null
 
 # 2. Sync Public Assets (CSS, .htaccess, robots.txt)
 echo "Syncing public assets to public_html and public..."
-mkdir -p "$HOME_DIR/public_html/css" "$HOME_DIR/public/css"
+mkdir -p "$HOME_DIR/public_html/css" "$HOME_DIR/public/css" "$HOME_DIR/public_html/js" "$HOME_DIR/public/js"
 cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public_html/css/" 2>/dev/null || true
 cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public/css/" 2>/dev/null || true
+cp -rf "$REPO_DIR/public/js/"* "$HOME_DIR/public_html/js/" 2>/dev/null || true
+cp -rf "$REPO_DIR/public/js/"* "$HOME_DIR/public/js/" 2>/dev/null || true
 
 cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public_html/.htaccess" 2>/dev/null || true
 cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public/.htaccess" 2>/dev/null || true
