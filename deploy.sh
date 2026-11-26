@@ -20,6 +20,8 @@ cp -rf "$REPO_DIR/public/css/"* "$HOME_DIR/public/css/" 2>/dev/null || true
 
 cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public_html/.htaccess" 2>/dev/null || true
 cp -f "$REPO_DIR/public/.htaccess" "$HOME_DIR/public/.htaccess" 2>/dev/null || true
+cp -f "$REPO_DIR/public/robots.txt" "$HOME_DIR/public_html/robots.txt" 2>/dev/null || true
+cp -f "$REPO_DIR/public/robots.txt" "$HOME_DIR/public/robots.txt" 2>/dev/null || true
 
 # 3. Sync Storage Assets & WebP Images
 echo "Syncing storage images and cache .htaccess..."
@@ -64,6 +66,14 @@ if [ -f "bootstrap/app.php" ]; then
                 "content" => Illuminate\Support\Facades\DB::raw("REPLACE(REPLACE(content, \"https://shrawaneffects.com/blog/\", \"https://shrawaneffects.com/\"), \"href=\\\"/blog/\", \"href=\\\"/\")")
             ]);
         echo "Updated $countSeo canonical URLs and $countContent post content internal links in database.\n";
+
+        // Promote h4 to h3, and h3 to h2 for vivo-x500-series if it lacks h2
+        $vivoPost = Illuminate\Support\Facades\DB::table("posts")->where("slug", "vivo-x500-series")->first();
+        if ($vivoPost && !str_contains($vivoPost->content, "<h2")) {
+            $updatedContent = str_replace(["<h3>", "</h3>", "<h4>", "</h4>"], ["<h2>", "</h2>", "<h3>", "</h3>"], $vivoPost->content);
+            Illuminate\Support\Facades\DB::table("posts")->where("id", $vivoPost->id)->update(["content" => $updatedContent]);
+            echo "Promoted vivo-x500-series headings to semantic H2 and H3.\n";
+        }
     } catch (\Throwable $e) {
         echo "Note: " . $e->getMessage() . "\n";
     }

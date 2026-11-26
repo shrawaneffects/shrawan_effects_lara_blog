@@ -450,9 +450,6 @@
         </div>
     </article>
 
-    <!-- Output Google Schema.org JSON-LD Structured Data -->
-    {!! $post->schema_json_ld !!}
-
     @push('scripts')
     <script>
         // Smooth scrolling for TOC links
