@@ -15,9 +15,17 @@ class PostController extends Controller
 
         // Check if draft preview is allowed for author/admin
         if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isAuthor())) {
-            $post = $postQuery->where('slug', $slug)->firstOrFail();
+            $post = $postQuery->where('slug', $slug)->first();
         } else {
-            $post = $postQuery->published()->where('slug', $slug)->firstOrFail();
+            $post = $postQuery->published()->where('slug', $slug)->first();
+        }
+
+        if (!$post) {
+            $page = \App\Models\Page::where('slug', $slug)->where('status', 'published')->first();
+            if ($page) {
+                return view('frontend.pages.show', compact('page'));
+            }
+            abort(404);
         }
 
         // Increment views with session throttle

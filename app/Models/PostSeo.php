@@ -91,7 +91,7 @@ class PostSeo extends Model
     public function getEffectiveCanonicalAttribute(): string
     {
         if (!empty($this->canonical_url)) {
-            return $this->canonical_url;
+            return preg_replace('#https?://[^/]+/blog/#', url('/') . '/', $this->canonical_url);
         }
         return $this->post ? route('blog.show', $this->post->slug) : url()->current();
     }

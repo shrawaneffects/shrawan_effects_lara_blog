@@ -49,7 +49,10 @@ use App\Http\Controllers\OpenSeo\SettingController as OpenSeoSettingController;
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
+Route::get('/blog/{slug}', function ($slug, \Illuminate\Http\Request $request) {
+    $qs = $request->getQueryString();
+    return redirect('/' . $slug . ($qs ? '?' . $qs : ''), 301);
+});
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
 Route::get('/author/{id}', [BlogController::class, 'author'])->name('blog.author');
@@ -310,4 +313,11 @@ Route::get('uploads/{path}', function (string $path) {
     }
     abort(404);
 })->where('path', '.*');
+
+// --------------------------------------------------------------------------
+// Top-Level Clean URLs for Articles (e.g. /gta-6-on-ps5)
+// --------------------------------------------------------------------------
+Route::get('/{slug}', [PostController::class, 'show'])
+    ->where('slug', '[a-zA-Z0-9\-_]+')
+    ->name('blog.show');
 

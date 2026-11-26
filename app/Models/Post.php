@@ -335,6 +335,8 @@ class Post extends Model
         return static::where('id', '!=', $this->id)
             ->where(function ($q) {
                 $q->where('content', 'LIKE', '%/blog/' . $this->slug . '%')
+                  ->orWhere('content', 'LIKE', '%/' . $this->slug . '"%')
+                  ->orWhere('content', 'LIKE', '%/' . $this->slug . '\'%')
                   ->orWhere('content', 'LIKE', '%href="' . $this->slug . '"%')
                   ->orWhere('content', 'LIKE', '%href=\'' . $this->slug . '\'%');
             })
@@ -350,6 +352,8 @@ class Post extends Model
             ->where('id', '!=', $this->id)
             ->where(function ($q) {
                 $q->where('content', 'LIKE', '%/blog/' . $this->slug . '%')
+                  ->orWhere('content', 'LIKE', '%/' . $this->slug . '"%')
+                  ->orWhere('content', 'LIKE', '%/' . $this->slug . '\'%')
                   ->orWhere('content', 'LIKE', '%href="' . $this->slug . '"%')
                   ->orWhere('content', 'LIKE', '%href=\'' . $this->slug . '\'%');
             })
