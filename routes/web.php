@@ -12,11 +12,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\BulkIpCheckerController;
+use App\Http\Controllers\ConvertCaseController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\ToolController as AdminToolController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
@@ -64,6 +66,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/bulk-website-ip-checker', [BulkIpCheckerController::class, 'index'])->name('services.bulk-ip-checker');
 Route::post('/services/bulk-website-ip-checker/resolve', [BulkIpCheckerController::class, 'resolve'])->name('services.bulk-ip-checker.resolve');
+Route::get('/services/convertcase', [ConvertCaseController::class, 'index'])->name('services.convertcase');
 Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
@@ -209,6 +212,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Services Management
     Route::resource('services', AdminServiceController::class)->except(['show']);
     Route::post('/services/{id}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
+
+    // Online Tools Management
+    Route::get('/tools', [AdminToolController::class, 'index'])->name('tools.index');
+    Route::post('/tools/toggle', [AdminToolController::class, 'toggle'])->name('tools.toggle');
+    Route::post('/tools/update', [AdminToolController::class, 'update'])->name('tools.update');
 
     // Centralized Media Library (Images, Videos, Audios, Documents)
     Route::post('/media/sync-storage', [AdminMediaController::class, 'syncStorage'])->name('media.sync-storage');

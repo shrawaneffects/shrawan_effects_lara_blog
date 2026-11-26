@@ -33,6 +33,9 @@
                 <a href="{{ \Illuminate\Support\Facades\Route::has('services.bulk-ip-checker') ? route('services.bulk-ip-checker') : url('/services/bulk-website-ip-checker') }}" class="btn btn-gradient-cyan rounded-pill px-4 py-2">
                     <i class="bi bi-hdd-network me-2"></i> Bulk Website IP Checker
                 </a>
+                <a href="{{ \Illuminate\Support\Facades\Route::has('services.convertcase') ? route('services.convertcase') : url('/services/convertcase') }}" class="btn btn-outline-warning rounded-pill px-4 py-2">
+                    <i class="bi bi-type me-2"></i> Convert Case
+                </a>
                 <a href="{{ route('contact.index') }}" class="btn btn-tactical rounded-pill px-4 py-2">
                     <i class="bi bi-chat-square-dots me-2"></i> Request Consultation
                 </a>
@@ -101,6 +104,63 @@
                             <i class="bi bi-search me-1"></i> Check Website IPs Now
                         </button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Free Online Tool: Convert Case -->
+    @php
+        $convertCaseToolUrl = \Illuminate\Support\Facades\Route::has('services.convertcase')
+            ? route('services.convertcase')
+            : url('/services/convertcase');
+    @endphp
+    <div class="container mb-5">
+        <div class="card card-post spotlight-card p-4 p-md-5 rounded-4 shadow-lg border border-warning border-opacity-25">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                        <span class="telemetry-tag"><i class="bi bi-type"></i> ONLINE UTILITY // TEXT CASE CONVERTER</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 font-mono small">
+                            <span class="cyber-beacon me-1"></span> INSTANT CLIENT-SIDE
+                        </span>
+                    </div>
+                    <h2 class="fw-bold font-cyber mb-2">
+                        Convert <span class="text-gradient">Case</span> Tool
+                    </h2>
+                    <p class="text-body-secondary small leading-relaxed mb-3">
+                        Convert text instantly between <strong>Sentence case</strong>, <strong>lower case</strong>, <strong>UPPER CASE</strong>, <strong>Capitalized Case</strong>, <strong>alternating case</strong>, <strong>Title Case</strong>, and <strong>InVeRsE CaSe</strong> with live character, word, and line count tracking.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 mb-4 font-mono small">
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-danger-subtle text-danger me-1">Sc</span> Sentence case</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-success-subtle text-success me-1">lc</span> lower case</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-info-subtle text-info me-1">UC</span> UPPER CASE</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-primary-subtle text-primary me-1">CC</span> Capitalized Case</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-warning-subtle text-warning me-1">aC</span> aLtErNaTiNg cAsE</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-teal-subtle text-success me-1">TC</span> Title Case</span>
+                        <span class="badge bg-body-tertiary text-body border px-2 py-1"><span class="badge bg-secondary-subtle text-light me-1">iC</span> InVeRsE CaSe</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ $convertCaseToolUrl }}" class="btn btn-gradient rounded-pill px-4 py-2">
+                            <i class="bi bi-type me-2"></i> Launch Convert Case
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-center">
+                    <div class="p-4 rounded-4 bg-black border border-secondary border-opacity-50 text-start font-mono small">
+                        <div class="d-flex gap-1 mb-2">
+                            <span class="badge bg-danger rounded-circle p-1"></span>
+                            <span class="badge bg-warning rounded-circle p-1"></span>
+                            <span class="badge bg-success rounded-circle p-1"></span>
+                        </div>
+                        <div class="text-body-secondary mb-1">// Quick preview</div>
+                        <div class="text-success mb-2">&gt; sentence case. lower case. UPPER CASE.</div>
+                        <div class="text-warning mb-2">&gt; aLtErNaTiNg cAsE &amp; Title Case</div>
+                        <div class="border-top border-secondary border-opacity-50 pt-2 text-end text-body-secondary" style="font-size: 0.72rem;">
+                            Character Count: 0 | Word Count: 0
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
