@@ -34,11 +34,23 @@ class Setting extends Model
                 return $logo;
             }
             $clean = ltrim($logo, '/');
-            if (str_starts_with($clean, 'storage/')) {
-                return asset($clean);
+            $relativePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
+
+            if (file_exists(public_path('storage/' . $relativePath)) || file_exists(storage_path('app/public/' . $relativePath))) {
+                return asset('storage/' . $relativePath);
             }
-            return asset('storage/' . $clean);
         }
+
+        // Fallback: look for any valid image in settings/ directory
+        $settingsDir = storage_path('app/public/settings');
+        if (is_dir($settingsDir)) {
+            $files = glob($settingsDir . '/*.{png,jpg,jpeg,webp,svg}', GLOB_BRACE);
+            if (!empty($files)) {
+                $basename = basename($files[0]);
+                return asset('storage/settings/' . $basename);
+            }
+        }
+
         return null;
     }
 
@@ -51,11 +63,23 @@ class Setting extends Model
                 return $favicon;
             }
             $clean = ltrim($favicon, '/');
-            if (str_starts_with($clean, 'storage/')) {
-                return asset($clean);
+            $relativePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
+
+            if (file_exists(public_path('storage/' . $relativePath)) || file_exists(storage_path('app/public/' . $relativePath))) {
+                return asset('storage/' . $relativePath);
             }
-            return asset('storage/' . $clean);
         }
+
+        // Fallback: look for any valid image in settings/ directory
+        $settingsDir = storage_path('app/public/settings');
+        if (is_dir($settingsDir)) {
+            $files = glob($settingsDir . '/*.{png,jpg,jpeg,webp,svg,ico}', GLOB_BRACE);
+            if (!empty($files)) {
+                $basename = basename($files[0]);
+                return asset('storage/settings/' . $basename);
+            }
+        }
+
         return null;
     }
 }

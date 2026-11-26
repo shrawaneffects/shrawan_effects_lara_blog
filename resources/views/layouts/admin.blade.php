@@ -19,7 +19,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5.3 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,16 +28,21 @@
 
     <style>
         :root {
-            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --sidebar-width: 260px;
             --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
             --gradient-sunset: linear-gradient(135deg, #f43f5e 0%, #fb7185 45%, #fb923c 100%);
             --gradient-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
+            font-size: 18px;
         }
-        body {
-            font-family: var(--font-main);
+        html, body {
+            font-family: var(--font-main) !important;
+            font-size: 18px !important;
             background-color: var(--bs-tertiary-bg);
             min-height: 100vh;
+        }
+        p, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, .sidebar-link, table {
+            font-size: 18px;
         }
         .top-gradient-bar {
             height: 3px;

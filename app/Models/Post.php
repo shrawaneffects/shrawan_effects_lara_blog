@@ -149,10 +149,10 @@ class Post extends Model
                     return $img;
                 }
                 $clean = ltrim($img, '/');
-                if (str_starts_with($clean, 'storage/')) {
-                    return asset($clean);
+                $relativePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
+                if (file_exists(public_path('storage/' . $relativePath)) || file_exists(storage_path('app/public/' . $relativePath))) {
+                    return asset('storage/' . $relativePath);
                 }
-                return asset('storage/' . $clean);
             }
         }
 
@@ -178,10 +178,15 @@ class Post extends Model
                 return $img;
             }
             $clean = ltrim($img, '/');
-            if (str_starts_with($clean, 'storage/')) {
-                return asset($clean);
+            $relativePath = str_starts_with($clean, 'storage/') ? substr($clean, 8) : $clean;
+            if (file_exists(public_path('storage/' . $relativePath)) || file_exists(storage_path('app/public/' . $relativePath))) {
+                return asset('storage/' . $relativePath);
             }
-            return asset('storage/' . $clean);
+        }
+
+        // 4. Default site image asset if available
+        if (file_exists(public_path('storage/default.jpg')) || file_exists(storage_path('app/public/default.jpg'))) {
+            return asset('storage/default.jpg');
         }
 
         return 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80';

@@ -35,8 +35,8 @@
         min-height: 280px;
         background-color: transparent !important;
         color: #f1f5f9;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1.05rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1.125rem;
         line-height: 1.6;
         padding: 1.25rem 1.5rem;
         border: none !important;
@@ -46,7 +46,7 @@
     }
     .cc-textarea::placeholder {
         color: #a3a3a3;
-        font-size: 1.02rem;
+        font-size: 1.125rem;
     }
 
     /* Bottom Action Toolbar inside the container */
@@ -67,12 +67,12 @@
         border: 1px solid #28342a;
         color: #d1d5db;
         border-radius: 6px;
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.05rem;
+        font-size: 1.15rem;
         transition: all 0.2s ease;
         cursor: pointer;
         padding: 0;
@@ -96,7 +96,7 @@
     /* Right Counters */
     .cc-counters {
         color: #a1a1aa;
-        font-size: 0.88rem;
+        font-size: 1rem;
         font-weight: 500;
         letter-spacing: 0.3px;
         user-select: none;
@@ -120,9 +120,10 @@
         background-color: #0b0f0c;
         border: 1px solid #242d26;
         color: #f1f5f9;
-        font-size: 0.92rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1.05rem;
         font-weight: 500;
-        padding: 0.42rem 0.85rem 0.42rem 0.45rem;
+        padding: 0.5rem 1rem 0.5rem 0.55rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
@@ -146,14 +147,14 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.72rem;
+        font-size: 0.82rem;
         font-weight: 700;
         font-family: monospace;
         letter-spacing: -0.5px;
-        padding: 0.15rem 0.45rem;
+        padding: 0.2rem 0.5rem;
         border-radius: 4px;
         margin-right: 0.55rem;
-        min-width: 24px;
+        min-width: 26px;
         line-height: 1.2;
     }
 
@@ -171,9 +172,10 @@
         background-color: #ea580c;
         border: 1px solid #f97316;
         color: #ffffff !important;
-        font-size: 0.92rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1.05rem;
         font-weight: 600;
-        padding: 0.42rem 1rem;
+        padding: 0.5rem 1.15rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;

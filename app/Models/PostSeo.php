@@ -106,9 +106,6 @@ class PostSeo extends Model
     {
         $index = $this->robots_index ? 'index' : 'noindex';
         $follow = $this->robots_follow ? 'follow' : 'nofollow';
-        if ($this->robots_index) {
-            return "{$index}, {$follow}, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
-        }
         return "{$index}, {$follow}";
     }
 }

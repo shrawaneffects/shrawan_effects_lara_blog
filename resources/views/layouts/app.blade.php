@@ -62,7 +62,7 @@
     @endif
     <meta name="description" content="@yield('meta_description', $defaultMetaDesc)">
     <meta name="keywords" content="@yield('meta_keywords', $defaultMetaKeywords)">
-    <meta name="robots" content="@yield('robots_meta', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')">
+    <meta name="robots" content="@yield('robots_meta', 'index, follow')">
 
     <!-- Canonical URL Optimization (Strip query strings & enforce HTTPS) -->
     @php
@@ -122,10 +122,10 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com">
 
-    <!-- Fonts: Preload critical Geist Font directly to prevent layout shift & FOIT -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap"></noscript>
+    <!-- Fonts: Google Sans, Google Sans Text & Monospace -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5.3 CSS (CDN Guaranteed Zero 404) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -136,9 +136,10 @@
 
     <style>
         :root {
-            --font-main: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-cyber: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'Geist Mono', monospace;
+            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-cyber: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Geist Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 18px;
 
             /* Futuristic HUD Color System (Neon Lime Green, Tactical Olive, Pitch Black, Holographic White) */
             --neon-green: #00ff66;
@@ -183,14 +184,25 @@
             box-shadow: 0 0 10px #00ff66;
         }
 
+        html, body {
+            font-family: var(--font-main) !important;
+            font-size: 18px !important;
+            line-height: 1.65;
+        }
+
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-main) !important;
+            font-size: 18px !important;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
             background-color: var(--bs-body-bg);
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        p, .lead, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, input, textarea, select {
+            font-size: 18px;
         }
 
         /* Dark Mode: Futuristic Cyberpunk HUD */
@@ -1923,6 +1935,15 @@
                                 <li class="mb-2"><a class="link-secondary text-decoration-none" href="{{ route('blog.category', 'ai-machine-learning') }}"><i class="bi bi-robot me-1 text-success small"></i>AI & Agents</a></li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Maps Embed (90% width) -->
+            <div class="row justify-content-center my-4">
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="rounded-4 overflow-hidden shadow-lg border border-success border-opacity-25" style="width: 90%; max-width: 90%; height: 450px;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3511.456520206179!2d77.2891763!3d28.3450445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdbc8703fd121%3A0xd46ef6dd5d57375e!2sShrawan%20Effects%20-%20New%20Age%20of%20Web%20Development%20Service%20in%20Faridabad%20City!5e0!3m2!1sen!2sin!4v1795723586532!5m2!1sen!2sin" width="100%" height="450" style="border:0; width: 100%; height: 100%; display: block;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                     </div>
                 </div>
             </div>
