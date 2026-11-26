@@ -15,7 +15,7 @@
         ? cfg.sampleDomains
         : [
             'shrawaneffects.com',
-            'shyamoengineers.com',
+            'www.shrawaneffects.com',
             'https://google.com/search?q=dns',
             'cloudflare.com',
             'github.com',

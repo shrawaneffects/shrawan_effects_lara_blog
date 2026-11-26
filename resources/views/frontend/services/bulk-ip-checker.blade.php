@@ -9,7 +9,7 @@
         : '/services/bulk-website-ip-checker/resolve'), '/');
     $bulkSampleDomains = $sampleDomains ?? [
         'shrawaneffects.com',
-        'shyamoengineers.com',
+        'www.shrawaneffects.com',
         'https://google.com/search?q=dns',
         'cloudflare.com',
         'github.com',
@@ -415,7 +415,7 @@
                     class="form-control bulk-textarea font-mono text-body"
                     rows="9"
                     spellcheck="false"
-                    placeholder="Enter websites, URLs, or domains (one per line, comma-separated, or drop a .txt / .csv file here)...&#10;Example:&#10;shrawaneffects.com&#10;shyamoengineers.com&#10;https://cloudflare.com/dns/&#10;google.com&#10;ipv6.google.com"
+                    placeholder="Enter websites, URLs, or domains (one per line, comma-separated, or drop a .txt / .csv file here)...&#10;Example:&#10;shrawaneffects.com&#10;www.shrawaneffects.com&#10;https://cloudflare.com/dns/&#10;google.com&#10;ipv6.google.com"
                 ></textarea>
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2 mt-2 border-top border-secondary border-opacity-25 px-2 font-mono small text-body-secondary">
                     <span><i class="bi bi-file-earmark-arrow-up text-success me-1"></i> Drag &amp; drop <code>.txt</code> or <code>.csv</code> anywhere in this box</span>

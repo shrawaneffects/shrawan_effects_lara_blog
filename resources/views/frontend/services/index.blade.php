@@ -75,7 +75,7 @@
                         <a href="{{ $bulkIpToolUrl }}" class="btn btn-gradient rounded-pill px-4 py-2">
                             <i class="bi bi-rocket-takeoff-fill me-2"></i> Open Bulk IP Checker
                         </a>
-                        <a href="{{ $bulkIpToolUrl }}?domains=shrawaneffects.com,shyamoengineers.com,google.com,cloudflare.com&autorun=1" class="btn btn-tactical rounded-pill px-3 py-2">
+                        <a href="{{ $bulkIpToolUrl }}?domains=shrawaneffects.com,www.shrawaneffects.com,google.com,cloudflare.com&autorun=1" class="btn btn-tactical rounded-pill px-3 py-2">
                             <i class="bi bi-play-circle me-1"></i> Run Live Sample Scan
                         </a>
                     </div>
@@ -94,7 +94,7 @@
                             name="domains"
                             rows="4"
                             class="form-control form-control-sm font-mono mb-2"
-                            placeholder="shrawaneffects.com&#10;shyamoengineers.com&#10;cloudflare.com&#10;google.com"
+                            placeholder="shrawaneffects.com&#10;www.shrawaneffects.com&#10;cloudflare.com&#10;google.com"
                         ></textarea>
                         <input type="hidden" name="autorun" value="1">
                         <button type="submit" class="btn btn-gradient-cyan btn-sm w-100 rounded-pill py-2">
