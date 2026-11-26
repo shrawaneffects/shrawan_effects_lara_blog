@@ -126,28 +126,21 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap"></noscript>
 
-    <!-- Bootstrap 5.3 CSS (Non-blocking async stylesheet with zero FOUC) -->
+    <!-- Bootstrap 5.3 CSS (Locally hosted, 1-Year Immutable Cached, Zero 3rd Party Handshake) -->
     <link rel="preload" href="{{ asset('css/bootstrap.min.css') }}" as="style">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"></noscript>
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Bootstrap Icons (Non-blocking Preload) -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
 
-    <!-- Cyberpunk HUD Theme Stylesheet (Non-blocking Cached 1 Year) -->
+    <!-- Cyberpunk HUD Theme Stylesheet (Cached 1 Year) -->
     <link rel="preload" href="{{ asset('css/cyberpunk-hud.min.css') }}" as="style">
-    <link rel="stylesheet" href="{{ asset('css/cyberpunk-hud.min.css') }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ asset('css/cyberpunk-hud.min.css') }}"></noscript>
+    <link rel="stylesheet" href="{{ asset('css/cyberpunk-hud.min.css') }}">
 
     <style>
         :root{--font-main:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;--neon-green:#00ff66;--cyber-dark:#050804}
-        *,*::before,*::after{box-sizing:border-box}
-        body{font-family:var(--font-main);min-height:100vh;background-color:#050804;color:#e4f5e7;margin:0}
-        .navbar{display:flex;align-items:center;padding:1rem 0;background:rgba(5,8,4,0.95)}
-        .container{width:100%;max-width:1320px;margin-right:auto;margin-left:auto;padding-right:.75rem;padding-left:.75rem}
-        .hero-banner{padding:2rem 0;background:#050804}
-        img{max-width:100%;height:auto}
+        body{font-family:var(--font-main);min-height:100vh;background-color:#050804;color:#e4f5e7}
     </style>
     @stack('styles')
 </head>
