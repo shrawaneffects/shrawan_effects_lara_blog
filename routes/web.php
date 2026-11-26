@@ -49,10 +49,9 @@ use App\Http\Controllers\OpenSeo\SettingController as OpenSeoSettingController;
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{slug}', function ($slug, \Illuminate\Http\Request $request) {
-    $qs = $request->getQueryString();
-    return redirect('/' . $slug . ($qs ? '?' . $qs : ''), 301);
-});
+Route::get('/blog/{slug}', [PostController::class, 'show'])
+    ->where('slug', '[a-zA-Z0-9\-_]+')
+    ->name('blog.show');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
 Route::get('/author/{id}', [BlogController::class, 'author'])->name('blog.author');
@@ -315,9 +314,13 @@ Route::get('uploads/{path}', function (string $path) {
 })->where('path', '.*');
 
 // --------------------------------------------------------------------------
-// Top-Level Clean URLs for Articles (e.g. /gta-6-on-ps5)
+// 301 Permanent Redirects from Top-Level /{slug} to /blog/{slug}
 // --------------------------------------------------------------------------
-Route::get('/{slug}', [PostController::class, 'show'])
-    ->where('slug', '[a-zA-Z0-9\-_]+')
-    ->name('blog.show');
+Route::get('/{slug}', function ($slug, \Illuminate\Http\Request $request) {
+    if (\App\Models\Post::where('slug', $slug)->exists()) {
+        $qs = $request->getQueryString();
+        return redirect('/blog/' . $slug . ($qs ? '?' . $qs : ''), 301);
+    }
+    abort(404);
+})->where('slug', '[a-zA-Z0-9\-_]+');
 

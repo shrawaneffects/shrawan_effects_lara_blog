@@ -6,20 +6,27 @@ $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
 try {
-    // 1. Clean up canonical URLs in post_seo
-    $countSeo = Illuminate\Support\Facades\DB::table("post_seo")
-        ->where("canonical_url", "LIKE", "%/blog/%")
-        ->update([
-            "canonical_url" => Illuminate\Support\Facades\DB::raw("REPLACE(canonical_url, '/blog/', '/')")
-        ]);
+    // 1. Update canonical URLs in post_seo to have /blog/
+    $posts = Illuminate\Support\Facades\DB::table("posts")->pluck("slug");
+    $countSeo = 0;
+    foreach ($posts as $slug) {
+        $countSeo += Illuminate\Support\Facades\DB::table("post_seo")
+            ->where("canonical_url", "https://shrawaneffects.com/" . $slug)
+            ->update([
+                "canonical_url" => "https://shrawaneffects.com/blog/" . $slug
+            ]);
+    }
 
-    // 2. Clean up post content internal links
-    $countContent = Illuminate\Support\Facades\DB::table("posts")
-        ->where("content", "LIKE", "%/blog/%")
-        ->update([
-            "content" => Illuminate\Support\Facades\DB::raw("REPLACE(REPLACE(content, 'https://shrawaneffects.com/blog/', 'https://shrawaneffects.com/'), 'href=\"/blog/', 'href=\"/')")
-        ]);
-    echo "Updated $countSeo canonical URLs and $countContent post content internal links in database.\n";
+    // 2. Update post content internal links to have /blog/
+    foreach ($posts as $slug) {
+        Illuminate\Support\Facades\DB::table("posts")
+            ->where("content", "LIKE", "%https://shrawaneffects.com/" . $slug . "%")
+            ->where("content", "NOT LIKE", "%https://shrawaneffects.com/blog/" . $slug . "%")
+            ->update([
+                "content" => Illuminate\Support\Facades\DB::raw("REPLACE(content, 'https://shrawaneffects.com/" . $slug . "', 'https://shrawaneffects.com/blog/" . $slug . "')")
+            ]);
+    }
+    echo "Updated $countSeo canonical URLs to /blog/ in database.\n";
 
     // 3. Promote headings for vivo-x500-series
     $vivoPost = Illuminate\Support\Facades\DB::table("posts")->where("slug", "vivo-x500-series")->first();
