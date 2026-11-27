@@ -14,10 +14,11 @@
     $processedContent = $tool->processed_content ?? ($tool->content ?? '');
     $faqs = ($tool && is_array($tool->faqs)) ? $tool->faqs : [];
 
-    // Fallback author
-    $authorName = 'Shrawan Choudhary';
-    $authorAvatar = asset('storage/avatars/admin.png');
-    $authorBio = 'Fullstack software engineer and tech analyst authoring deep-dive guides on web architecture, Laravel, and AI systems at Shrawan Effects.';
+    // Author data
+    $adminUser = class_exists(\App\Models\User::class) ? \App\Models\User::where('role', 'admin')->first() : null;
+    $authorName = $adminUser ? $adminUser->name : 'Shrawan Choudhary';
+    $authorAvatar = $adminUser ? $adminUser->avatar_url : 'https://ui-avatars.com/api/?name=Shrawan+Choudhary&background=00ff66&color=050804&size=150';
+    $authorBio = ($adminUser && !empty($adminUser->bio)) ? $adminUser->bio : 'Fullstack software engineer and tech analyst authoring deep-dive guides on web architecture, Laravel, and AI systems at Shrawan Effects.';
 @endphp
 
 @if(!empty($processedContent) || count($faqs) > 0 || !empty($toolTitle))
