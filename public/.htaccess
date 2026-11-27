@@ -26,17 +26,18 @@
     RewriteRule ^ %1 [L,R=301]
 
     # 3.5. WebP Content Negotiation (Serve modern WebP if client supports it and file exists)
-    <IfModule mod_mime.c>
-        AddType image/webp .webp
-    </IfModule>
     RewriteCond %{HTTP_ACCEPT} image/webp
     RewriteCond %{REQUEST_FILENAME}.webp -f
-    RewriteRule ^(.*)$ $1.webp [T=image/webp,E=accept:1,L]
+    RewriteRule ^(.*\.(jpe?g|png))$ $1.webp [NC,T=image/webp,E=accept:1,L]
 
     # 4. Send Requests To Front Controller
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType image/webp .webp
 </IfModule>
 
 # 5. Gzip / Deflate Compression
