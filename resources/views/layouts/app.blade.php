@@ -123,8 +123,6 @@
     <link rel="preconnect" href="https://www.googletagmanager.com">
 
     <!-- Fonts: Google Sans, Google Sans Text & Monospace -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5.3 CSS (CDN Guaranteed Zero 404) -->
@@ -137,8 +135,12 @@
     <style>
         :root {
             --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-cyber: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Geist Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --bs-body-font-family: var(--font-main);
+            --bs-font-monospace: 'JetBrains Mono', monospace;
+            --bs-body-font-size: 1rem;
             font-size: 18px;
 
             /* Futuristic HUD Color System (Neon Lime Green, Tactical Olive, Pitch Black, Holographic White) */
@@ -201,8 +203,24 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        p, .lead, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, input, textarea, select {
-            font-size: 18px;
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+        .navbar, .navbar-brand, .navbar-nav, .nav-link,
+        .dropdown-menu, .dropdown-item, .dropdown-header,
+        form, label, input, textarea, select, button,
+        .form-control, .form-select, .form-label, .form-check-label, .input-group-text,
+        table, thead, tbody, tfoot, tr, th, td, .table,
+        .card, .card-header, .card-body, .card-footer, .card-title, .card-subtitle, .card-text,
+        footer, .footer, .btn, .badge, .breadcrumb, .alert {
+            font-family: var(--font-main);
+        }
+
+        p, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, .form-label, .input-group-text,
+        input, textarea, select, table, th, td, .breadcrumb, .breadcrumb-item, footer, .footer {
+            font-size: 1rem;
+        }
+
+        .lead {
+            font-size: 1.25rem;
         }
 
         /* Dark Mode: Futuristic Cyberpunk HUD */
@@ -306,17 +324,20 @@
         /* Telemetry Chip & Monospace Metadata */
         .telemetry-tag {
             font-family: var(--font-mono);
-            font-size: 0.73rem;
-            letter-spacing: 0.6px;
-            padding: 3px 8px;
-            border-radius: 4px;
+            font-size: 1rem;
+            letter-spacing: 0.4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             background: rgba(33, 54, 8, 0.45);
             border: 1px solid rgba(0, 255, 102, 0.35);
             color: #00ff66;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            flex-wrap: wrap;
+            max-width: 100%;
+            line-height: 1.3;
+            gap: 6px;
         }
 
         /* Navbar & Glassmorphic HUD Bar */
@@ -351,9 +372,10 @@
             font-family: var(--font-mono);
             padding: 3px 9px;
             border-radius: 6px;
-            font-size: 0.74rem;
-            letter-spacing: 0.8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
             margin-left: 8px;
+            white-space: nowrap;
             box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
             transition: all 0.3s ease;
         }
@@ -403,9 +425,81 @@
         .nav-link {
             position: relative;
             font-weight: 600;
-            font-size: 0.92rem;
-            letter-spacing: 0.3px;
+            font-size: 1rem;
+            letter-spacing: 0.2px;
+            padding-left: 0.55rem;
+            padding-right: 0.55rem;
             transition: color 0.3s ease;
+        }
+
+        .navbar .navbar-nav {
+            gap: 0.1rem;
+            min-width: 0;
+        }
+
+        .navbar .nav-link,
+        .navbar .btn {
+            white-space: nowrap;
+        }
+
+        .navbar .nav-search-form {
+            max-width: 175px;
+            flex-shrink: 1;
+        }
+
+        .navbar .dropdown-menu {
+            max-width: calc(100vw - 2rem);
+        }
+
+        @media (min-width: 992px) {
+            .navbar-expand-lg .navbar-collapse {
+                min-width: 0;
+                flex-wrap: wrap;
+                row-gap: 0.4rem;
+            }
+            .navbar .navbar-nav {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1399.98px) {
+            .navbar .navbar-nav {
+                margin-left: 0.75rem !important;
+                gap: 0;
+            }
+            .navbar .nav-link {
+                padding-left: 0.45rem;
+                padding-right: 0.45rem;
+            }
+            .navbar .nav-search-form {
+                max-width: 155px;
+                margin-right: 0.65rem !important;
+            }
+            .navbar .btn-gradient,
+            .navbar .btn-tactical {
+                padding: 0.42rem 0.85rem;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar .nav-search-form {
+                max-width: 100%;
+                width: 100%;
+            }
+            .navbar .dropdown-item {
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .navbar-brand {
+                max-width: calc(100% - 56px);
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+            .brand-badge {
+                margin-left: 0;
+            }
         }
 
         .nav-link::after {
@@ -543,12 +637,12 @@
             color: #050804 !important;
             font-family: var(--font-cyber);
             font-weight: 700;
-            font-size: 0.82rem;
-            letter-spacing: 0.8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             border: 1px solid #00ff66;
             border-radius: 10px;
-            padding: 0.6rem 1.4rem;
+            padding: 0.52rem 1.25rem;
             transition: all 0.35s ease;
             box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
             position: relative;
@@ -573,11 +667,11 @@
             color: #00ff66 !important;
             border: 1px solid rgba(0, 255, 102, 0.4);
             font-family: var(--font-cyber);
-            font-size: 0.82rem;
-            letter-spacing: 0.8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             border-radius: 10px;
-            padding: 0.6rem 1.4rem;
+            padding: 0.52rem 1.25rem;
             transition: all 0.35s ease;
             box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.12);
             display: inline-flex;
@@ -599,11 +693,11 @@
             border: none;
             border-radius: 10px;
             font-family: var(--font-cyber);
-            font-size: 0.82rem;
-            letter-spacing: 0.8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             font-weight: 700;
-            padding: 0.6rem 1.4rem;
+            padding: 0.52rem 1.25rem;
             transition: all 0.4s ease;
             box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
             display: inline-flex;
@@ -623,11 +717,11 @@
             border: 1px solid #00f0ff;
             border-radius: 10px;
             font-family: var(--font-cyber);
-            font-size: 0.82rem;
-            letter-spacing: 0.8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             font-weight: 700;
-            padding: 0.6rem 1.4rem;
+            padding: 0.52rem 1.25rem;
             transition: all 0.4s ease;
             box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
             display: inline-flex;
@@ -717,8 +811,8 @@
         /* Tag Pills */
         .tag-pill {
             font-family: var(--font-mono);
-            font-size: 0.8rem;
-            padding: 0.38rem 0.85rem;
+            font-size: 1rem;
+            padding: 0.35rem 0.85rem;
             border-radius: 6px;
             text-decoration: none;
             background-color: rgba(33, 54, 8, 0.4);
@@ -798,10 +892,10 @@
         .badge-category {
             font-family: var(--font-cyber);
             text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.6px;
+            font-size: 1rem;
+            letter-spacing: 0.4px;
             font-weight: 700;
-            padding: 5px 11px;
+            padding: 4px 12px;
             border-radius: 6px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
@@ -925,8 +1019,8 @@
         .nav-search-input {
             background: rgba(33, 54, 8, 0.25);
             border-color: rgba(0, 255, 102, 0.25);
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-family: var(--font-main);
+            font-size: 1rem;
             color: inherit;
         }
 
@@ -1398,7 +1492,7 @@
         }
         figcaption.post-image-caption {
             margin-top: 0.65rem;
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: var(--bs-secondary-color, #94a3b8);
             font-style: italic;
             line-height: 1.45;
@@ -1469,6 +1563,116 @@
         }
     </style>
     @stack('styles')
+    <style id="frontend-typography-enforcer">
+        :root {
+            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --bs-body-font-family: var(--font-main);
+            --bs-font-monospace: 'JetBrains Mono', monospace;
+            --bs-body-font-size: 1rem;
+            font-size: 18px;
+        }
+        html, body {
+            font-family: var(--font-main) !important;
+            font-size: 18px !important;
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+        .navbar, .navbar-brand, .navbar-nav, .nav-link,
+        .dropdown-menu, .dropdown-item, .dropdown-header,
+        form, label, input, textarea, select, button,
+        .form-control, .form-select, .form-label, .form-check-label, .input-group-text,
+        table, thead, tbody, tfoot, tr, th, td, .table,
+        .card, .card-header, .card-body, .card-footer, .card-title, .card-subtitle, .card-text,
+        footer, .footer, .btn, .badge, .breadcrumb, .alert {
+            font-family: var(--font-main);
+        }
+        .font-cyber {
+            font-family: var(--font-cyber);
+        }
+        .font-mono, .font-monospace, code, pre, kbd, samp, .cc-badge {
+            font-family: var(--font-mono) !important;
+        }
+        code, pre, kbd, samp {
+            font-size: max(1rem, 1em);
+        }
+        small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .text-small,
+        .badge:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .btn-sm,
+        .btn-group-sm > .btn,
+        .form-control-sm,
+        .form-select-sm,
+        .input-group-sm > .form-control,
+        .input-group-sm > .form-select,
+        .input-group-sm > .input-group-text,
+        .input-group-sm > .btn,
+        .form-text,
+        figcaption,
+        .figure-caption,
+        .blockquote-footer,
+        .breadcrumb,
+        .breadcrumb-item,
+        .nav-link,
+        .dropdown-item,
+        .dropdown-header,
+        .card-text,
+        .form-control,
+        .form-select,
+        .form-label,
+        .input-group-text,
+        .table-sm,
+        .page-link,
+        .pagination-sm .page-link,
+        .telemetry-tag,
+        .brand-badge,
+        .tag-pill,
+        .badge-category,
+        .openseo-nav-tab,
+        .openseo-table,
+        .openseo-table th,
+        .badge-intent,
+        .rank-change-badge,
+        .bulk-textarea,
+        .bulk-nav-tab,
+        .bulk-filter-chip,
+        .bulk-table,
+        .bulk-table th,
+        .bulk-subtext,
+        .bulk-type-badge,
+        .bulk-shared-pill,
+        .bulk-cc-yes-pill,
+        .cc-badge,
+        .cc-toast,
+        .cc-counters {
+            font-size: 1rem !important;
+        }
+        .btn {
+            --bs-btn-font-size: 1rem;
+            font-size: var(--bs-btn-font-size);
+        }
+        .btn-lg,
+        .btn-group-lg > .btn {
+            --bs-btn-font-size: 1.25rem;
+            font-size: 1.25rem;
+        }
+        table, thead, tbody, tr, th, td, .table, footer, .footer {
+            font-size: 1rem;
+        }
+        .badge {
+            white-space: normal;
+            max-width: 100%;
+            line-height: 1.3;
+        }
+        [style*="font-size: 0."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size:0."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size: ."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size:."]:not(.bi):not([class*="bi-"]) {
+            font-size: 1rem !important;
+        }
+    </style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -1549,7 +1753,7 @@
                                                 <li>
                                                     <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}" @if($isBulkIpCheckerActive) aria-current="page" @endif>
                                                         <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
-                                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 1rem;">TOOL</span>
                                                     </a>
                                                 </li>
                                             @endif
@@ -1557,7 +1761,7 @@
                                                 <li>
                                                     <a class="dropdown-item font-mono py-2 {{ $isConvertCaseActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $convertCaseUrl }}" @if($isConvertCaseActive) aria-current="page" @endif>
                                                         <i class="bi bi-type text-warning me-2"></i> Convert Case
-                                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 1rem;">TOOL</span>
                                                     </a>
                                                 </li>
                                             @endif
@@ -1641,13 +1845,13 @@
                                 <li>
                                     <a class="dropdown-item font-mono py-2 {{ $isBulkIpCheckerActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $bulkIpCheckerUrl }}" @if($isBulkIpCheckerActive) aria-current="page" @endif>
                                         <i class="bi bi-hdd-network text-info me-2"></i> Bulk Website IP Checker
-                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 1rem;">TOOL</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item font-mono py-2 {{ $isConvertCaseActive ? 'bg-success bg-opacity-10 text-success fw-bold' : '' }}" href="{{ $convertCaseUrl }}" @if($isConvertCaseActive) aria-current="page" @endif>
                                         <i class="bi bi-type text-warning me-2"></i> Convert Case
-                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.62rem;">TOOL</span>
+                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 1rem;">TOOL</span>
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider border-secondary border-opacity-50"></li>
@@ -1661,7 +1865,7 @@
                         <!-- OpenSEO Suite Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle {{ request()->routeIs('openseo.*') ? 'active text-gradient fw-bold' : '' }}" href="{{ route('openseo.domain') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-radar me-1 text-success"></i> OpenSEO <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 0.65rem;">SUITE</span>
+                                <i class="bi bi-radar me-1 text-success"></i> OpenSEO <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono ms-1" style="font-size: 1rem;">SUITE</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark shadow border border-success border-opacity-25 rounded-3 py-2">
                                 <li>
@@ -1736,7 +1940,7 @@
                 </ul>
 
                 <!-- Search form in navbar with telemetry styling -->
-                <form class="d-flex me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET" role="search">
+                <form class="d-flex nav-search-form me-3 mb-2 mb-lg-0" action="{{ route('blog.index') }}" method="GET" role="search">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text border-end-0 nav-search-addon"><i class="bi bi-search" aria-hidden="true"></i></span>
                         <input class="form-control border-start-0 nav-search-input" type="search" name="search" placeholder="John 3:16" value="{{ request('search') }}" aria-label="Search">
@@ -2034,7 +2238,7 @@
     </script>
 
     <!-- Floating Anti-Inspect & Content Protection Alert Toast -->
-    <div id="securityShieldToast" class="position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-3 bg-dark text-white rounded-pill shadow-lg border border-secondary border-opacity-50 d-none" style="z-index: 99999; backdrop-filter: blur(12px); font-size: 0.9rem;">
+    <div id="securityShieldToast" class="position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-3 bg-dark text-white rounded-pill shadow-lg border border-secondary border-opacity-50 d-none" style="z-index: 99999; backdrop-filter: blur(12px); font-size: 1rem;">
         <div class="d-flex align-items-center gap-2">
             <i class="bi bi-shield-slash-fill text-warning fs-5"></i>
             <span id="securityShieldToastMsg" class="fw-semibold">Action disabled to protect website content.</span>
