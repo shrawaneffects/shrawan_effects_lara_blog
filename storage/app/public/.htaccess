@@ -1,28 +1,28 @@
 # 1 Year Long-Lived Immutable Cache for Static Storage Assets
+# Note: Do NOT add RewriteEngine, RewriteRule, or Options directives here.
+# Parent public/.htaccess handles WebP content negotiation, and mod_rewrite or
+# Options directives inside a subdirectory .htaccess trigger HTTP 403/500 on StackCP Apache.
+
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule>
+
 <IfModule mod_expires.c>
     ExpiresActive On
-    ExpiresDefault "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/x-icon "access plus 1 year"
 </IfModule>
 
 <IfModule mod_headers.c>
-    Header set Cache-Control "public, max-age=31536000, immutable"
-    Header append Vary "Accept, Accept-Encoding"
-</IfModule>
-
-# Automatic WebP Content Negotiation
-<IfModule mod_mime.c>
-    AddType image/webp .webp
-</IfModule>
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{HTTP_ACCEPT} image/webp
-    RewriteCond %{REQUEST_FILENAME}.webp -f
-    RewriteRule ^(.*)$ $1.webp [T=image/webp,E=accept:1,L]
+    <FilesMatch "(?i)\.(ico|jpe?g|png|gif|webp|avif|svg)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+        Header merge Vary "Accept"
+        Header merge Vary "Accept-Encoding"
+    </FilesMatch>
 </IfModule>
