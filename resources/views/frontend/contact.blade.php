@@ -152,8 +152,10 @@
                             @error('message') <span class="text-danger font-mono">{{ $message }}</span> @enderror
                         </div>
 
+                        @include('components.captcha')
+
                         <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-pill shadow-sm">
-                            <i class="bi bi-send-fill me-2"></i> INITIATE TRANSMISSION
+                            <i class="bi bi-send-fill me-2"></i> Send Message
                         </button>
                     </form>
                 </div>

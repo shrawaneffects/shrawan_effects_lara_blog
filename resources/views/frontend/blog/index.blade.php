@@ -182,6 +182,7 @@
                                 <div class="mb-3">
                                     <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2" placeholder="Your email address" required>
                                 </div>
+                                @include('components.captcha')
                                 <button type="submit" class="btn btn-light text-primary fw-bold w-100 rounded-pill py-2 shadow-sm">
                                     <i class="bi bi-send-fill me-1"></i> Subscribe
                                 </button>

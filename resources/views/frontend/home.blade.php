@@ -313,6 +313,7 @@
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="info@shrawaneffects.com" aria-label="Email address for subscription" required>
                                     </div>
+                                    @include('components.captcha')
                                     <button type="submit" class="btn btn-gradient w-100 rounded-pill py-2" aria-label="Initiate subscription">
                                         <i class="bi bi-shield-check me-1"></i> Subscribe Now
                                     </button>

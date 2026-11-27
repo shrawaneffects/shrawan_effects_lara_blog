@@ -126,6 +126,8 @@
                                     </a>
                                 </div>
 
+                                @include('components.captcha')
+
                                 <button type="submit" class="btn btn-gradient w-100 py-2.5 fw-semibold rounded-pill shadow-sm">
                                     <i class="bi bi-box-arrow-in-right me-2"></i> Sign In with Password
                                 </button>

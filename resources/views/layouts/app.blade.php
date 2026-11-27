@@ -1702,6 +1702,44 @@
         [style*="font-size:."]:not(.bi):not([class*="bi-"]) {
             font-size: 1rem !important;
         }
+
+        /* 100% Full-Width Layout Across Entire Website */
+        .container,
+        .container-sm,
+        .container-md,
+        .container-lg,
+        .container-xl,
+        .container-xxl {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding-left: clamp(1rem, 2.5vw, 2.5rem) !important;
+            padding-right: clamp(1rem, 2.5vw, 2.5rem) !important;
+        }
+
+        .hero-banner,
+        .hero-banner .container,
+        .spotlight-card,
+        .card-post {
+            width: 100% !important;
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-banner {
+                padding: 1.25rem 0 !important;
+            }
+            .container,
+            .container-sm,
+            .container-md,
+            .container-lg,
+            .container-xl,
+            .container-xxl {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+            .card-post {
+                border-radius: 14px !important;
+            }
+        }
     </style>
 </head>
 <body>

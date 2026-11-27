@@ -16,6 +16,17 @@ class CommentController extends Controller
             return redirect()->back()->with('success', 'Your comment has been posted successfully!');
         }
 
+        // Security CAPTCHA verification
+        if (!app()->environment('testing')) {
+            if (!\App\Services\Security\CaptchaService::verify(
+                $request->input('captcha_answer'),
+                $request->input('captcha_token'),
+                $request->input('captcha_timestamp')
+            )) {
+                return redirect()->back()->withInput()->withErrors(['captcha_answer' => 'Security verification failed. Please solve the math problem correctly.']);
+            }
+        }
+
         $post = Post::published()->findOrFail($postId);
 
         $rules = [

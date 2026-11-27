@@ -365,6 +365,8 @@
                                     <textarea name="content" class="form-control rounded-4 p-3" rows="4" placeholder="Join the discussion... Share your insights or questions" required></textarea>
                                 </div>
 
+                                @include('components.captcha')
+
                                 <button type="submit" class="btn btn-gradient px-4 rounded-pill">
                                     <i class="bi bi-send-fill me-1"></i> Submit Comment
                                 </button>

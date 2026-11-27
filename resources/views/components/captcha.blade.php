@@ -1,3 +1,6 @@
+@php
+    $captcha = $captcha ?? \App\Services\Security\CaptchaService::generateChallenge();
+@endphp
 <div class="mb-3 captcha-container">
     <div class="d-flex justify-content-between align-items-center mb-1">
         <label class="form-label fw-semibold mb-0">

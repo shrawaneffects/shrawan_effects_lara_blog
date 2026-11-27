@@ -24,6 +24,17 @@ class ContactController extends Controller
             return redirect()->back()->with('success', 'Thank you for reaching out! We will get back to you shortly.');
         }
 
+        // Security CAPTCHA verification
+        if (!app()->environment('testing')) {
+            if (!\App\Services\Security\CaptchaService::verify(
+                $request->input('captcha_answer'),
+                $request->input('captcha_token'),
+                $request->input('captcha_timestamp')
+            )) {
+                return redirect()->back()->withInput()->withErrors(['captcha_answer' => 'Security verification failed. Please solve the math problem correctly.']);
+            }
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:150',
