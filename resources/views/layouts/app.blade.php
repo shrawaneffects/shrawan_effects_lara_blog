@@ -2136,7 +2136,7 @@
 
                 <!-- Section 2: Quick Protocols & Sectors -->
                 <div class="col-lg-6 col-md-12">
-                    <h6 class="fw-bold mb-3 text-gradient font-cyber">DIRECT PROTOCOLS</h6>
+                    <h6 class="fw-bold mb-3 text-gradient font-cyber">Useful Links</h6>
                     <div class="row g-2">
                         <div class="col-6">
                             <ul class="list-unstyled text-small small mb-0">

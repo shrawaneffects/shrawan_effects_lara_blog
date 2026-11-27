@@ -51,9 +51,6 @@
     @if($featuredPosts->count() > 0)
         <section class="hero-banner">
             <div class="container position-relative" style="z-index: 1;">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <span class="telemetry-tag"><i class="bi bi-broadcast"></i> TRANSMISSION // FEATURED INTEL</span>
-                </div>
                 <div class="row g-4 align-items-stretch">
                     <!-- Main Hero Post -->
                     @php $leadPost = $featuredPosts->first(); @endphp
@@ -63,7 +60,7 @@
                                 <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" height="380" fetchpriority="high" loading="eager" decoding="async">
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge priority-intel-badge">
-                                        <i class="bi bi-star-fill text-warning me-1"></i> PRIORITY INTEL
+                                        <i class="bi bi-star-fill text-warning me-1"></i> Featured
                                     </span>
                                 </div>
                             </div>
@@ -137,10 +134,10 @@
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h3 class="fw-bold mb-0 d-flex align-items-center font-cyber">
                         <i class="bi bi-cpu-fill text-success me-2 fs-3"></i>
-                        <span>TRENDING // <span class="text-gradient">TELEMETRY</span></span>
+                        <span>Trending <span class="text-gradient">Topics</span></span>
                     </h3>
                     <a href="{{ route('blog.index', ['sort' => 'popular']) }}" class="btn btn-tactical btn-sm rounded-pill px-3">
-                        DISPATCH LOG <i class="bi bi-arrow-right ms-1"></i>
+                        View All <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
 
@@ -180,9 +177,9 @@
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h3 class="fw-bold mb-0 font-cyber">
                         <i class="bi bi-grid-3x3-gap-fill text-gradient me-2"></i>
-                        <span>SECTORS // <span class="text-gradient">TOPICS</span></span>
+                        <span>Explore <span class="text-gradient">Categories</span></span>
                     </h3>
-                    <a href="{{ route('blog.index') }}" class="btn btn-tactical btn-sm rounded-pill px-3">ALL SECTORS</a>
+                    <a href="{{ route('blog.index') }}" class="btn btn-tactical btn-sm rounded-pill px-3">All Categories</a>
                 </div>
 
                 <div class="row g-3">
@@ -194,7 +191,7 @@
                                 </div>
                                 <h6 class="fw-bold text-body mb-1 text-truncate">{{ $category->name }}</h6>
                                 <span class="badge font-mono rounded-pill px-2 category-docs-count">
-                                    {{ $category->published_posts_count }} DOCS
+                                    {{ $category->published_posts_count }} Articles
                                 </span>
                             </a>
                         </div>
@@ -218,9 +215,9 @@
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h3 class="fw-bold mb-0 font-cyber">
                             <i class="bi bi-hdd-network-fill text-success me-2"></i>
-                            <span>DATASTREAM // <span class="text-gradient">LATEST</span></span>
+                            <span>Latest <span class="text-gradient">Posts</span></span>
                         </h3>
-                        <a href="{{ route('blog.index') }}" class="btn btn-tactical btn-sm rounded-pill px-3">ALL DISPATCHES</a>
+                        <a href="{{ route('blog.index') }}" class="btn btn-tactical btn-sm rounded-pill px-3">All Posts</a>
                     </div>
 
                     <div class="row g-4">
@@ -261,7 +258,7 @@
                                 <div class="p-5 text-center rounded-4 empty-state-box">
                                     <i class="bi bi-cpu fs-1 text-success opacity-50"></i>
                                     <h5 class="mt-3 font-cyber">NO DATA PACKETS DETECTED</h5>
-                                    <p class="text-body-secondary font-mono" style="font-size: 1rem;">Telemetry stream will update once new intel is published.</p>
+                                    <p class="text-body-secondary font-mono" style="font-size: 1rem;">No posts published yet.</p>
                                 </div>
                             </div>
                         @endforelse
@@ -269,7 +266,7 @@
 
                     <div class="text-center mt-5">
                         <a href="{{ route('blog.index') }}" class="btn btn-gradient btn-lg px-5 shadow-lg rounded-pill">
-                            <i class="bi bi-grid me-2"></i> EXPLORE ALL DISPATCHES
+                            <i class="bi bi-grid me-2"></i> EXPLORE All Posts
                         </a>
                     </div>
                 </div>
@@ -279,10 +276,10 @@
                     <div class="sticky-top-widget d-flex flex-column gap-4">
                         <!-- Search Box Widget -->
                         <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
-                            <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-terminal me-2 text-success"></i> DATABASE QUERY</h5>
+                            <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-search me-2 text-success"></i> Search Articles</h5>
                             <form action="{{ route('blog.index') }}" method="GET" role="search">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search keywords..." aria-label="Search articles by keywords" style="border-color: rgba(0,255,102,0.25); font-family: var(--font-main); font-size: 1rem;">
+                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search articles..." aria-label="Search articles by keywords" style="border-color: rgba(0,255,102,0.25); font-family: var(--font-main); font-size: 1rem;">
                                     <button class="btn btn-gradient rounded-end-pill px-3" type="submit" aria-label="Search articles"><i class="bi bi-search" aria-hidden="true"></i></button>
                                 </div>
                             </form>
@@ -291,7 +288,7 @@
                         <!-- Popular Tags Widget -->
                         @if($popularTags->count() > 0)
                             <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
-                                <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-tags me-2 text-success"></i> INTEL TAGS</h5>
+                                <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-tags me-2 text-success"></i> Popular Tags</h5>
                                 <div class="d-flex flex-wrap gap-1">
                                     @foreach($popularTags as $tag)
                                         <a href="{{ route('blog.tag', $tag->slug) }}" class="tag-pill">
@@ -309,15 +306,15 @@
                         <div class="card card-newsletter-gradient p-4 p-md-5 text-white hover-lift">
                             <div class="position-relative" style="z-index: 1;">
                                 <i class="bi bi-broadcast-pin fs-1 mb-2 d-inline-block text-success"></i>
-                                <h4 class="fw-bold font-cyber">CIPHER TRANSMISSION</h4>
-                                <p class="text-white-50" style="font-size: 1rem;">Receive curated architectural blueprints, zero-day tutorials, and deep engineering intel.</p>
+                                <h4 class="fw-bold font-cyber">Subscribe Newsletter</h4>
+                                <p class="text-white-50" style="font-size: 1rem;">Receive curated web development tutorials, tech insights, and software updates.</p>
                                 <form action="{{ route('newsletter.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="agent@shrawaneffects.com" aria-label="Email address for subscription" required>
+                                        <input type="email" name="email" class="form-control rounded-pill border-0 px-3 py-2 font-mono newsletter-input" placeholder="info@shrawaneffects.com" aria-label="Email address for subscription" required>
                                     </div>
                                     <button type="submit" class="btn btn-gradient w-100 rounded-pill py-2" aria-label="Initiate subscription">
-                                        <i class="bi bi-shield-check me-1"></i> INITIATE SUBSCRIPTION
+                                        <i class="bi bi-shield-check me-1"></i> Subscribe Now
                                     </button>
                                 </form>
                             </div>
