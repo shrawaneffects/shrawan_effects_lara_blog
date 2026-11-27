@@ -37,11 +37,14 @@ copy_tree_update() {
 echo "=== Shrawan Effects Full Performance Deployment Started ==="
 
 # 1. Sync App, Routes, Resources, Database
-echo "Syncing app, routes, resources, database to $HOME_DIR..."
+echo "Syncing app, routes, resources to $HOME_DIR..."
 cp -rf "$REPO_DIR/app" "$HOME_DIR/"
 cp -rf "$REPO_DIR/routes" "$HOME_DIR/"
 cp -rf "$REPO_DIR/resources" "$HOME_DIR/"
-cp -rf "$REPO_DIR/database" "$HOME_DIR/"
+mkdir -p "$HOME_DIR/database"
+if [ -f "$REPO_DIR/database/deploy_updates.php" ]; then
+    cp -f "$REPO_DIR/database/deploy_updates.php" "$HOME_DIR/database/"
+fi
 
 # 2. Remove stale Next.js static export paths & Sync Public Assets (CSS, JS, .htaccess, robots.txt)
 echo "Removing stale static export paths from public_html and public..."
@@ -134,14 +137,10 @@ done
 
 cd "$HOME_DIR"
 
-# 5. Clean up database canonical URLs, internal links, semantic headings, and migrations
+# 5. Clean up database canonical URLs, internal links, and semantic headings
 if [ -f "database/deploy_updates.php" ]; then
     echo "Running database updates..."
     php database/deploy_updates.php || true
-fi
-if [ -f "artisan" ]; then
-    echo "Running pending database migrations..."
-    php artisan migrate --force || true
 fi
 
 # 6. Clear compiled Blade views & Laravel caches

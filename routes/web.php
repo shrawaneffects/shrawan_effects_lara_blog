@@ -213,11 +213,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('services', AdminServiceController::class)->except(['show']);
     Route::post('/services/{id}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
 
-    // Online Tools Management & Rich Content CRUD
-    Route::resource('tools', AdminToolController::class)->except(['show']);
-    Route::post('/tools/{id}/toggle-status', [AdminToolController::class, 'toggle'])->name('tools.toggle');
-    Route::post('/tools/toggle', [AdminToolController::class, 'toggleLegacy'])->name('tools.toggle.legacy');
-    Route::post('/tools/update', [AdminToolController::class, 'updateLegacy'])->name('tools.update.legacy');
+    // Online Tools Management
+    Route::get('/tools', [AdminToolController::class, 'index'])->name('tools.index');
+    Route::post('/tools/toggle', [AdminToolController::class, 'toggle'])->name('tools.toggle');
+    Route::post('/tools/update', [AdminToolController::class, 'update'])->name('tools.update');
 
     // Centralized Media Library (Images, Videos, Audios, Documents)
     Route::post('/media/sync-storage', [AdminMediaController::class, 'syncStorage'])->name('media.sync-storage');

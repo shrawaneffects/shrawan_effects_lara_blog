@@ -35,15 +35,15 @@
             --bs-body-font-family: var(--font-main);
             --bs-font-monospace: 'JetBrains Mono', monospace;
             --bs-body-font-size: 1rem;
-            --sidebar-width: 300px;
+            --sidebar-width: 280px;
             --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
             --gradient-sunset: linear-gradient(135deg, #f43f5e 0%, #fb7185 45%, #fb923c 100%);
             --gradient-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
-            font-size: 18px;
+            font-size: 12px;
         }
         html, body {
             font-family: var(--font-main) !important;
-            font-size: 18px !important;
+            font-size: 12px !important;
             background-color: var(--bs-tertiary-bg);
             min-height: 100vh;
             overflow-x: hidden;
@@ -255,11 +255,16 @@
             --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --bs-body-font-family: var(--font-main);
             --bs-font-monospace: 'JetBrains Mono', monospace;
-            font-size: 18px;
+            font-size: 12px;
         }
         html, body {
             font-family: var(--font-main) !important;
-            font-size: 18px !important;
+            font-size: 12px !important;
+        }
+        .bi,
+        [class^="bi-"],
+        [class*=" bi-"] {
+            font-family: "bootstrap-icons" !important;
         }
         h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
         .navbar, .navbar-brand, .nav-link, .dropdown-menu, .dropdown-item, .dropdown-header,
@@ -278,65 +283,10 @@
         .font-mono, .font-monospace, code, pre, kbd, samp, .code-editor-area {
             font-family: var(--font-mono) !important;
         }
-        code, pre, kbd, samp {
-            font-size: max(1rem, 1em);
-        }
-        small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
-        .small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
-        .text-small,
-        .badge:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
-        .btn-sm,
-        .btn-group-sm > .btn,
-        .form-control-sm,
-        .form-select-sm,
-        .input-group-sm > .form-control,
-        .input-group-sm > .form-select,
-        .input-group-sm > .input-group-text,
-        .input-group-sm > .btn,
-        .form-text,
-        figcaption,
-        .figure-caption,
-        .blockquote-footer,
-        .breadcrumb,
-        .breadcrumb-item,
-        .nav-link,
-        .dropdown-item,
-        .dropdown-header,
-        .card-text,
-        .form-control,
-        .form-select,
-        .form-label,
-        .input-group-text,
-        .sidebar-link,
-        .nav-item-header,
-        .table-sm,
-        .page-link,
-        .pagination-sm .page-link,
-        .code-editor-area {
-            font-size: 1rem !important;
-        }
-        .btn {
-            --bs-btn-font-size: 1rem;
-            font-size: var(--bs-btn-font-size);
-        }
-        .btn-lg,
-        .btn-group-lg > .btn {
-            --bs-btn-font-size: 1.25rem;
-            font-size: 1.25rem;
-        }
-        table, thead, tbody, tr, th, td, .table, footer, .footer {
-            font-size: 1rem;
-        }
         .badge {
             white-space: normal;
             max-width: 100%;
             line-height: 1.3;
-        }
-        [style*="font-size: 0."]:not(.bi):not([class*="bi-"]),
-        [style*="font-size:0."]:not(.bi):not([class*="bi-"]),
-        [style*="font-size: ."]:not(.bi):not([class*="bi-"]),
-        [style*="font-size:."]:not(.bi):not([class*="bi-"]) {
-            font-size: 1rem !important;
         }
     </style>
 </head>
@@ -429,13 +379,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.tools.index') }}" class="sidebar-link {{ request()->routeIs('admin.tools.index') || request()->routeIs('admin.tools.edit') ? 'active' : '' }}">
+                <a href="{{ route('admin.tools.index') }}" class="sidebar-link {{ request()->routeIs('admin.tools.*') ? 'active' : '' }}">
                     <i class="bi bi-tools text-info"></i> Tools
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.tools.create') }}" class="sidebar-link {{ request()->routeIs('admin.tools.create') ? 'active' : '' }}">
-                    <i class="bi bi-plus-circle text-info"></i> New Tool Content
                 </a>
             </li>
             <li>

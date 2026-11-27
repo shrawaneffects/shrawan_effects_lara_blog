@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', !empty($tool->meta_title) ? $tool->meta_title : 'Convert Case - Online Text Case Converter | Shrawan Effects')
-@section('meta_description', !empty($tool->meta_description) ? $tool->meta_description : 'Free online Convert Case tool. Convert text into Sentence case, lower case, UPPER CASE, Capitalized Case, alternating case, Title Case, and InVeRsE CaSe with live character, word, and line count.')
-@section('canonical_url', !empty($tool->canonical_url) ? $tool->canonical_url : (\Illuminate\Support\Facades\Route::has('services.convertcase') ? route('services.convertcase') : url('/services/convertcase')))
+@section('title', 'Convert Case - Online Text Case Converter | Shrawan Effects')
+@section('meta_description', 'Free online Convert Case tool. Convert text into Sentence case, lower case, UPPER CASE, Capitalized Case, alternating case, Title Case, and InVeRsE CaSe with live character, word, and line count.')
+@section('canonical_url', \Illuminate\Support\Facades\Route::has('services.convertcase') ? route('services.convertcase') : url('/services/convertcase'))
 
 @push('styles')
 <style>
@@ -404,21 +404,6 @@
         </div>
     </div>
 </section>
-
-<!-- Dynamic Tool Article & Guide Content (Managed via Admin Panel) -->
-@if(!empty($tool) && !empty($tool->content))
-    <section class="tool-content-section py-5 mt-4 border-top border-secondary border-opacity-25" style="background: rgba(9, 18, 6, 0.45);">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <article class="tool-article-body">
-                        {!! $tool->content !!}
-                    </article>
-                </div>
-            </div>
-        </div>
-    </section>
-@endif
 
 <!-- Floating Toast Notification -->
 <div id="ccToast" class="cc-toast" role="alert" aria-live="assertive" aria-atomic="true">
