@@ -46,7 +46,18 @@ if [ -f "$REPO_DIR/database/deploy_updates.php" ]; then
     cp -f "$REPO_DIR/database/deploy_updates.php" "$HOME_DIR/database/"
 fi
 
-# 2. Sync Public Assets (CSS, JS, .htaccess, robots.txt)
+# 2. Remove stale Next.js static export paths & Sync Public Assets (CSS, JS, .htaccess, robots.txt)
+echo "Removing stale static export paths from public_html and public..."
+for pub_dir in "$HOME_DIR/public_html" "$HOME_DIR/public"; do
+    [ -d "$pub_dir" ] || continue
+    for stale_target in _next blog category tag contact faq 404 404.html index.html index.txt; do
+        target_path="$pub_dir/$stale_target"
+        if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+            rm -rf -- "$target_path"
+        fi
+    done
+done
+
 echo "Syncing public assets to public_html and public..."
 mkdir -p "$HOME_DIR/public_html/css" "$HOME_DIR/public/css" "$HOME_DIR/public_html/js" "$HOME_DIR/public/js"
 copy_tree_force "$REPO_DIR/public/css" "$HOME_DIR/public_html/css"
