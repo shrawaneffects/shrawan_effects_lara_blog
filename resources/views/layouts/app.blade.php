@@ -122,8 +122,8 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com">
 
-    <!-- Fonts: Google Sans, Google Sans Text & Monospace -->
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Fonts: Google Sans & Google Sans Text -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5.3 CSS (CDN Guaranteed Zero 404) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -136,10 +136,10 @@
         :root {
             --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --font-mono: 'Google Sans', 'Google Sans Text', sans-serif;
             --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --bs-body-font-family: var(--font-main);
-            --bs-font-monospace: 'JetBrains Mono', monospace;
+            --bs-font-monospace: 'Google Sans', 'Google Sans Text', sans-serif;
             --bs-body-font-size: 1rem;
             font-size: 18px;
 
@@ -628,9 +628,13 @@
         }
 
         .card-post .post-thumb {
-            height: 220px;
-            object-fit: cover;
             width: 100%;
+            height: auto;
+            max-height: 220px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            object-position: center;
+            display: block;
             transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
         }
 
@@ -640,10 +644,14 @@
         }
 
         .featured-thumb {
-            height: 380px;
-            object-fit: cover;
             width: 100%;
+            height: auto;
+            max-height: 420px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            object-position: center;
             border-radius: 16px;
+            display: block;
             transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
         }
 
@@ -1595,17 +1603,28 @@
     @stack('styles')
     <style id="frontend-typography-enforcer">
         :root {
-            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --bs-body-font-family: var(--font-main);
-            --bs-font-monospace: 'JetBrains Mono', monospace;
+            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --font-cyber: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --font-mono: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --bs-body-font-family: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --bs-font-monospace: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
             --bs-body-font-size: 1rem;
             font-size: 18px;
         }
+        *,
+        *::before,
+        *::after,
+        html,
+        body {
+            font-family: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+        .bi,
+        [class^="bi-"],
+        [class*=" bi-"] {
+            font-family: "bootstrap-icons" !important;
+        }
         html, body {
-            font-family: var(--font-main) !important;
             font-size: 18px !important;
         }
         h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
@@ -1615,14 +1634,9 @@
         .form-control, .form-select, .form-label, .form-check-label, .input-group-text,
         table, thead, tbody, tfoot, tr, th, td, .table,
         .card, .card-header, .card-body, .card-footer, .card-title, .card-subtitle, .card-text,
-        footer, .footer, .btn, .badge, .breadcrumb, .alert {
-            font-family: var(--font-main);
-        }
-        .font-cyber {
-            font-family: var(--font-cyber);
-        }
-        .font-mono, .font-monospace, code, pre, kbd, samp, .cc-badge {
-            font-family: var(--font-mono) !important;
+        footer, .footer, .btn, .badge, .breadcrumb, .alert,
+        .font-cyber, .font-mono, .font-monospace, code, pre, kbd, samp, .cc-badge {
+            font-family: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         }
         code, pre, kbd, samp {
             font-size: max(1rem, 1em);

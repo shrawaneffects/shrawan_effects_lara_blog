@@ -56,8 +56,8 @@
                     @php $leadPost = $featuredPosts->first(); @endphp
                     <div class="col-lg-7">
                         <div class="card card-post spotlight-card h-100 position-relative shadow-lg">
-                            <div class="post-thumb-container position-relative">
-                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" height="380" fetchpriority="high" loading="eager" decoding="async">
+                            <div class="post-thumb-container position-relative overflow-hidden">
+                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" style="aspect-ratio: 16/9; object-fit: cover; width: 100%; height: auto; max-height: 420px; display: block;" fetchpriority="high" loading="eager" decoding="async">
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge priority-intel-badge">
                                         <i class="bi bi-star-fill text-warning me-1"></i> Featured
@@ -94,28 +94,37 @@
                     <!-- Secondary Featured Posts -->
                     <div class="col-lg-5 d-flex flex-column gap-4">
                         @foreach($featuredPosts->skip(1) as $fPost)
-                            <div class="card card-post spotlight-card flex-grow-1 shadow-sm">
-                                <div class="row g-0 h-100">
-                                    <div class="col-sm-5 post-thumb-container">
-                                        <img src="{{ $fPost->image_url }}" class="img-fluid h-100 w-100 post-thumb object-fit-cover rounded-start" alt="{{ $fPost->title }}" width="250" height="180" loading="lazy" decoding="async" style="min-height: 160px;">
+                            <div class="card card-post spotlight-card h-100 shadow-sm">
+                                <div class="post-thumb-container position-relative overflow-hidden">
+                                    <img src="{{ $fPost->image_url }}" class="img-fluid w-100 post-thumb" alt="{{ $fPost->title }}" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%; height: auto; max-height: 220px; display: block;" loading="lazy" decoding="async">
+                                </div>
+                                <div class="card-body p-3 p-md-4 d-flex flex-column">
+                                    <div class="mb-2">
+                                        @if($fPost->category)
+                                            <a href="{{ route('blog.category', $fPost->category->slug) }}" class="badge badge-category text-white text-decoration-none" style="background-color: {{ $fPost->category->color }};">
+                                                {{ $fPost->category->name }}
+                                            </a>
+                                        @endif
                                     </div>
-                                    <div class="col-sm-7 d-flex flex-column justify-content-center p-3">
-                                        <div>
-                                            @if($fPost->category)
-                                                <a href="{{ route('blog.category', $fPost->category->slug) }}" class="badge badge-category text-white text-decoration-none mb-1" style="background-color: {{ $fPost->category->color }};">
-                                                    {{ $fPost->category->name }}
-                                                </a>
+                                    <h5 class="fw-bold mb-2 card-title">
+                                        <a href="{{ route('blog.show', $fPost->slug) }}" class="text-decoration-none text-body">
+                                            {{ $fPost->title }}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text text-body-secondary mt-1 mb-3" style="font-size: 1rem;">
+                                        {{ Str::limit($fPost->excerpt, 110) }}
+                                    </p>
+                                    <div class="d-flex align-items-center justify-content-between mt-auto pt-2 border-top border-secondary border-opacity-25 text-body-secondary font-mono" style="font-size: 1rem;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if($fPost->author)
+                                                <img src="{{ $fPost->author->avatar_url }}" alt="{{ $fPost->author->name }}" class="rounded-circle author-avatar" width="22" height="22" loading="lazy" decoding="async" style="width: 22px; height: 22px;">
+                                                <span>{{ $fPost->author->name }}</span>
                                             @endif
                                         </div>
-                                        <h5 class="fw-bold mb-2 card-title">
-                                            <a href="{{ route('blog.show', $fPost->slug) }}" class="text-decoration-none text-body">
-                                                {{ Str::limit($fPost->title, 55) }}
-                                            </a>
-                                        </h5>
-                                        <div class="d-flex align-items-center mt-auto font-mono text-body-secondary" style="font-size: 1rem;">
-                                            <span>{{ $fPost->published_at ? $fPost->published_at->format('M d') : 'Recent' }}</span>
-                                            <span class="mx-2">&bull;</span>
-                                            <span class="text-success"><i class="bi bi-clock me-1"></i>{{ $fPost->reading_time }}m</span>
+                                        <div>
+                                            <span>{{ $fPost->published_at ? $fPost->published_at->format('M d, Y') : 'Recent' }}</span>
+                                            <span class="mx-1">&bull;</span>
+                                            <span class="text-success"><i class="bi bi-clock me-1"></i>{{ $fPost->reading_time }}m read</span>
                                         </div>
                                     </div>
                                 </div>
