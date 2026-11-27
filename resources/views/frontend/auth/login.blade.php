@@ -2,11 +2,37 @@
 
 @section('title', 'Sign In - ' . config('app.name', 'Shrawan Effects'))
 
+@push('styles')
+<style>
+    #authMethodTabs {
+        gap: 0.2rem;
+    }
+    #authMethodTabs .nav-link {
+        font-size: 1rem;
+        padding-left: 0.55rem;
+        padding-right: 0.55rem;
+    }
+    @media (min-width: 576px) {
+        #authMethodTabs {
+            flex-wrap: nowrap;
+        }
+        #authMethodTabs .nav-link {
+            white-space: nowrap;
+        }
+    }
+    @media (max-width: 575.98px) {
+        #authMethodTabs {
+            border-radius: 1rem !important;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
     <div class="container py-5 my-3">
         <div class="row justify-content-center">
-            <div class="col-md-7 col-lg-5">
-                <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 bg-body hover-lift auth-card">
+            <div class="col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                <div class="card border-0 shadow-lg p-4 p-lg-5 rounded-4 bg-body hover-lift auth-card">
                     <div class="text-center mb-4">
                         <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-3 shadow auth-icon-wrap" style="width: 58px; height: 58px; background: var(--gradient-primary);">
                             <i class="bi bi-shield-lock-fill fs-3 text-white"></i>

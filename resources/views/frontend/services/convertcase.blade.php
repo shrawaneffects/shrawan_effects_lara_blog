@@ -9,8 +9,9 @@
     /* ==========================================================================
        Convert Case Tool Styles (Cyberpunk HUD Dark Container matching screenshot)
        ========================================================================== */
+    .container.cc-wrapper,
     .cc-wrapper {
-        max-width: 1200px;
+        max-width: 1340px;
         margin: 0 auto;
     }
 
@@ -130,7 +131,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 0.55rem;
+        gap: 0.3rem;
     }
 
     /* Transformation Pill Button */
@@ -141,10 +142,12 @@
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
         font-size: 1rem;
         font-weight: 500;
-        padding: 0.45rem 0.9rem 0.45rem 0.45rem;
+        letter-spacing: -0.025em;
+        padding: 0.42rem 0.44rem 0.42rem 0.28rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
+        white-space: nowrap;
         transition: all 0.2s ease;
         cursor: pointer;
         user-select: none;
@@ -169,10 +172,10 @@
         font-weight: 700;
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
         letter-spacing: -0.3px;
-        padding: 0.15rem 0.45rem;
+        padding: 0.1rem 0.24rem;
         border-radius: 4px;
-        margin-right: 0.5rem;
-        min-width: 30px;
+        margin-right: 0.26rem;
+        min-width: 0;
         line-height: 1.25;
     }
 
@@ -193,11 +196,12 @@
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
         font-size: 1rem;
         font-weight: 600;
-        padding: 0.45rem 1.05rem;
+        padding: 0.42rem 0.65rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
+        gap: 0.35rem;
+        white-space: nowrap;
         text-decoration: none;
         transition: all 0.2s ease;
         margin-left: auto;
