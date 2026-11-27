@@ -429,8 +429,13 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.tools.index') }}" class="sidebar-link {{ request()->routeIs('admin.tools.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.tools.index') }}" class="sidebar-link {{ request()->routeIs('admin.tools.index') || request()->routeIs('admin.tools.edit') ? 'active' : '' }}">
                     <i class="bi bi-tools text-info"></i> Tools
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.tools.create') }}" class="sidebar-link {{ request()->routeIs('admin.tools.create') ? 'active' : '' }}">
+                    <i class="bi bi-plus-circle text-info"></i> New Tool Content
                 </a>
             </li>
             <li>

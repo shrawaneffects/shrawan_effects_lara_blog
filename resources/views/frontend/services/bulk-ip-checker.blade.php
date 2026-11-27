@@ -30,9 +30,9 @@
     $jsVersion = file_exists(public_path('js/bulk-ip-checker.js')) ? filemtime(public_path('js/bulk-ip-checker.js')) : '1';
 @endphp
 
-@section('title', 'Bulk Website IP Checker & Class-C Subnet Analyzer (10,000+ Domains) - Shrawan Effects')
-@section('meta_description', 'Free Bulk Website IP Checker supporting 10,000+ domains. Resolve IPv4 & IPv6, detect CDN/Proxy/Cloud/Hosting IP types, find Same-IP & Class-C (/24) shared hosting footprints, and export CSV/JSON.')
-@section('canonical_url', \Illuminate\Support\Facades\Route::has('services.bulk-ip-checker') ? route('services.bulk-ip-checker') : url('/services/bulk-website-ip-checker'))
+@section('title', !empty($tool->meta_title) ? $tool->meta_title : 'Bulk Website IP Checker & Class-C Subnet Analyzer (10,000+ Domains) - Shrawan Effects')
+@section('meta_description', !empty($tool->meta_description) ? $tool->meta_description : 'Free Bulk Website IP Checker supporting 10,000+ domains. Resolve IPv4 & IPv6, detect CDN/Proxy/Cloud/Hosting IP types, find Same-IP & Class-C (/24) shared hosting footprints, and export CSV/JSON.')
+@section('canonical_url', !empty($tool->canonical_url) ? $tool->canonical_url : (\Illuminate\Support\Facades\Route::has('services.bulk-ip-checker') ? route('services.bulk-ip-checker') : url('/services/bulk-website-ip-checker')))
 
 @push('styles')
 <style>
@@ -699,6 +699,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Dynamic Tool Article & Guide Content (Managed via Admin Panel) -->
+    @if(!empty($tool) && !empty($tool->content))
+        <section class="tool-content-section py-5 mt-4 border-top border-secondary border-opacity-25" style="background: rgba(9, 18, 6, 0.45);">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <article class="tool-article-body">
+                            {!! $tool->content !!}
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- Floating Action Toast -->
     <div id="actionToast" class="bulk-toast rounded-pill px-4 py-2 shadow-lg d-none" role="status" aria-live="polite">
