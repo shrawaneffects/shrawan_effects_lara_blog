@@ -57,28 +57,30 @@
                     <div class="col-lg-7">
                         <div class="card card-post spotlight-card h-100 position-relative shadow-lg">
                             <div class="post-thumb-container position-relative overflow-hidden">
-                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" style="aspect-ratio: 16/9; object-fit: cover; width: 100%; height: auto; max-height: 420px; display: block;" fetchpriority="high" loading="eager" decoding="async">
+                                <img src="{{ $leadPost->image_url }}" class="featured-thumb" alt="{{ $leadPost->title }}" width="650" style="aspect-ratio: 16/9; object-fit: cover; width: 100%; height: auto; display: block;" fetchpriority="high" loading="eager" decoding="async">
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge priority-intel-badge">
                                         <i class="bi bi-star-fill text-warning me-1"></i> Featured
                                     </span>
                                 </div>
                             </div>
-                            <div class="card-body p-4 d-flex flex-column justify-content-end">
-                                <div class="mb-2 d-flex align-items-center gap-2">
-                                    @if($leadPost->category)
-                                        <a href="{{ route('blog.category', $leadPost->category->slug) }}" class="badge badge-category text-white text-decoration-none" style="background-color: {{ $leadPost->category->color }};">
-                                            {{ $leadPost->category->name }}
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        @if($leadPost->category)
+                                            <a href="{{ route('blog.category', $leadPost->category->slug) }}" class="badge badge-category text-white text-decoration-none" style="background-color: {{ $leadPost->category->color }};">
+                                                {{ $leadPost->category->name }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <h2 class="card-title fw-bold">
+                                        <a href="{{ route('blog.show', $leadPost->slug) }}" class="text-decoration-none text-body stretched-link">
+                                            {{ $leadPost->title }}
                                         </a>
-                                    @endif
+                                    </h2>
+                                    <p class="card-text text-body-secondary mt-2">{{ $leadPost->excerpt }}</p>
                                 </div>
-                                <h2 class="card-title fw-bold">
-                                    <a href="{{ route('blog.show', $leadPost->slug) }}" class="text-decoration-none text-body stretched-link">
-                                        {{ $leadPost->title }}
-                                    </a>
-                                </h2>
-                                <p class="card-text text-body-secondary mt-2">{{ $leadPost->excerpt }}</p>
-                                <div class="d-flex align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                                <div class="d-flex align-items-center mt-auto pt-3 border-top border-secondary border-opacity-25">
                                     <img src="{{ $leadPost->author->avatar_url }}" alt="{{ $leadPost->author->name }}" class="author-avatar me-3" width="40" height="40" loading="lazy" decoding="async">
                                     <div class="d-flex flex-column">
                                         <h6 class="mb-0 fw-semibold">{{ $leadPost->author->name }}</h6>
@@ -96,7 +98,7 @@
                         @foreach($featuredPosts->skip(1) as $fPost)
                             <div class="card card-post spotlight-card h-100 shadow-sm">
                                 <div class="post-thumb-container position-relative overflow-hidden">
-                                    <img src="{{ $fPost->image_url }}" class="img-fluid w-100 post-thumb" alt="{{ $fPost->title }}" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%; height: auto; max-height: 220px; display: block;" loading="lazy" decoding="async">
+                                    <img src="{{ $fPost->image_url }}" class="img-fluid w-100 post-thumb" alt="{{ $fPost->title }}" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
                                 </div>
                                 <div class="card-body p-3 p-md-4 d-flex flex-column">
                                     <div class="mb-2">
