@@ -630,7 +630,6 @@
         .card-post .post-thumb {
             width: 100%;
             height: auto;
-            max-height: 220px;
             aspect-ratio: 16 / 9;
             object-fit: cover;
             object-position: center;
