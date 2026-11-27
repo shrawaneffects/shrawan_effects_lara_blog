@@ -9,7 +9,7 @@
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
                 <div>
                     <h4 class="fw-bold mb-1">General Settings & Branding</h4>
-                    <p class="text-body-secondary small mb-0">Upload custom logo, favicon, site titles, and contact information.</p>
+                    <p class="text-body-secondary mb-0">Upload custom logo, favicon, site titles, and contact information.</p>
                 </div>
             </div>
 
@@ -23,7 +23,7 @@
                     <div class="row g-4">
                         <!-- Logo Upload Box -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold small">Website Header Logo</label>
+                            <label class="form-label fw-bold">Website Header Logo</label>
                             <div class="p-3 border rounded-3 text-center bg-body-tertiary mb-2">
                                 @if($settings['site_logo'])
                                     <div class="mb-3 p-3 bg-body rounded border d-inline-block">
@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="form-check d-flex justify-content-center gap-2 mb-2">
                                         <input class="form-check-input" type="checkbox" name="delete_logo" value="1" id="deleteLogoCheck">
-                                        <label class="form-check-label text-danger small fw-semibold" for="deleteLogoCheck">
+                                        <label class="form-check-label text-danger fw-semibold" for="deleteLogoCheck">
                                             Remove current logo
                                         </label>
                                     </div>
@@ -39,16 +39,16 @@
                                     <div class="mb-3 p-3 bg-body rounded border d-inline-block">
                                         <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='50' viewBox='0 0 120 50'><text x='10' y='32' font-family='Arial' font-size='18' fill='%236c757d'>No Logo</text></svg>" id="logoPreview" class="img-fluid" style="max-height: 70px; object-fit: contain;">
                                     </div>
-                                    <p class="text-muted small mb-1">No custom logo uploaded yet. Default text title is active.</p>
+                                    <p class="text-muted mb-1">No custom logo uploaded yet. Default text title is active.</p>
                                 @endif
                             </div>
                             <input type="file" name="site_logo" id="logoInput" class="form-control form-control-sm" accept="image/png,image/jpeg,image/svg+xml,image/webp">
-                            <small class="text-muted">Recommended: PNG or SVG with transparent background (Max 2MB)</small>
+                            <span class="text-muted">Recommended: PNG or SVG with transparent background (Max 2MB)</span>
                         </div>
 
                         <!-- Favicon Upload Box -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold small">Browser Favicon</label>
+                            <label class="form-label fw-bold">Browser Favicon</label>
                             <div class="p-3 border rounded-3 text-center bg-body-tertiary mb-2">
                                 @if($settings['site_favicon'])
                                     <div class="mb-3 p-3 bg-body rounded border d-inline-block">
@@ -56,7 +56,7 @@
                                     </div>
                                     <div class="form-check d-flex justify-content-center gap-2 mb-2">
                                         <input class="form-check-input" type="checkbox" name="delete_favicon" value="1" id="deleteFaviconCheck">
-                                        <label class="form-check-label text-danger small fw-semibold" for="deleteFaviconCheck">
+                                        <label class="form-check-label text-danger fw-semibold" for="deleteFaviconCheck">
                                             Remove current favicon
                                         </label>
                                     </div>
@@ -65,11 +65,11 @@
                                         <i class="bi bi-browser-chrome fs-1 text-muted" id="faviconPlaceholderIcon"></i>
                                         <img src="" alt="Favicon Preview" id="faviconPreview" class="img-fluid d-none" style="width: 36px; height: 36px; object-fit: contain;">
                                     </div>
-                                    <p class="text-muted small mb-1">Favicon displayed on browser tab.</p>
+                                    <p class="text-muted mb-1">Favicon displayed on browser tab.</p>
                                 @endif
                             </div>
                             <input type="file" name="site_favicon" id="faviconInput" class="form-control form-control-sm" accept="image/x-icon,image/png,image/svg+xml,image/jpeg,image/webp">
-                            <small class="text-muted">Recommended: 32x32 or 64x64 px (ICO, PNG, SVG, WEBP)</small>
+                            <span class="text-muted">Recommended: 32x32 or 64x64 px (ICO, PNG, SVG, WEBP)</span>
                         </div>
                     </div>
                 </div>
@@ -80,11 +80,11 @@
                         <h5 class="fw-bold mb-0 text-info">
                             <i class="bi bi-house-door-fill me-2"></i> Homepage Display Configuration
                         </h5>
-                        <span class="badge bg-info-subtle text-info rounded-pill px-3 py-1.5 small">
+                        <span class="badge bg-info-subtle text-info rounded-pill px-3 py-1.5">
                             Front Page Router
                         </span>
                     </div>
-                    <p class="text-body-secondary small mb-4">
+                    <p class="text-body-secondary mb-4">
                         Choose what content is served when visitors navigate to the homepage root URL (<code>/</code>).
                     </p>
 
@@ -102,9 +102,9 @@
                                 <input class="form-check-input" type="radio" name="homepage_type" id="hpTypeDefault" value="default" {{ $currentHomepageType === 'default' ? 'checked' : '' }} onchange="toggleHomepageDropdowns()">
                                 <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="hpTypeDefault">
                                     <span>🌟 Standard Dynamic Homepage</span>
-                                    <span class="badge bg-primary-subtle text-primary small">Default</span>
+                                    <span class="badge bg-primary-subtle text-primary">Default</span>
                                 </label>
-                                <p class="text-muted small mb-0 mt-1 ms-1">
+                                <p class="text-muted mb-0 mt-1 ms-1">
                                     Hero spotlight banner, featured stories slider, trending articles, latest grid, category cards & newsletter CTA.
                                 </p>
                             </div>
@@ -116,9 +116,9 @@
                                 <input class="form-check-input" type="radio" name="homepage_type" id="hpTypeBlogs" value="blogs" {{ $currentHomepageType === 'blogs' ? 'checked' : '' }} onchange="toggleHomepageDropdowns()">
                                 <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="hpTypeBlogs">
                                     <span>📰 All Blog Posts Feed (Blog Index)</span>
-                                    <span class="badge bg-success-subtle text-success small">Blog Stream</span>
+                                    <span class="badge bg-success-subtle text-success">Blog Stream</span>
                                 </label>
-                                <p class="text-muted small mb-0 mt-1 ms-1">
+                                <p class="text-muted mb-0 mt-1 ms-1">
                                     Directly displays the full paginated article directory with live search bar, category filtering, and tag filters.
                                 </p>
                             </div>
@@ -130,15 +130,15 @@
                                 <input class="form-check-input" type="radio" name="homepage_type" id="hpTypeCategory" value="category" {{ $currentHomepageType === 'category' ? 'checked' : '' }} onchange="toggleHomepageDropdowns()">
                                 <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="hpTypeCategory">
                                     <span>📁 A Specific Category Archive</span>
-                                    <span class="badge bg-info-subtle text-info small">Category Focus</span>
+                                    <span class="badge bg-info-subtle text-info">Category Focus</span>
                                 </label>
-                                <p class="text-muted small mb-2 mt-1 ms-1">
+                                <p class="text-muted mb-2 mt-1 ms-1">
                                     Feature a selected category and its filtered stream as the homepage.
                                 </p>
                             </div>
 
                             <div id="categorySelectBox" class="mt-3 ms-4 ps-1 {{ $currentHomepageType === 'category' ? '' : 'd-none' }}">
-                                <label class="form-label fw-semibold small">Select Active Category:</label>
+                                <label class="form-label fw-semibold">Select Active Category:</label>
                                 <select name="homepage_category_id" class="form-select">
                                     <option value="">-- Choose a Category --</option>
                                     @foreach($categories as $cat)
@@ -156,15 +156,15 @@
                                 <input class="form-check-input" type="radio" name="homepage_type" id="hpTypePost" value="post" {{ $currentHomepageType === 'post' ? 'checked' : '' }} onchange="toggleHomepageDropdowns()">
                                 <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="hpTypePost">
                                     <span>📄 A Specific Single Blog Article (Lead Post)</span>
-                                    <span class="badge bg-warning-subtle text-warning small">Featured Article</span>
+                                    <span class="badge bg-warning-subtle text-warning">Featured Article</span>
                                 </label>
-                                <p class="text-muted small mb-2 mt-1 ms-1">
+                                <p class="text-muted mb-2 mt-1 ms-1">
                                     Renders a specific published article, complete with table of contents, comments, and related reading on the root URL.
                                 </p>
                             </div>
 
                             <div id="postSelectBox" class="mt-3 ms-4 ps-1 {{ $currentHomepageType === 'post' ? '' : 'd-none' }}">
-                                <label class="form-label fw-semibold small">Select Published Article:</label>
+                                <label class="form-label fw-semibold">Select Published Article:</label>
                                 <select name="homepage_post_id" class="form-select">
                                     <option value="">-- Choose an Article --</option>
                                     @foreach($posts as $p)
@@ -182,15 +182,15 @@
                                 <input class="form-check-input" type="radio" name="homepage_type" id="hpTypePage" value="page" {{ $currentHomepageType === 'page' ? 'checked' : '' }} onchange="toggleHomepageDropdowns()">
                                 <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="hpTypePage">
                                     <span>📑 A Static Custom Page (e.g. Landing Page / About)</span>
-                                    <span class="badge bg-secondary-subtle text-secondary small">Static Page</span>
+                                    <span class="badge bg-secondary-subtle text-secondary">Static Page</span>
                                 </label>
-                                <p class="text-muted small mb-2 mt-1 ms-1">
+                                <p class="text-muted mb-2 mt-1 ms-1">
                                     Renders a custom static page designed in the Pages Builder as your main website front page.
                                 </p>
                             </div>
 
                             <div id="pageSelectBox" class="mt-3 ms-4 ps-1 {{ $currentHomepageType === 'page' ? '' : 'd-none' }}">
-                                <label class="form-label fw-semibold small">Select Published Static Page:</label>
+                                <label class="form-label fw-semibold">Select Published Static Page:</label>
                                 <select name="homepage_page_id" class="form-select">
                                     <option value="">-- Choose a Static Page --</option>
                                     @foreach($pages as $page)
@@ -210,11 +210,11 @@
                         <h5 class="fw-bold mb-0 text-primary">
                             <i class="bi bi-search me-2"></i> Homepage SEO & Search Metadata
                         </h5>
-                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5 small">
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5">
                             <i class="bi bi-google me-1"></i> Google SERP & Social Sharing
                         </span>
                     </div>
-                    <p class="text-body-secondary small mb-4">
+                    <p class="text-body-secondary mb-4">
                         Optimize how your homepage appears on Google Search results, Bing, social media previews (OpenGraph & Twitter Cards), and browser title bar.
                     </p>
 
@@ -222,67 +222,67 @@
                         <!-- Homepage Meta Title -->
                         <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold small mb-0" for="hpMetaTitleInput">
+                                <label class="form-label fw-bold mb-0" for="hpMetaTitleInput">
                                     Homepage Meta Title (SEO Title)
                                 </label>
-                                <span class="badge bg-secondary-subtle text-secondary small" id="hpTitleCounter">
+                                <span class="badge bg-secondary-subtle text-secondary" id="hpTitleCounter">
                                     <span id="hpTitleCount">0</span>/60 chars (Recommended: 50–60)
                                 </span>
                             </div>
                             <input type="text" name="homepage_meta_title" id="hpMetaTitleInput" class="form-control" 
                                    value="{{ old('homepage_meta_title', $settings['homepage_meta_title'] ?? '') }}" 
                                    placeholder="e.g. {{ $settings['site_name'] }} - {{ $settings['site_tagline'] ?: 'Modern Tech Publications & Guides' }}">
-                            <small class="text-muted d-block mt-1">
+                            <span class="text-muted d-block mt-1">
                                 <i class="bi bi-info-circle me-1"></i> Replaces the <kbd>&lt;title&gt;</kbd> and <kbd>og:title</kbd> on the homepage. If left empty, system defaults to <strong>{{ $settings['site_name'] }} - {{ $settings['site_tagline'] }}</strong>.
-                            </small>
+                            </span>
                         </div>
 
                         <!-- Homepage Meta Description -->
                         <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold small mb-0" for="hpMetaDescInput">
+                                <label class="form-label fw-bold mb-0" for="hpMetaDescInput">
                                     Homepage Meta Description
                                 </label>
-                                <span class="badge bg-secondary-subtle text-secondary small" id="hpDescCounter">
+                                <span class="badge bg-secondary-subtle text-secondary" id="hpDescCounter">
                                     <span id="hpDescCount">0</span>/160 chars (Recommended: 150–160)
                                 </span>
                             </div>
                             <textarea name="homepage_meta_description" id="hpMetaDescInput" class="form-control" rows="3" 
                                       placeholder="e.g. Discover in-depth programming tutorials, clean architecture guides, Laravel tips, and high-performance engineering insights.">{{ old('homepage_meta_description', $settings['homepage_meta_description'] ?? '') }}</textarea>
-                            <small class="text-muted d-block mt-1">
+                            <span class="text-muted d-block mt-1">
                                 <i class="bi bi-info-circle me-1"></i> Appears in search engine result snippets and social shares. If left empty, system uses site tagline/footer description.
-                            </small>
+                            </span>
                         </div>
 
                         <!-- Homepage Meta Keywords -->
                         <div class="col-12">
-                            <label class="form-label fw-bold small mb-1" for="hpMetaKeywordsInput">
+                            <label class="form-label fw-bold mb-1" for="hpMetaKeywordsInput">
                                 Homepage Meta Keywords (Optional)
                             </label>
                             <input type="text" name="homepage_meta_keywords" id="hpMetaKeywordsInput" class="form-control" 
                                    value="{{ old('homepage_meta_keywords', $settings['homepage_meta_keywords'] ?? '') }}" 
                                    placeholder="e.g. laravel, php, web development, bootstrap 5, tech blog, tutorials">
-                            <small class="text-muted d-block mt-1">
+                            <span class="text-muted d-block mt-1">
                                 <i class="bi bi-tags me-1"></i> Comma-separated list of target topics for meta keywords header tag.
-                            </small>
+                            </span>
                         </div>
                     </div>
 
                     <!-- Live Google Search SERP Preview Box -->
                     <div class="p-3.5 p-md-4 rounded-4 bg-body-tertiary border">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="fw-bold small text-body d-flex align-items-center gap-1.5">
+                            <div class="fw-bold text-body d-flex align-items-center gap-1.5">
                                 <i class="bi bi-google text-primary"></i> Live Google Search Result (SERP) Preview
                             </div>
-                            <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 small">
+                            <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1">
                                 Live Simulation
                             </span>
                         </div>
-                        <p class="text-muted small mb-3">This is an approximate preview of how your homepage snippet will render in Google search results.</p>
+                        <p class="text-muted mb-3">This is an approximate preview of how your homepage snippet will render in Google search results.</p>
 
                         <div class="p-3 bg-body rounded-3 border shadow-xs" style="max-width: 650px;">
                             <div class="d-flex align-items-center gap-2 mb-1">
-                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 26px; height: 26px; font-size: 13px;">
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 26px; height: 26px; font-size: 1rem;">
                                     @if($settings['site_favicon'])
                                         <img src="{{ $settings['site_favicon'] }}" alt="Favicon" style="width: 16px; height: 16px; object-fit: contain;">
                                     @else
@@ -290,14 +290,14 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <div class="text-body fw-semibold text-truncate" id="serpPreviewSiteName" style="font-size: 0.85rem; line-height: 1.1;">{{ $settings['site_name'] }}</div>
-                                    <div class="text-muted text-truncate" style="font-size: 0.72rem; line-height: 1.1;">{{ url('/') }}</div>
+                                    <div class="text-body fw-semibold text-truncate" id="serpPreviewSiteName" style="font-size: 1rem; line-height: 1.1;">{{ $settings['site_name'] }}</div>
+                                    <div class="text-muted text-truncate" style="font-size: 1rem; line-height: 1.1;">{{ url('/') }}</div>
                                 </div>
                             </div>
                             <h6 class="mb-1 fw-medium" style="color: #1a0dab; font-size: 1.15rem; line-height: 1.3;">
                                 <span id="serpPreviewTitle" class="text-decoration-underline-hover cursor-pointer">{{ $settings['homepage_meta_title'] ?: ($settings['site_name'] . ' - ' . ($settings['site_tagline'] ?: 'Modern Tech Publications')) }}</span>
                             </h6>
-                            <p class="mb-0 text-secondary" id="serpPreviewDesc" style="font-size: 0.86rem; line-height: 1.45;">
+                            <p class="mb-0 text-secondary" id="serpPreviewDesc" style="font-size: 1rem; line-height: 1.45;">
                                 {{ $settings['homepage_meta_description'] ?: ($settings['footer_text'] ?: 'A modern, high-performance blog platform crafted with Laravel 12 and Bootstrap 5.') }}
                             </p>
                         </div>
@@ -310,22 +310,22 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Site Name *</label>
+                            <label class="form-label fw-semibold">Site Name *</label>
                             <input type="text" name="site_name" class="form-control" value="{{ old('site_name', $settings['site_name']) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Contact Email</label>
+                            <label class="form-label fw-semibold">Contact Email</label>
                             <input type="email" name="contact_email" class="form-control" value="{{ old('contact_email', $settings['contact_email']) }}">
                         </div>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Site Tagline</label>
+                            <label class="form-label fw-semibold">Site Tagline</label>
                             <input type="text" name="site_tagline" class="form-control" value="{{ old('site_tagline', $settings['site_tagline']) }}" placeholder="Modern Tech Publications & Guides">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">System Timezone</label>
+                            <label class="form-label fw-semibold">System Timezone</label>
                             <select name="timezone" class="form-select">
                                 @php
                                     $currentTimezone = old('timezone', $settings['timezone'] ?? 'Asia/Kolkata');
@@ -346,12 +346,12 @@
                                     <option value="{{ $tzKey }}" {{ $currentTimezone === $tzKey ? 'selected' : '' }}>{{ $tzLabel }}</option>
                                 @endforeach
                             </select>
-                            <small class="text-muted">Current Server Time: <strong>{{ now()->format('d M Y, h:i A') }}</strong></small>
+                            <span class="text-muted">Current Server Time: <strong>{{ now()->format('d M Y, h:i A') }}</strong></span>
                         </div>
                     </div>
 
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Footer Description</label>
+                        <label class="form-label fw-semibold">Footer Description</label>
                         <textarea name="footer_text" class="form-control" rows="3">{{ old('footer_text', $settings['footer_text']) }}</textarea>
                     </div>
                 </div>
@@ -362,18 +362,18 @@
                         <h5 class="fw-bold text-primary mb-0">
                             <i class="bi bi-share me-2"></i> Social Profiles &amp; Channels
                         </h5>
-                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5 small">
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5">
                             <i class="bi bi-globe2 me-1"></i> Displayed in Website Footer
                         </span>
                     </div>
-                    <p class="text-body-secondary small mb-4">
+                    <p class="text-body-secondary mb-4">
                         Connect your brand's social networks. Active channels will automatically render as interactive icons in the website's footer. Leave any field blank to hide that icon.
                     </p>
 
                     <div class="row g-3">
                         <!-- Facebook -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-facebook text-primary me-1"></i> Facebook Page / Profile
                             </label>
                             <input type="text" name="facebook_url" class="form-control rounded-3" 
@@ -383,7 +383,7 @@
 
                         <!-- Twitter / X -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-twitter-x me-1"></i> X (Twitter) Profile
                             </label>
                             <input type="text" name="twitter_url" class="form-control rounded-3" 
@@ -393,7 +393,7 @@
 
                         <!-- Instagram -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-instagram text-danger me-1"></i> Instagram Profile
                             </label>
                             <input type="text" name="instagram_url" class="form-control rounded-3" 
@@ -403,7 +403,7 @@
 
                         <!-- LinkedIn -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-linkedin text-info me-1"></i> LinkedIn Page / Profile
                             </label>
                             <input type="text" name="linkedin_url" class="form-control rounded-3" 
@@ -413,7 +413,7 @@
 
                         <!-- YouTube -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-youtube text-danger me-1"></i> YouTube Channel
                             </label>
                             <input type="text" name="youtube_url" class="form-control rounded-3" 
@@ -423,7 +423,7 @@
 
                         <!-- Pinterest -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-pinterest text-danger me-1"></i> Pinterest Profile
                             </label>
                             <input type="text" name="pinterest_url" class="form-control rounded-3" 
@@ -433,18 +433,18 @@
 
                         <!-- WhatsApp -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Link / Number
                             </label>
                             <input type="text" name="whatsapp_url" class="form-control rounded-3" 
                                    value="{{ old('whatsapp_url', $settings['whatsapp_url'] ?? '') }}" 
                                    placeholder="https://wa.me/919999999999 or 9999999999">
-                            <small class="text-muted d-block" style="font-size: 0.72rem;">Accepts wa.me URL or phone number with country code</small>
+                            <span class="text-muted d-block" style="font-size: 1rem;">Accepts wa.me URL or phone number with country code</span>
                         </div>
 
                         <!-- GitHub -->
                         <div class="col-md-6 col-lg-3">
-                            <label class="form-label fw-semibold small">
+                            <label class="form-label fw-semibold">
                                 <i class="bi bi-github me-1"></i> GitHub Repository / Profile
                             </label>
                             <input type="text" name="github_url" class="form-control rounded-3" 
@@ -457,42 +457,42 @@
                 <!-- Content Protection & Anti-Inspect Card -->
                 <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-body mb-4">
                     <h5 class="fw-bold mb-4 text-warning"><i class="bi bi-shield-slash-fill me-2"></i> Content Protection & Security</h5>
-                    <p class="text-body-secondary small mb-3">Protect your articles, media, and code from unauthorized copying, right-clicking, screen capture / screenshots, and developer tools.</p>
+                    <p class="text-body-secondary mb-3">Protect your articles, media, and code from unauthorized copying, right-clicking, screen capture / screenshots, and developer tools.</p>
 
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
                                 <div class="form-check form-switch d-flex justify-content-between align-items-center ps-0">
-                                    <label class="form-check-label fw-semibold small" for="disableRightClick">
+                                    <label class="form-check-label fw-semibold" for="disableRightClick">
                                         <i class="bi bi-mouse me-1 text-primary"></i> Disable Right-Click
                                     </label>
                                     <input class="form-check-input ms-0" type="checkbox" name="disable_right_click" value="1" id="disableRightClick" {{ $settings['disable_right_click'] ? 'checked' : '' }}>
                                 </div>
-                                <small class="text-muted d-block mt-2">Blocks context menu and right-clicking on pages & media.</small>
+                                <span class="text-muted d-block mt-2">Blocks context menu and right-clicking on pages & media.</span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
                                 <div class="form-check form-switch d-flex justify-content-between align-items-center ps-0">
-                                    <label class="form-check-label fw-semibold small" for="disableInspect">
+                                    <label class="form-check-label fw-semibold" for="disableInspect">
                                         <i class="bi bi-code-slash me-1 text-primary"></i> Disable Inspect & Source
                                     </label>
                                     <input class="form-check-input ms-0" type="checkbox" name="disable_inspect" value="1" id="disableInspect" {{ $settings['disable_inspect'] ? 'checked' : '' }}>
                                 </div>
-                                <small class="text-muted d-block mt-2">Blocks F12, Ctrl+U (View Source), Ctrl+Shift+I, and DevTools.</small>
+                                <span class="text-muted d-block mt-2">Blocks F12, Ctrl+U (View Source), Ctrl+Shift+I, and DevTools.</span>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
                                 <div class="form-check form-switch d-flex justify-content-between align-items-center ps-0">
-                                    <label class="form-check-label fw-semibold small" for="disableScreenshot">
+                                    <label class="form-check-label fw-semibold" for="disableScreenshot">
                                         <i class="bi bi-camera-fill me-1 text-danger"></i> Anti-Screenshot Shield
                                     </label>
                                     <input class="form-check-input ms-0" type="checkbox" name="disable_screenshot" value="1" id="disableScreenshot" {{ $settings['disable_screenshot'] ? 'checked' : '' }}>
                                 </div>
-                                <small class="text-muted d-block mt-2">Blocks PrintScreen, Windows Snipping Tool (Win+Shift+S), Mac shortcuts, Ctrl+P, and blurs on capture.</small>
+                                <span class="text-muted d-block mt-2">Blocks PrintScreen, Windows Snipping Tool (Win+Shift+S), Mac shortcuts, Ctrl+P, and blurs on capture.</span>
                             </div>
                         </div>
                     </div>
@@ -501,28 +501,28 @@
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                         <div>
                             <h5 class="fw-bold mb-1 text-success"><i class="bi bi-badge-ad me-2"></i> Google AdSense & Monetization Hub</h5>
-                            <p class="text-body-secondary small mb-0">Manage Google AdSense client ID, Auto Ads, and custom ad placements across Header, Articles, Sidebar, and Feeds.</p>
+                            <p class="text-body-secondary mb-0">Manage Google AdSense client ID, Auto Ads, and custom ad placements across Header, Articles, Sidebar, and Feeds.</p>
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="ads_enabled" value="1" id="adsEnabled" {{ $settings['ads_enabled'] ? 'checked' : '' }}>
-                                <label class="form-check-label fw-semibold small" for="adsEnabled">Ads Enabled Site-wide</label>
+                                <label class="form-check-label fw-semibold" for="adsEnabled">Ads Enabled Site-wide</label>
                             </div>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="ads_placeholders" value="1" id="adsPlaceholders" {{ $settings['ads_placeholders'] ? 'checked' : '' }}>
-                                <label class="form-check-label fw-semibold small text-muted" for="adsPlaceholders">Show Preview Placeholders</label>
+                                <label class="form-check-label fw-semibold text-muted" for="adsPlaceholders">Show Preview Placeholders</label>
                             </div>
                         </div>
                     </div>
 
                     <!-- AdSense Auto Ads / Client ID -->
                     <div class="p-3.5 rounded-4 bg-body-tertiary border mb-4">
-                        <label class="form-label fw-bold small text-body d-flex align-items-center gap-1">
+                        <label class="form-label fw-bold text-body d-flex align-items-center gap-1">
                             <i class="bi bi-google text-primary"></i> Google AdSense Publisher Client ID
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2" style="font-size: 0.68rem;">Auto Ads</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2" style="font-size: 1rem;">Auto Ads</span>
                         </label>
                         <input type="text" name="adsense_publisher_id" class="form-control font-monospace" value="{{ old('adsense_publisher_id', $settings['adsense_publisher_id']) }}" placeholder="ca-pub-1234567890123456">
-                        <small class="text-muted d-block mt-1">If provided, the official Google AdSense Auto Ads script will be automatically included in the <kbd>&lt;head&gt;</kbd> of every public page.</small>
+                        <span class="text-muted d-block mt-1">If provided, the official Google AdSense Auto Ads script will be automatically included in the <kbd>&lt;head&gt;</kbd> of every public page.</span>
                     </div>
 
                     <h6 class="fw-bold text-body mb-3"><i class="bi bi-grid-1x2 me-1 text-primary"></i> Targeted Ad Unit Placements</h6>
@@ -531,84 +531,84 @@
                         <!-- Header Leaderboard Ad -->
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-layout-top me-1 text-primary"></i> Header Leaderboard Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">728x90 / Responsive</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">728x90 / Responsive</span>
                                 </label>
-                                <textarea name="ad_slot_header" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_header', $settings['ad_slot_header']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed below the top navigation bar across all pages.</small>
+                                <textarea name="ad_slot_header" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_header', $settings['ad_slot_header']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed below the top navigation bar across all pages.</span>
                             </div>
                         </div>
 
                         <!-- Homepage Middle Ad -->
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-house me-1 text-primary"></i> Homepage Mid-Section Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">Leaderboard / Responsive</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">Leaderboard / Responsive</span>
                                 </label>
-                                <textarea name="ad_slot_home_middle" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_home_middle', $settings['ad_slot_home_middle']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed between Featured Spotlight and Recent Posts on Homepage.</small>
+                                <textarea name="ad_slot_home_middle" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_home_middle', $settings['ad_slot_home_middle']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed between Featured Spotlight and Recent Posts on Homepage.</span>
                             </div>
                         </div>
 
                         <!-- Post Top Ad -->
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-arrow-up-square me-1 text-primary"></i> Article Top Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">Above Content</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">Above Content</span>
                                 </label>
-                                <textarea name="ad_slot_post_top" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_post_top', $settings['ad_slot_post_top']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed directly above the article text & reading area.</small>
+                                <textarea name="ad_slot_post_top" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_post_top', $settings['ad_slot_post_top']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed directly above the article text & reading area.</span>
                             </div>
                         </div>
 
                         <!-- Post Middle Ad -->
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-card-text me-1 text-primary"></i> Article In-Content Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">Mid-Paragraph</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">Mid-Paragraph</span>
                                 </label>
-                                <textarea name="ad_slot_post_middle" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_post_middle', $settings['ad_slot_post_middle']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed in the middle of long articles between paragraphs.</small>
+                                <textarea name="ad_slot_post_middle" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML ad unit code here -->">{{ old('ad_slot_post_middle', $settings['ad_slot_post_middle']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed in the middle of long articles between paragraphs.</span>
                             </div>
                         </div>
 
                         <!-- Post Bottom Ad -->
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-arrow-down-square me-1 text-primary"></i> Article Bottom Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">End of Post</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">End of Post</span>
                                 </label>
-                                <textarea name="ad_slot_post_bottom" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_post_bottom', $settings['ad_slot_post_bottom']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed before comments and author bio.</small>
+                                <textarea name="ad_slot_post_bottom" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_post_bottom', $settings['ad_slot_post_bottom']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed before comments and author bio.</span>
                             </div>
                         </div>
 
                         <!-- Sidebar Sticky Ad -->
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-layout-sidebar me-1 text-primary"></i> Sidebar Sticky Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">300x250 / 300x600</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">300x250 / 300x600</span>
                                 </label>
-                                <textarea name="ad_slot_sidebar" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_sidebar', $settings['ad_slot_sidebar']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed on the sidebar of Article, Category, and Blog Index pages.</small>
+                                <textarea name="ad_slot_sidebar" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_sidebar', $settings['ad_slot_sidebar']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed on the sidebar of Article, Category, and Blog Index pages.</span>
                             </div>
                         </div>
 
                         <!-- Feed In-Between Ad -->
                         <div class="col-md-4">
                             <div class="p-3 border rounded-3 bg-body-tertiary h-100">
-                                <label class="form-label fw-bold small d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold d-flex justify-content-between align-items-center">
                                     <span><i class="bi bi-collection me-1 text-primary"></i> Feed In-Between Ad</span>
-                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">Native In-Feed</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size: 1rem;">Native In-Feed</span>
                                 </label>
-                                <textarea name="ad_slot_feed" class="form-control font-monospace small" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_feed', $settings['ad_slot_feed']) }}</textarea>
-                                <small class="text-muted d-block mt-1">Displayed between article cards in Blog Index & Category streams.</small>
+                                <textarea name="ad_slot_feed" class="form-control font-monospace" rows="3" placeholder="<!-- Paste AdSense / HTML code -->">{{ old('ad_slot_feed', $settings['ad_slot_feed']) }}</textarea>
+                                <span class="text-muted d-block mt-1">Displayed between article cards in Blog Index & Category streams.</span>
                             </div>
                         </div>
                     </div>

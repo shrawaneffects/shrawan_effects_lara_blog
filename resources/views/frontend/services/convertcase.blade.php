@@ -10,8 +10,22 @@
        Convert Case Tool Styles (Cyberpunk HUD Dark Container matching screenshot)
        ========================================================================== */
     .cc-wrapper {
-        max-width: 1140px;
+        max-width: 1200px;
         margin: 0 auto;
+    }
+
+    .cc-page-title {
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1.5rem;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+    }
+
+    .cc-history-btn {
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1rem;
+        padding: 0.28rem 0.85rem;
+        line-height: 1.4;
     }
 
     /* Main Black Textarea Container */
@@ -20,7 +34,7 @@
         border: 1px solid #1a241b;
         border-radius: 8px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 255, 102, 0.2);
-        overflow: hidden;
+        overflow: visible;
         position: relative;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -32,28 +46,31 @@
     /* Textarea */
     .cc-textarea {
         width: 100%;
-        min-height: 280px;
+        min-height: 220px;
         background-color: transparent !important;
         color: #f1f5f9;
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
-        font-size: 1.125rem;
+        font-size: 1.05rem;
         line-height: 1.6;
-        padding: 1.25rem 1.5rem;
+        padding: 1rem 1.25rem;
         border: none !important;
+        border-radius: 8px 8px 0 0;
         outline: none !important;
         box-shadow: none !important;
         resize: vertical;
     }
     .cc-textarea::placeholder {
         color: #a3a3a3;
-        font-size: 1.125rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1.05rem;
     }
 
     /* Bottom Action Toolbar inside the container */
     .cc-toolbar {
         background-color: #0a0e0a;
         border-top: 1px solid #1c261e;
-        padding: 0.65rem 1.25rem;
+        border-radius: 0 0 8px 8px;
+        padding: 0.6rem 1.15rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -67,12 +84,12 @@
         border: 1px solid #28342a;
         color: #d1d5db;
         border-radius: 6px;
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         transition: all 0.2s ease;
         cursor: pointer;
         padding: 0;
@@ -96,9 +113,10 @@
     /* Right Counters */
     .cc-counters {
         color: #a1a1aa;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
         font-size: 1rem;
         font-weight: 500;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.2px;
         user-select: none;
     }
     .cc-counters .separator {
@@ -108,11 +126,11 @@
 
     /* Case Buttons Row */
     .cc-buttons-row {
-        margin-top: 1rem;
+        margin-top: 0.85rem;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.55rem;
     }
 
     /* Transformation Pill Button */
@@ -121,9 +139,9 @@
         border: 1px solid #242d26;
         color: #f1f5f9;
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
-        font-size: 1.05rem;
+        font-size: 1rem;
         font-weight: 500;
-        padding: 0.5rem 1rem 0.5rem 0.55rem;
+        padding: 0.45rem 0.9rem 0.45rem 0.45rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
@@ -147,15 +165,15 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.82rem;
+        font-size: 1rem;
         font-weight: 700;
-        font-family: monospace;
-        letter-spacing: -0.5px;
-        padding: 0.2rem 0.5rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        letter-spacing: -0.3px;
+        padding: 0.15rem 0.45rem;
         border-radius: 4px;
-        margin-right: 0.55rem;
-        min-width: 26px;
-        line-height: 1.2;
+        margin-right: 0.5rem;
+        min-width: 30px;
+        line-height: 1.25;
     }
 
     /* Specific Badge Backgrounds */
@@ -173,9 +191,9 @@
         border: 1px solid #f97316;
         color: #ffffff !important;
         font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
-        font-size: 1.05rem;
+        font-size: 1rem;
         font-weight: 600;
-        padding: 0.5rem 1.15rem;
+        padding: 0.45rem 1.05rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
@@ -192,7 +210,7 @@
         box-shadow: 0 4px 14px rgba(234, 88, 12, 0.45);
     }
     .cc-coffee-btn i {
-        font-size: 1.05rem;
+        font-size: 1rem;
     }
 
     /* Feedback Toast */
@@ -210,8 +228,9 @@
         display: none;
         align-items: center;
         gap: 0.75rem;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 1rem;
         animation: ccToastFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @keyframes ccToastFadeIn {
@@ -226,59 +245,43 @@
         border-radius: 10px;
         padding: 1rem;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-        min-width: 280px;
+        min-width: 320px;
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1rem;
     }
-
-    /* SEO Article Cards */
-    .cc-seo-card {
-        background: rgba(9, 15, 10, 0.75);
-        border: 1px solid rgba(0, 255, 102, 0.15);
-        border-radius: 14px;
-        padding: 1.75rem;
-        margin-top: 1.75rem;
+    .cc-settings-dropdown .dropdown-header {
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1rem;
+        color: #94a3b8 !important;
+    }
+    .cc-settings-dropdown .form-check-label {
+        font-family: var(--font-main, 'Google Sans', 'Google Sans Text', sans-serif);
+        font-size: 1rem;
+        color: #e2e8f0 !important;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="py-4 hero-banner">
+<section class="py-3">
     <div class="container cc-wrapper">
-        <!-- Breadcrumb & Header -->
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-2 font-mono" style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('services.index') }}" class="text-decoration-none">Services</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Convert Case</li>
-            </ol>
-        </nav>
-
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-            <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <span class="telemetry-tag"><i class="bi bi-type"></i> ONLINE UTILITY // TEXT CASE CONVERTER</span>
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono small">
-                        <span class="cyber-beacon me-1"></span> 100% CLIENT-SIDE & SECURE
-                    </span>
-                </div>
-                <h1 class="fw-bold mb-1 display-5 font-cyber">
-                    Convert <span class="text-gradient">Case</span>
-                </h1>
-                <p class="text-body-secondary mb-0 small">
-                    Instantly transform and format your text between sentence case, lower case, upper case, capitalized case, alternating case, title case, and inverse case.
-                </p>
-            </div>
-            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill font-mono" id="btnUndo" title="Undo last change (Ctrl+Z)" disabled>
+        <!-- Compact Single-Line Header with Undo/Redo -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+            <h1 class="cc-page-title fw-bold mb-0">
+                Convert <span class="text-gradient">Case</span>
+            </h1>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-secondary rounded-pill cc-history-btn" id="btnUndo" title="Undo last change (Ctrl+Z)" disabled>
                     <i class="bi bi-arrow-counterclockwise me-1"></i> Undo
                 </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill font-mono" id="btnRedo" title="Redo last change (Ctrl+Y)" disabled>
+                <button type="button" class="btn btn-outline-secondary rounded-pill cc-history-btn" id="btnRedo" title="Redo last change (Ctrl+Y)" disabled>
                     <i class="bi bi-arrow-clockwise me-1"></i> Redo
                 </button>
             </div>
         </div>
 
         <!-- ==========================================================================
-             THE TOOL CONTAINER (matching media_1795720420539_eab68368.png exactly)
+             THE TOOL CONTAINER
              ========================================================================== -->
         <div class="cc-editor-box">
             <!-- Text Input Area -->
@@ -287,7 +290,7 @@
                 class="cc-textarea"
                 placeholder="Type or paste your content here"
                 spellcheck="true"
-                rows="9"
+                rows="7"
                 aria-label="Content to convert"
             ></textarea>
 
@@ -317,25 +320,25 @@
                             <i class="bi bi-gear"></i>
                         </button>
                         <div class="dropdown-menu cc-settings-dropdown dropdown-menu-dark">
-                            <h6 class="dropdown-header text-uppercase text-secondary font-mono px-0 pt-0">Options</h6>
+                            <h6 class="dropdown-header text-uppercase px-0 pt-0">Options</h6>
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input" type="checkbox" role="switch" id="optTrimWhitespace" checked>
-                                <label class="form-check-label small text-body" for="optTrimWhitespace">Auto-trim extra spaces</label>
+                                <label class="form-check-label" for="optTrimWhitespace">Auto-trim extra spaces</label>
                             </div>
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input" type="checkbox" role="switch" id="optPreserveAcronyms">
-                                <label class="form-check-label small text-body" for="optPreserveAcronyms">Preserve recognized acronyms (NASA, USA, AI)</label>
+                                <label class="form-check-label" for="optPreserveAcronyms">Preserve recognized acronyms (NASA, USA, AI)</label>
                             </div>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="optExcludeSpacesCount">
-                                <label class="form-check-label small text-body" for="optExcludeSpacesCount">Character count without spaces</label>
+                                <label class="form-check-label" for="optExcludeSpacesCount">Character count without spaces</label>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Live Character / Word / Line Counters -->
-                <div class="cc-counters font-mono" id="ccCounters">
+                <div class="cc-counters" id="ccCounters">
                     Character Count: <span id="countChars">0</span>
                     <span class="separator">|</span>
                     Word Count: <span id="countWords">0</span>
@@ -396,7 +399,7 @@
             </a>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Floating Toast Notification -->
 <div id="ccToast" class="cc-toast" role="alert" aria-live="assertive" aria-atomic="true">

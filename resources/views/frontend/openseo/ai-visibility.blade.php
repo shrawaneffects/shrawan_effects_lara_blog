@@ -7,27 +7,27 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-xl-4">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">AI Prompts Evaluated</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">AI Prompts Evaluated</span>
             <div class="openseo-stat-num">{{ $totalChecked }}</div>
-            <span class="text-body-secondary font-mono small mt-2 d-block">Search prompts tested across LLM models</span>
+            <span class="text-body-secondary font-mono mt-2 d-block">Search prompts tested across LLM models</span>
         </div>
     </div>
     <div class="col-sm-6 col-xl-4">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Brand Mentions & Citations</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Brand Mentions & Citations</span>
             <div class="openseo-stat-num text-success">{{ $citedCount }}</div>
-            <span class="text-success font-mono small mt-2 d-block">
+            <span class="text-success font-mono mt-2 d-block">
                 <i class="bi bi-robot me-1"></i> {{ round(($citedCount / max(1, $totalChecked)) * 100) }}% Inclusion Rate
             </span>
         </div>
     </div>
     <div class="col-sm-6 col-xl-4">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Sentiment Rating</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Sentiment Rating</span>
             <div class="openseo-stat-num text-info">
                 {{ round(($positiveCount / max(1, $totalChecked)) * 100) }}%
             </div>
-            <span class="text-info font-mono small mt-2 d-block">
+            <span class="text-info font-mono mt-2 d-block">
                 <i class="bi bi-emoji-smile-fill me-1"></i> Positive Brand Authority
             </span>
         </div>
@@ -37,7 +37,7 @@
 <!-- Test AI Brand Presence Form -->
 <div class="openseo-hud-card p-3 p-md-4 mb-4">
     <h5 class="font-cyber fw-bold text-white mb-1">Audit Brand Visibility in AI Search</h5>
-    <p class="text-body-secondary font-mono small mb-3">Check whether ChatGPT, Claude, Gemini, or Perplexity recommend {{ $activeProject->name }} for industry queries</p>
+    <p class="text-body-secondary font-mono mb-3">Check whether ChatGPT, Claude, Gemini, or Perplexity recommend {{ $activeProject->name }} for industry queries</p>
 
     <form action="{{ route('openseo.ai-visibility.check') }}" method="POST" class="row g-2 align-items-center">
         @csrf
@@ -65,7 +65,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h5 class="font-cyber fw-bold text-white mb-0">AI Mentions & Response Snippets</h5>
-            <p class="text-body-secondary font-mono small mb-0">Real model responses citing {{ $activeProject->name }}</p>
+            <p class="text-body-secondary font-mono mb-0">Real model responses citing {{ $activeProject->name }}</p>
         </div>
         <span class="badge bg-dark text-info border border-info border-opacity-50 font-mono">
             <span class="cyber-beacon me-1"></span>LLM CITATION ACTIVE
@@ -103,7 +103,7 @@
                             </span>
                         </td>
                         <td>
-                            <span class="text-white fw-bold font-mono small">"{{ $m->prompt_query }}"</span>
+                            <span class="text-white fw-bold font-mono">"{{ $m->prompt_query }}"</span>
                         </td>
                         <td class="text-center">
                             @if($m->is_mentioned)
@@ -125,11 +125,11 @@
                             </span>
                         </td>
                         <td>
-                            <div class="text-slate-300 small p-2 rounded bg-dark border border-secondary border-opacity-25 font-mono" style="max-width: 480px; font-size: 0.78rem;">
+                            <div class="text-slate-300 p-2 rounded bg-dark border border-secondary border-opacity-25 font-mono" style="max-width: 480px; font-size: 1rem;">
                                 {{ $m->response_snippet }}
                             </div>
                         </td>
-                        <td class="text-end font-mono small text-body-secondary text-nowrap">
+                        <td class="text-end font-mono text-body-secondary text-nowrap">
                             {{ $m->last_checked_at ? $m->last_checked_at->diffForHumans() : 'Just now' }}
                         </td>
                     </tr>

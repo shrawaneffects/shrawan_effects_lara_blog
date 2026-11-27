@@ -39,7 +39,7 @@
                                 <p class="text-body fw-semibold mb-1">
                                     Shrawan Effects
                                 </p>
-                                <p class="text-body-secondary small mb-2 leading-relaxed">
+                                <p class="text-body-secondary mb-2 leading-relaxed">
                                     House No. 1049, Jeevan Nagar, Gounchhi,<br>
                                     FARIDABAD, Haryana 121004, India
                                 </p>
@@ -58,13 +58,13 @@
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-1 font-cyber">Direct Transmission</h6>
-                                <p class="text-muted small mb-1">General & Project Inquiries:</p>
+                                <p class="text-muted mb-1">General & Project Inquiries:</p>
                                 <a href="mailto:{{ \App\Models\Setting::get('contact_email', 'shrawaneffects@gmail.com') }}" class="fw-bold text-success text-decoration-none font-mono">
                                     {{ \App\Models\Setting::get('contact_email', 'shrawaneffects@gmail.com') }}
                                 </a>
                             </div>
                         </div>
-                        <p class="text-body-secondary small mb-0 font-mono">
+                        <p class="text-body-secondary mb-0 font-mono">
                             <i class="bi bi-clock-history me-1 text-success"></i> Response Protocol: Under 24 Business Hours
                         </p>
                     </div>
@@ -74,7 +74,7 @@
                         <div class="position-relative" style="z-index: 1;">
                             <span class="badge bg-white text-dark font-mono mb-2">SERVICES SUITE</span>
                             <h4 class="fw-bold mb-2 font-cyber">Fullstack Solutions</h4>
-                            <p class="small text-white-50 mb-3">
+                            <p class="text-white-50 mb-3">
                                 Custom Websites, Enterprise Software, E-Commerce, Mobile Apps, REST APIs, and Cloud Infrastructure.
                             </p>
                             <a href="{{ route('services.index') }}" class="btn btn-gradient rounded-pill px-4 shadow-sm w-100">
@@ -92,7 +92,7 @@
                         <i class="bi bi-chat-dots-fill text-gradient me-2"></i>
                         <span>Transmit a <span class="text-gradient">Message</span></span>
                     </h3>
-                    <p class="text-body-secondary small mb-4">
+                    <p class="text-body-secondary mb-4">
                         Send us your technical requirements, project scope, or general inquiries. Our lead architects will get back to you promptly.
                     </p>
 
@@ -107,24 +107,24 @@
                         @csrf
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Full Name *</label>
+                                <label class="form-label fw-semibold">Full Name *</label>
                                 <input type="text" name="name" class="form-control rounded-pill px-3 py-2" placeholder="e.g. Rahul Sharma" required value="{{ old('name') }}">
-                                @error('name') <small class="text-danger font-mono">{{ $message }}</small> @enderror
+                                @error('name') <span class="text-danger font-mono">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Email Address *</label>
+                                <label class="form-label fw-semibold">Email Address *</label>
                                 <input type="email" name="email" class="form-control rounded-pill px-3 py-2" placeholder="name@domain.com" required value="{{ old('email') }}">
-                                @error('email') <small class="text-danger font-mono">{{ $message }}</small> @enderror
+                                @error('email') <span class="text-danger font-mono">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Phone / WhatsApp (Optional)</label>
+                                <label class="form-label fw-semibold">Phone / WhatsApp (Optional)</label>
                                 <input type="text" name="phone" class="form-control rounded-pill px-3 py-2 font-mono" placeholder="+91 98765 43210" value="{{ old('phone') }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Service Interested In</label>
+                                <label class="form-label fw-semibold">Service Interested In</label>
                                 <select name="service" class="form-select rounded-pill px-3 py-2">
                                     <option value="">Select a Service...</option>
                                     <option value="Fullstack Website Development">Fullstack Website Development</option>
@@ -141,15 +141,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">Subject *</label>
+                            <label class="form-label fw-semibold">Subject *</label>
                             <input type="text" name="subject" class="form-control rounded-pill px-3 py-2" placeholder="Project blueprint / Consultation inquiry" required value="{{ old('subject') }}">
-                            @error('subject') <small class="text-danger font-mono">{{ $message }}</small> @enderror
+                            @error('subject') <span class="text-danger font-mono">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-semibold small">Project Scope & Message *</label>
+                            <label class="form-label fw-semibold">Project Scope & Message *</label>
                             <textarea name="message" class="form-control rounded-4 p-3" rows="5" placeholder="Tell us about your project timeline, business objectives, and requirements..." required>{{ old('message') }}</textarea>
-                            @error('message') <small class="text-danger font-mono">{{ $message }}</small> @enderror
+                            @error('message') <span class="text-danger font-mono">{{ $message }}</span> @enderror
                         </div>
 
                         <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-pill shadow-sm">

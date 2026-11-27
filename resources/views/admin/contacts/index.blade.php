@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Messages & Inquiries</h4>
-            <p class="text-body-secondary small mb-0">Messages submitted through the public contact form.</p>
+            <p class="text-body-secondary mb-0">Messages submitted through the public contact form.</p>
         </div>
     </div>
 
@@ -44,15 +44,15 @@
                         <tr class="{{ !$contact->is_read ? 'table-warning-subtle fw-semibold' : '' }}">
                             <td>
                                 <div class="fw-bold">{{ $contact->name }}</div>
-                                <div class="text-muted small">
+                                <div class="text-muted">
                                     <a href="mailto:{{ $contact->email }}" class="text-decoration-none">{{ $contact->email }}</a>
                                 </div>
                             </td>
                             <td>
                                 @if($contact->subject)
-                                    <div class="fw-bold text-body small">{{ $contact->subject }}</div>
+                                    <div class="fw-bold text-body">{{ $contact->subject }}</div>
                                 @endif
-                                <p class="mb-0 small text-body">{{ $contact->message }}</p>
+                                <p class="mb-0 text-body">{{ $contact->message }}</p>
                             </td>
                             <td>
                                 @if($contact->is_read)
@@ -61,7 +61,7 @@
                                     <span class="badge bg-warning text-dark"><i class="bi bi-envelope-fill me-1"></i> New</span>
                                 @endif
                             </td>
-                            <td class="small text-muted">{{ $contact->created_at->diffForHumans() }}</td>
+                            <td class="text-muted">{{ $contact->created_at->diffForHumans() }}</td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     @if(!$contact->is_read)

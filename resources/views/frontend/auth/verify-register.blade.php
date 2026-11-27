@@ -12,44 +12,44 @@
                             <i class="bi bi-envelope-check-fill fs-2 text-dark"></i>
                         </div>
                         <h3 class="fw-bold mb-1"><span class="text-gradient font-cyber">AUTHENTICATE EMAIL</span></h3>
-                        <p class="text-body-secondary small mb-0 font-mono">
+                        <p class="text-body-secondary mb-0 font-mono">
                             Validation packet transmitted to:
                             <br><strong class="text-success">{{ $email }}</strong>
                         </p>
                     </div>
 
                     @if(session('info'))
-                        <div class="alert alert-info border-0 rounded-3 small py-2 d-flex align-items-center mb-3">
+                        <div class="alert alert-info border-0 rounded-3 py-2 d-flex align-items-center mb-3">
                             <i class="bi bi-info-circle-fill me-2"></i>
                             <div>{{ session('info') }}</div>
                         </div>
                     @endif
 
                     @if(session('success'))
-                        <div class="alert alert-success border-0 rounded-3 small py-2 d-flex align-items-center mb-3">
+                        <div class="alert alert-success border-0 rounded-3 py-2 d-flex align-items-center mb-3">
                             <i class="bi bi-check-circle-fill me-2"></i>
                             <div>{{ session('success') }}</div>
                         </div>
                     @endif
 
                     @if(session('fallback_otp'))
-                        <div class="alert alert-warning border border-warning-subtle rounded-3 small p-3 mb-3">
+                        <div class="alert alert-warning border border-warning-subtle rounded-3 p-3 mb-3">
                             <div class="d-flex align-items-center mb-1 text-warning-emphasis fw-bold">
                                 <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
                                 <span>Email Delivery Notice</span>
                             </div>
-                            <div class="text-muted small mb-2">
+                            <div class="text-muted mb-2">
                                 {{ session('email_error') }}
                             </div>
                             <div class="p-2 bg-body rounded border text-center">
-                                <span class="text-muted small d-block mb-1">Your Temporary Verification Code:</span>
+                                <span class="text-muted d-block mb-1">Your Temporary Verification Code:</span>
                                 <span class="fs-4 fw-bold font-monospace text-success" style="letter-spacing: 4px;">{{ session('fallback_otp') }}</span>
                             </div>
                         </div>
                     @endif
 
                     <!-- Remaining Daily Attempts Counter -->
-                    <div class="telemetry-tag text-center py-2 px-3 rounded-pill small mb-4 font-mono w-100 justify-content-center">
+                    <div class="telemetry-tag text-center py-2 px-3 rounded-pill mb-4 font-mono w-100 justify-content-center">
                         <i class="bi bi-shield-lock me-1 text-success"></i>
                         SESSION ATTEMPTS REMAINING: <strong>{{ $remainingAttempts ?? 5 }} OF 5</strong>
                     </div>
@@ -58,7 +58,7 @@
                         @csrf
                         <input type="hidden" name="token" value="{{ $token ?? '' }}">
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-center w-100 mb-2">Enter 6-Digit Verification Code</label>
+                            <label class="form-label fw-bold text-center w-100 mb-2">Enter 6-Digit Verification Code</label>
                             <div class="d-flex justify-content-center">
                                 <input type="text" name="code" id="regOtpInput" 
                                        class="form-control text-center font-monospace fs-2 fw-bold tracking-widest rounded-4 border-2 @error('code') is-invalid @enderror" 
@@ -67,10 +67,10 @@
                                        placeholder="••••••" autofocus required autocomplete="one-time-code">
                             </div>
                             @error('code')
-                                <div class="text-danger small text-center mt-2">{{ $message }}</div>
+                                <div class="text-danger text-center mt-2">{{ $message }}</div>
                             @enderror
                             @error('email')
-                                <div class="text-danger small text-center mt-2">{{ $message }}</div>
+                                <div class="text-danger text-center mt-2">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -80,7 +80,7 @@
                     </form>
 
                     <!-- Resend OTP Action -->
-                    <div class="d-flex align-items-center justify-content-between pt-3 border-top small text-body-secondary">
+                    <div class="d-flex align-items-center justify-content-between pt-3 border-top text-body-secondary">
                         <form action="{{ route('register.resend-otp') }}" method="POST">
                             @csrf
                             <input type="hidden" name="token" value="{{ $token ?? '' }}">

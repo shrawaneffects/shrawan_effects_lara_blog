@@ -29,7 +29,13 @@
     <style>
         :root {
             --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --sidebar-width: 260px;
+            --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --bs-body-font-family: var(--font-main);
+            --bs-font-monospace: 'JetBrains Mono', monospace;
+            --bs-body-font-size: 1rem;
+            --sidebar-width: 300px;
             --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
             --gradient-sunset: linear-gradient(135deg, #f43f5e 0%, #fb7185 45%, #fb923c 100%);
             --gradient-emerald: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
@@ -40,9 +46,27 @@
             font-size: 18px !important;
             background-color: var(--bs-tertiary-bg);
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        p, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, .sidebar-link, table {
-            font-size: 18px;
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+        .navbar, .navbar-brand, .nav-link, .dropdown-menu, .dropdown-item, .dropdown-header,
+        form, label, input, textarea, select, button,
+        .form-control, .form-select, .form-label, .form-check-label, .input-group-text,
+        table, thead, tbody, tfoot, tr, th, td, .table,
+        .card, .card-header, .card-body, .card-footer, .card-title, .card-subtitle, .card-text,
+        footer, .footer,
+        #sidebar, .sidebar-brand, .sidebar-nav, .nav-item-header, .sidebar-link,
+        .stat-card, .admin-topbar, .btn, .badge, .breadcrumb, .alert {
+            font-family: var(--font-main);
+        }
+        .font-cyber {
+            font-family: var(--font-cyber);
+        }
+        .font-mono, .font-monospace, code, pre, kbd, samp {
+            font-family: var(--font-mono) !important;
+        }
+        p, .nav-link, .dropdown-item, .card-text, .form-control, .form-select, .sidebar-link, table, th, td, footer, .footer {
+            font-size: 1rem;
         }
         .top-gradient-bar {
             height: 3px;
@@ -76,6 +100,7 @@
         }
         #sidebar {
             width: var(--sidebar-width);
+            max-width: 100vw;
             height: 100vh;
             max-height: 100vh;
             overflow-y: auto;
@@ -103,11 +128,12 @@
         #main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
+            min-width: 0;
             display: flex;
             flex-direction: column;
         }
         .sidebar-brand {
-            padding: 1.25rem 1.5rem;
+            padding: 1.15rem 1.25rem;
             font-size: 1.25rem;
             font-weight: 800;
             border-bottom: 1px solid var(--bs-border-color);
@@ -125,28 +151,29 @@
             margin: 0;
         }
         .nav-item-header {
-            padding: 0.75rem 1.5rem 0.25rem;
-            font-size: 0.75rem;
+            padding: 0.85rem 1.25rem 0.3rem;
+            font-size: 1rem;
             text-transform: uppercase;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             color: var(--bs-secondary-color);
         }
         .sidebar-link {
             display: flex;
             align-items: center;
-            padding: 0.7rem 1.5rem;
+            padding: 0.65rem 1.25rem;
             color: var(--bs-body-color);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 500;
             transition: all 0.25s ease;
             position: relative;
         }
         .sidebar-link i {
             font-size: 1.15rem;
-            margin-right: 0.85rem;
-            width: 20px;
+            margin-right: 0.75rem;
+            width: 22px;
+            flex-shrink: 0;
             text-align: center;
             transition: transform 0.25s ease;
         }
@@ -168,6 +195,8 @@
             background-color: var(--bs-body-bg);
             border-bottom: 1px solid var(--bs-border-color);
             padding: 0.85rem 1.75rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
         }
         .stat-card {
             border: 1px solid var(--bs-border-color-translucent);
@@ -199,13 +228,117 @@
             }
             #sidebar.show {
                 margin-left: 0;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
             }
             #main-content {
                 margin-left: 0;
             }
+            .admin-topbar {
+                padding: 0.75rem 1rem;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .admin-topbar h5 {
+                max-width: 165px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     </style>
     @stack('styles')
+    <style id="admin-typography-enforcer">
+        :root {
+            --font-main: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-cyber: 'Google Sans', 'Google Sans Text', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --bs-font-sans-serif: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --bs-body-font-family: var(--font-main);
+            --bs-font-monospace: 'JetBrains Mono', monospace;
+            font-size: 18px;
+        }
+        html, body {
+            font-family: var(--font-main) !important;
+            font-size: 18px !important;
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+        .navbar, .navbar-brand, .nav-link, .dropdown-menu, .dropdown-item, .dropdown-header,
+        form, label, input, textarea, select, button,
+        .form-control, .form-select, .form-label, .form-check-label, .input-group-text,
+        table, thead, tbody, tfoot, tr, th, td, .table,
+        .card, .card-header, .card-body, .card-footer, .card-title, .card-subtitle, .card-text,
+        footer, .footer,
+        #sidebar, .sidebar-brand, .sidebar-nav, .nav-item-header, .sidebar-link,
+        .stat-card, .admin-topbar, .btn, .badge, .breadcrumb, .alert {
+            font-family: var(--font-main);
+        }
+        .font-cyber {
+            font-family: var(--font-cyber);
+        }
+        .font-mono, .font-monospace, code, pre, kbd, samp, .code-editor-area {
+            font-family: var(--font-mono) !important;
+        }
+        code, pre, kbd, samp {
+            font-size: max(1rem, 1em);
+        }
+        small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .small:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .text-small,
+        .badge:not(.fs-1):not(.fs-2):not(.fs-3):not(.fs-4):not(.fs-5):not(.fs-6),
+        .btn-sm,
+        .btn-group-sm > .btn,
+        .form-control-sm,
+        .form-select-sm,
+        .input-group-sm > .form-control,
+        .input-group-sm > .form-select,
+        .input-group-sm > .input-group-text,
+        .input-group-sm > .btn,
+        .form-text,
+        figcaption,
+        .figure-caption,
+        .blockquote-footer,
+        .breadcrumb,
+        .breadcrumb-item,
+        .nav-link,
+        .dropdown-item,
+        .dropdown-header,
+        .card-text,
+        .form-control,
+        .form-select,
+        .form-label,
+        .input-group-text,
+        .sidebar-link,
+        .nav-item-header,
+        .table-sm,
+        .page-link,
+        .pagination-sm .page-link,
+        .code-editor-area {
+            font-size: 1rem !important;
+        }
+        .btn {
+            --bs-btn-font-size: 1rem;
+            font-size: var(--bs-btn-font-size);
+        }
+        .btn-lg,
+        .btn-group-lg > .btn {
+            --bs-btn-font-size: 1.25rem;
+            font-size: 1.25rem;
+        }
+        table, thead, tbody, tr, th, td, .table, footer, .footer {
+            font-size: 1rem;
+        }
+        .badge {
+            white-space: normal;
+            max-width: 100%;
+            line-height: 1.3;
+        }
+        [style*="font-size: 0."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size:0."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size: ."]:not(.bi):not([class*="bi-"]),
+        [style*="font-size:."]:not(.bi):not([class*="bi-"]) {
+            font-size: 1rem !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -231,11 +364,11 @@
                 <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" style="width: 10px; height: 10px;" title="Online"></span>
             </div>
             <div class="overflow-hidden flex-grow-1">
-                <div class="fw-bold text-truncate text-body" style="font-size: 0.9rem;" title="{{ auth()->user()->name }}">
+                <div class="fw-bold text-truncate text-body" style="font-size: 1rem;" title="{{ auth()->user()->name }}">
                     {{ auth()->user()->name }}
                 </div>
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
-                    <i class="bi bi-shield-check me-0.5"></i> {{ ucfirst(auth()->user()->role) }}
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1" style="font-size: 1rem;">
+                    <i class="bi bi-shield-check me-1"></i> {{ ucfirst(auth()->user()->role) }}
                 </span>
             </div>
         </div>
@@ -251,9 +384,9 @@
                 <li>
                     <a href="{{ route('admin.settings.index') }}" class="sidebar-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                         <i class="bi bi-gear-wide-connected text-primary"></i>
-                        <span class="d-flex align-items-center justify-content-between w-100">
+                        <span class="d-flex align-items-center justify-content-between flex-wrap gap-1 w-100">
                             <span>Website Settings</span>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-0.5" style="font-size: 0.65rem;">Homepage & Logo</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1" style="font-size: 1rem;">Homepage & Logo</span>
                         </span>
                     </a>
                 </li>
@@ -410,15 +543,15 @@
 
                 <!-- Admin User Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-light border btn-sm dropdown-toggle d-flex align-items-center gap-2 rounded-pill px-2.5 py-1 shadow-sm" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-light border btn-sm dropdown-toggle d-flex align-items-center gap-2 rounded-pill px-3 py-1 shadow-sm" type="button" data-bs-toggle="dropdown">
                         <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="rounded-circle border" width="28" height="28" style="object-fit: cover;">
-                        <span class="fw-semibold text-body" style="font-size: 0.88rem;">{{ auth()->user()->name }}</span>
-                        <span class="badge bg-primary-subtle text-primary rounded-pill d-none d-lg-inline-block" style="font-size: 0.68rem;">{{ ucfirst(auth()->user()->role) }}</span>
+                        <span class="fw-semibold text-body text-truncate" style="font-size: 1rem; max-width: 140px;">{{ auth()->user()->name }}</span>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill d-none d-lg-inline-block" style="font-size: 1rem;">{{ ucfirst(auth()->user()->role) }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-3">
                         <li class="px-3 py-2 border-bottom mb-1 bg-body-tertiary">
                             <div class="fw-bold small">{{ auth()->user()->name }}</div>
-                            <small class="text-muted text-truncate d-block" style="font-size: 0.78rem;">{{ auth()->user()->email }}</small>
+                            <small class="text-muted text-truncate d-block" style="font-size: 1rem;">{{ auth()->user()->email }}</small>
                         </li>
                         <li>
                             <a class="dropdown-item py-1.5" href="{{ route('profile.edit') }}">

@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Custom Dynamic Pages</h4>
-            <p class="text-body-secondary small mb-0">Create and manage static/content pages (About Us, Privacy Policy, Terms, Landing Pages).</p>
+            <p class="text-body-secondary mb-0">Create and manage static/content pages (About Us, Privacy Policy, Terms, Landing Pages).</p>
         </div>
         <a href="{{ route('admin.pages.create') }}" class="btn btn-primary rounded-pill px-4">
             <i class="bi bi-plus-circle me-1"></i> Create New Page
@@ -20,7 +20,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Pages</span>
+                        <span class="text-body-secondary fw-semibold">Total Pages</span>
                         <h4 class="fw-bold mb-0 text-gradient mt-1">{{ number_format($totalPages) }}</h4>
                     </div>
                     <div class="bg-primary-subtle text-primary p-3 rounded-4">
@@ -34,7 +34,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Published Pages</span>
+                        <span class="text-body-secondary fw-semibold">Published Pages</span>
                         <h4 class="fw-bold mb-0 text-success mt-1">{{ number_format($publishedPages) }}</h4>
                     </div>
                     <div class="bg-success-subtle text-success p-3 rounded-4">
@@ -48,7 +48,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Draft Pages</span>
+                        <span class="text-body-secondary fw-semibold">Draft Pages</span>
                         <h4 class="fw-bold mb-0 text-secondary mt-1">{{ number_format($draftPages) }}</h4>
                     </div>
                     <div class="bg-secondary-subtle text-secondary p-3 rounded-4">
@@ -117,7 +117,7 @@
                                 <a href="{{ route('admin.pages.edit', $page->id) }}" class="fw-bold text-decoration-none text-body">
                                     {{ $page->title }}
                                 </a>
-                                <div class="text-muted small font-monospace">
+                                <div class="text-muted font-monospace">
                                     /page/{{ $page->slug }}
                                 </div>
                             </td>
@@ -148,12 +148,12 @@
                                         </span>
                                     @endif
                                     @if(!$page->show_in_navbar && !$page->show_in_footer)
-                                        <span class="text-muted small">Hidden</span>
+                                        <span class="text-muted">Hidden</span>
                                     @endif
                                 </div>
                             </td>
-                            <td class="small fw-semibold">{{ $page->order }}</td>
-                            <td class="small text-muted">{{ $page->updated_at->format('M d, Y') }}</td>
+                            <td class="fw-semibold">{{ $page->order }}</td>
+                            <td class="text-muted">{{ $page->updated_at->format('M d, Y') }}</td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('page.show', $page->slug) }}" target="_blank" class="btn btn-outline-secondary" title="View Page">

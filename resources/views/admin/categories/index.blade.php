@@ -12,27 +12,27 @@
                 <form action="{{ route('admin.categories.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Category Name *</label>
+                        <label class="form-label fw-semibold">Category Name *</label>
                         <input type="text" name="name" class="form-control" placeholder="e.g. Artificial Intelligence" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Slug (Optional)</label>
+                        <label class="form-label fw-semibold">Slug (Optional)</label>
                         <input type="text" name="slug" class="form-control" placeholder="auto-generated-if-empty">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Color Theme</label>
+                        <label class="form-label fw-semibold">Color Theme</label>
                         <input type="color" name="color" class="form-control form-control-color w-100" value="#0d6efd" title="Choose color">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Description</label>
+                        <label class="form-label fw-semibold">Description</label>
                         <textarea name="description" class="form-control" rows="3" placeholder="Brief category description"></textarea>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold small">Image URL (Optional)</label>
+                        <label class="form-label fw-semibold">Image URL (Optional)</label>
                         <input type="url" name="image" class="form-control" placeholder="https://images.unsplash.com/...">
                     </div>
 
@@ -65,12 +65,12 @@
                                 <tr>
                                     <td>
                                         <div class="fw-bold text-body">{{ $category->name }}</div>
-                                        <div class="text-muted small">/category/{{ $category->slug }}</div>
+                                        <div class="text-muted">/category/{{ $category->slug }}</div>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
                                             <span class="d-inline-block rounded" style="width: 20px; height: 20px; background-color: {{ $category->color }};"></span>
-                                            <span class="small font-monospace">{{ $category->color }}</span>
+                                            <span class="font-monospace">{{ $category->color }}</span>
                                         </div>
                                     </td>
                                     <td>
@@ -99,19 +99,19 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label class="form-label small fw-semibold">Name *</label>
+                                                                <label class="form-label fw-semibold">Name *</label>
                                                                 <input type="text" name="name" class="form-control" value="{{ $category->name }}" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="form-label small fw-semibold">Slug</label>
+                                                                <label class="form-label fw-semibold">Slug</label>
                                                                 <input type="text" name="slug" class="form-control" value="{{ $category->slug }}">
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="form-label small fw-semibold">Color</label>
+                                                                <label class="form-label fw-semibold">Color</label>
                                                                 <input type="color" name="color" class="form-control form-control-color w-100" value="{{ $category->color }}">
                                                             </div>
                                                             <div class="mb-0">
-                                                                <label class="form-label small fw-semibold">Description</label>
+                                                                <label class="form-label fw-semibold">Description</label>
                                                                 <textarea name="description" class="form-control" rows="3">{{ $category->description }}</textarea>
                                                             </div>
                                                         </div>

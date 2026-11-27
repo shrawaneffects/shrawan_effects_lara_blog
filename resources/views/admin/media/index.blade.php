@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1"><i class="bi bi-collection-play-fill text-primary me-2"></i> Centralized Media Library</h4>
-            <p class="text-body-secondary small mb-0">Upload, manage, and embed Images, Videos, Audios, and Documents with persistent database tracking.</p>
+            <p class="text-body-secondary mb-0">Upload, manage, and embed Images, Videos, Audios, and Documents with persistent database tracking.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
             <form action="{{ route('admin.media.sync-storage') }}" method="POST" class="d-inline">
@@ -29,9 +29,9 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Assets</span>
+                        <span class="text-body-secondary fw-semibold">Total Assets</span>
                         <h4 class="fw-bold mb-0 text-gradient mt-1">{{ number_format($stats['total_count']) }}</h4>
-                        <small class="text-muted">{{ $stats['total_size'] }} used</small>
+                        <span class="text-muted">{{ $stats['total_size'] }} used</span>
                     </div>
                     <div class="bg-primary-subtle text-primary p-3 rounded-4">
                         <i class="bi bi-folder-fill fs-4"></i>
@@ -45,9 +45,9 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Images</span>
+                        <span class="text-body-secondary fw-semibold">Images</span>
                         <h4 class="fw-bold mb-0 text-info mt-1">{{ number_format($stats['images_count']) }}</h4>
-                        <small class="text-muted">WebP, PNG, JPG, SVG</small>
+                        <span class="text-muted">WebP, PNG, JPG, SVG</span>
                     </div>
                     <div class="bg-info-subtle text-info p-3 rounded-4">
                         <i class="bi bi-image-fill fs-4"></i>
@@ -61,9 +61,9 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Videos & Audio</span>
+                        <span class="text-body-secondary fw-semibold">Videos & Audio</span>
                         <h4 class="fw-bold mb-0 text-danger mt-1">{{ number_format($stats['videos_count'] + $stats['audios_count']) }}</h4>
-                        <small class="text-muted">{{ $stats['videos_count'] }} Videos &bull; {{ $stats['audios_count'] }} Audios</small>
+                        <span class="text-muted">{{ $stats['videos_count'] }} Videos &bull; {{ $stats['audios_count'] }} Audios</span>
                     </div>
                     <div class="bg-danger-subtle text-danger p-3 rounded-4">
                         <i class="bi bi-camera-reels-fill fs-4"></i>
@@ -77,9 +77,9 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Documents</span>
+                        <span class="text-body-secondary fw-semibold">Documents</span>
                         <h4 class="fw-bold mb-0 text-success mt-1">{{ number_format($stats['documents_count']) }}</h4>
-                        <small class="text-muted">PDF, DOCX, ZIP, XLS</small>
+                        <span class="text-muted">PDF, DOCX, ZIP, XLS</span>
                     </div>
                     <div class="bg-success-subtle text-success p-3 rounded-4">
                         <i class="bi bi-file-earmark-text-fill fs-4"></i>
@@ -99,18 +99,18 @@
                         <i class="bi bi-cloud-arrow-up text-primary" style="font-size: 3.5rem;"></i>
                     </div>
                     <h5 class="fw-bold mb-1">Drag & Drop Media Files Here</h5>
-                    <p class="text-body-secondary small mb-3">Upload multiple Images (PNG, JPG, WEBP, SVG), Videos (MP4, WEBM), Audios (MP3, WAV), or Documents (PDF, DOCX, ZIP).</p>
+                    <p class="text-body-secondary mb-3">Upload multiple Images (PNG, JPG, WEBP, SVG), Videos (MP4, WEBM), Audios (MP3, WAV), or Documents (PDF, DOCX, ZIP).</p>
                     
                     <input type="file" name="files[]" id="fileInput" class="d-none" multiple>
                     <button type="button" class="btn btn-gradient px-4 rounded-pill shadow-sm" onclick="document.getElementById('fileInput').click()">
                         <i class="bi bi-folder-plus me-1"></i> Browse Files from Device
                     </button>
-                    <small class="d-block text-muted mt-2">Maximum file size: 100MB per asset</small>
+                    <span class="d-block text-muted mt-2">Maximum file size: 100MB per asset</span>
                 </div>
 
                 <!-- Selected Files List / Upload Progress -->
                 <div id="uploadFileList" class="d-none mt-3 pt-3 border-top">
-                    <h6 class="fw-bold small mb-2 text-primary"><i class="bi bi-list-check me-1"></i> Selected Files (<span id="fileCountText">0</span>):</h6>
+                    <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-list-check me-1"></i> Selected Files (<span id="fileCountText">0</span>):</h6>
                     <div id="fileItemsContainer" class="d-flex flex-column gap-2 mb-3" style="max-height: 180px; overflow-y: auto;"></div>
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="clearSelectedFiles()">Clear</button>
@@ -185,46 +185,46 @@
                         @if($media->is_image)
                             <img src="{{ $media->url }}" alt="{{ $media->alt_text ?: $media->title }}" class="img-fluid w-100 h-100 object-fit-cover">
                             @if($media->width && $media->height)
-                                <span class="badge bg-dark bg-opacity-75 position-absolute bottom-0 end-0 m-1.5 rounded-pill" style="font-size: 0.62rem;">
+                                <span class="badge bg-dark bg-opacity-75 position-absolute bottom-0 end-0 m-1.5 rounded-pill" style="font-size: 1rem;">
                                     {{ $media->width }}&times;{{ $media->height }}
                                 </span>
                             @endif
                         @elseif($media->is_video)
                             <div class="text-center p-3">
                                 <i class="bi bi-play-circle-fill text-danger fs-1"></i>
-                                <span class="d-block small fw-semibold text-truncate mt-1" style="font-size: 0.72rem;">Video</span>
+                                <span class="d-block fw-semibold text-truncate mt-1" style="font-size: 1rem;">Video</span>
                             </div>
                         @elseif($media->is_audio)
                             <div class="text-center p-3">
                                 <i class="bi bi-music-note-beamed text-success fs-1"></i>
-                                <span class="d-block small fw-semibold text-truncate mt-1" style="font-size: 0.72rem;">Audio</span>
+                                <span class="d-block fw-semibold text-truncate mt-1" style="font-size: 1rem;">Audio</span>
                             </div>
                         @else
                             <div class="text-center p-3">
                                 <i class="bi {{ $media->icon }} fs-1"></i>
-                                <span class="d-block small fw-bold text-uppercase text-truncate mt-1" style="font-size: 0.68rem;">
+                                <span class="d-block fw-bold text-uppercase text-truncate mt-1" style="font-size: 1rem;">
                                     {{ pathinfo($media->original_name, PATHINFO_EXTENSION) ?: 'File' }}
                                 </span>
                             </div>
                         @endif
 
                         <!-- Type Badge -->
-                        <span class="badge bg-primary-subtle text-primary position-absolute top-0 start-0 m-1.5 rounded-pill text-uppercase" style="font-size: 0.58rem; letter-spacing: 0.5px;">
+                        <span class="badge bg-primary-subtle text-primary position-absolute top-0 start-0 m-1.5 rounded-pill text-uppercase" style="font-size: 1rem; letter-spacing: 0.5px;">
                             {{ $media->media_type }}
                         </span>
                     </div>
 
                     <!-- Meta Body -->
                     <div class="p-2.5 d-flex flex-column flex-grow-1">
-                        <h6 class="fw-semibold text-truncate mb-1 small" id="media-title-{{ $media->id }}" title="{{ $media->original_name }}" style="font-size: 0.82rem;">
+                        <h6 class="fw-semibold text-truncate mb-1" id="media-title-{{ $media->id }}" title="{{ $media->original_name }}" style="font-size: 1rem;">
                             {{ $media->title ?: $media->original_name }}
                         </h6>
                         @if($media->caption)
-                            <p class="text-body-secondary small text-truncate mb-1" id="media-caption-{{ $media->id }}" style="font-size: 0.72rem;" title="{{ $media->caption }}">
+                            <p class="text-body-secondary text-truncate mb-1" id="media-caption-{{ $media->id }}" style="font-size: 1rem;" title="{{ $media->caption }}">
                                 <i class="bi bi-chat-quote text-success me-1"></i>{{ $media->caption }}
                             </p>
                         @endif
-                        <div class="d-flex justify-content-between align-items-center mt-auto small text-muted" style="font-size: 0.72rem;">
+                        <div class="d-flex justify-content-between align-items-center mt-auto text-muted" style="font-size: 1rem;">
                             <span>{{ $media->formatted_size }}</span>
                             <span>{{ $media->created_at->format('M d') }}</span>
                         </div>
@@ -253,7 +253,7 @@
                 <div class="p-5 text-center bg-body rounded-4 shadow-sm border-0">
                     <i class="bi bi-folder-x fs-1 text-muted"></i>
                     <h5 class="mt-3 fw-bold">No Media Files Registered in Database</h5>
-                    <p class="text-muted small">You can scan your server storage to index existing images and article uploads, or upload new assets directly.</p>
+                    <p class="text-muted">You can scan your server storage to index existing images and article uploads, or upload new assets directly.</p>
                     <div class="d-flex justify-content-center gap-2 mt-3">
                         <form action="{{ route('admin.media.sync-storage') }}" method="POST" class="d-inline">
                             @csrf
@@ -309,27 +309,27 @@
                                 @method('PUT')
                                 
                                 <div class="mb-2">
-                                    <label class="form-label small fw-bold mb-1">Title</label>
+                                    <label class="form-label fw-bold mb-1">Title</label>
                                     <input type="text" name="title" id="modalMetaTitle" class="form-control form-control-sm rounded-3">
                                 </div>
 
                                 <div class="mb-2" id="modalAltTextGroup">
-                                    <label class="form-label small fw-bold mb-1">Alt Text (Image SEO & Accessibility)</label>
+                                    <label class="form-label fw-bold mb-1">Alt Text (Image SEO & Accessibility)</label>
                                     <input type="text" name="alt_text" id="modalMetaAlt" class="form-control form-control-sm rounded-3" placeholder="Describe image for search engines">
                                 </div>
 
                                 <div class="mb-2">
-                                    <label class="form-label small fw-bold mb-1">Caption</label>
+                                    <label class="form-label fw-bold mb-1">Caption</label>
                                     <textarea name="caption" id="modalMetaCaption" rows="2" class="form-control form-control-sm rounded-3" placeholder="Add a caption..."></textarea>
                                 </div>
 
                                 <div class="mb-2">
-                                    <label class="form-label small fw-bold mb-1">Description / Notes</label>
+                                    <label class="form-label fw-bold mb-1">Description / Notes</label>
                                     <textarea name="description" id="modalMetaDescription" rows="2" class="form-control form-control-sm rounded-3" placeholder="Detailed notes or description..."></textarea>
                                 </div>
 
                                 <!-- File Specs Summary -->
-                                <div class="p-2.5 rounded-3 bg-body-tertiary border mt-3 small">
+                                <div class="p-2.5 rounded-3 bg-body-tertiary border mt-3">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span class="text-muted">File Name:</span>
                                         <span class="fw-semibold text-truncate" id="modalSpecFileName" style="max-width: 180px;"></span>

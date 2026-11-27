@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">301 Permanent Redirects Manager</h4>
-            <p class="text-body-secondary small mb-0">Preserve search rankings and backlink authority when URL slugs or legacy links change.</p>
+            <p class="text-body-secondary mb-0">Preserve search rankings and backlink authority when URL slugs or legacy links change.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.seo.index') }}" class="btn btn-outline-secondary rounded-pill px-3">
@@ -25,7 +25,7 @@
             <div class="card border-0 shadow-sm p-4 rounded-4 bg-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Active Redirect Rules</span>
+                        <span class="text-body-secondary fw-semibold">Active Redirect Rules</span>
                         <h3 class="fw-bold mb-0 text-primary mt-1">{{ $redirects->total() }}</h3>
                     </div>
                     <div class="p-3 bg-primary-subtle text-primary rounded-4">
@@ -38,7 +38,7 @@
             <div class="card border-0 shadow-sm p-4 rounded-4 bg-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Redirect Hits Logged</span>
+                        <span class="text-body-secondary fw-semibold">Total Redirect Hits Logged</span>
                         <h3 class="fw-bold mb-0 text-success mt-1">{{ number_format($totalHits) }}</h3>
                     </div>
                     <div class="p-3 bg-success-subtle text-success rounded-4">
@@ -98,9 +98,9 @@
                                 </span>
                             </td>
                             <td>
-                                <small class="text-body-secondary">
+                                <span class="text-body-secondary">
                                     {{ $r->last_used_at ? $r->last_used_at->diffForHumans() : 'Never' }}
-                                </small>
+                                </span>
                             </td>
                             <td class="text-end">
                                 <form action="{{ route('admin.seo.redirects.destroy', $r->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this redirect rule?');">
@@ -143,17 +143,17 @@
                     </div>
                     <div class="modal-body px-4 py-2">
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">Old URL Path *</label>
+                            <label class="form-label fw-bold">Old URL Path *</label>
                             <input type="text" name="old_url" class="form-control" placeholder="/blog/old-article-slug" required>
-                            <small class="text-body-secondary">The relative path that search engines or old backlinks visit.</small>
+                            <span class="text-body-secondary">The relative path that search engines or old backlinks visit.</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">Target URL Path or External Link *</label>
+                            <label class="form-label fw-bold">Target URL Path or External Link *</label>
                             <input type="text" name="new_url" class="form-control" placeholder="/blog/new-article-slug" required>
-                            <small class="text-body-secondary">Where the user & search engines should be redirected.</small>
+                            <span class="text-body-secondary">Where the user & search engines should be redirected.</span>
                         </div>
                         <div class="mb-0">
-                            <label class="form-label fw-bold small">HTTP Status Code</label>
+                            <label class="form-label fw-bold">HTTP Status Code</label>
                             <select name="status_code" class="form-select">
                                 <option value="301" selected>301 Moved Permanently (Passes SEO authority & PageRank)</option>
                                 <option value="302">302 Found / Temporary (For temporary maintenance)</option>

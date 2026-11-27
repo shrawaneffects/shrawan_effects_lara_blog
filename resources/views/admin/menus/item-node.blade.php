@@ -40,12 +40,12 @@
                 </div>
 
                 <!-- URL preview -->
-                <span class="text-muted small font-monospace d-none d-md-inline-block text-truncate" style="max-width: 170px;" title="{{ $item->url }}">
+                <span class="text-muted font-monospace d-none d-md-inline-block text-truncate" style="max-width: 170px;" title="{{ $item->url }}">
                     {{ $item->url }}
                 </span>
 
                 <!-- Hierarchy Level Badge -->
-                <span class="depth-badge badge {{ $depth === 0 ? 'bg-primary-subtle text-primary border border-primary-subtle' : ($depth === 1 ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle') }} small">
+                <span class="depth-badge badge {{ $depth === 0 ? 'bg-primary-subtle text-primary border border-primary-subtle' : ($depth === 1 ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle') }}">
                     @if($depth === 0)
                         <i class="bi bi-hdd-stack me-1"></i> Top Level
                     @elseif($depth === 1)
@@ -56,13 +56,13 @@
                 </span>
 
                 @if($item->target === '_blank')
-                    <span class="badge bg-secondary-subtle text-secondary small d-none d-sm-inline" title="Opens in new tab">
+                    <span class="badge bg-secondary-subtle text-secondary d-none d-sm-inline" title="Opens in new tab">
                         <i class="bi bi-box-arrow-up-right me-1"></i> New tab
                     </span>
                 @endif
 
                 @if(!$item->is_active)
-                    <span class="badge bg-secondary text-white small">
+                    <span class="badge bg-secondary text-white">
                         <i class="bi bi-eye-slash me-1"></i> Hidden
                     </span>
                 @endif
@@ -107,15 +107,15 @@
                 @method('PUT')
                 <div class="row g-2">
                     <div class="col-md-4">
-                        <label class="form-label small fw-semibold">Navigation Label <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Navigation Label <span class="text-danger">*</span></label>
                         <input type="text" name="title" class="form-control form-control-sm rounded-pill" value="{{ $item->title }}" required>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label small fw-semibold">URL Path <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">URL Path <span class="text-danger">*</span></label>
                         <input type="text" name="url" class="form-control form-control-sm rounded-pill" value="{{ $item->url }}" required>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label small fw-semibold">Parent Menu (Dropdown Hierarchy)</label>
+                        <label class="form-label fw-semibold">Parent Menu (Dropdown Hierarchy)</label>
                         <select name="parent_id" class="form-select form-select-sm rounded-pill">
                             <option value="">-- None (Top Level Menu) --</option>
                             @foreach($allLocationItems as $opt)
@@ -128,11 +128,11 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label small fw-semibold">Icon Class <span class="text-muted">(Bootstrap Icons)</span></label>
+                        <label class="form-label fw-semibold">Icon Class <span class="text-muted">(Bootstrap Icons)</span></label>
                         <input type="text" name="icon" class="form-control form-control-sm rounded-pill" value="{{ $item->icon }}" placeholder="bi bi-star">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label small fw-semibold">Open Behavior</label>
+                        <label class="form-label fw-semibold">Open Behavior</label>
                         <select name="target" class="form-select form-select-sm rounded-pill">
                             <option value="_self" {{ $item->target === '_self' ? 'selected' : '' }}>Same Tab (_self)</option>
                             <option value="_blank" {{ $item->target === '_blank' ? 'selected' : '' }}>New Tab (_blank)</option>
@@ -141,7 +141,7 @@
                     <div class="col-md-4 d-flex align-items-center mt-3">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" name="is_active" value="1" id="activeSwitch-{{ $item->id }}" {{ $item->is_active ? 'checked' : '' }}>
-                            <label class="form-check-label small fw-semibold" for="activeSwitch-{{ $item->id }}">Visible / Active</label>
+                            <label class="form-check-label fw-semibold" for="activeSwitch-{{ $item->id }}">Visible / Active</label>
                         </div>
                     </div>
                     <div class="col-12 text-end mt-2">

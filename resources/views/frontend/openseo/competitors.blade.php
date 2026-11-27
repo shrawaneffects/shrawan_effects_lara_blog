@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h5 class="font-cyber fw-bold text-white mb-0">Organic Competitors</h5>
-            <p class="text-body-secondary font-mono small mb-0">Direct search rivals sharing SERP real estate with {{ $activeProject->domain }}</p>
+            <p class="text-body-secondary font-mono mb-0">Direct search rivals sharing SERP real estate with {{ $activeProject->domain }}</p>
         </div>
         <button class="btn btn-sm btn-gradient font-mono" type="button" data-bs-toggle="collapse" data-bs-target="#addCompetitorCollapse" aria-expanded="false" aria-controls="addCompetitorCollapse">
             <i class="bi bi-plus-lg me-1"></i> Add Competitor
@@ -69,7 +69,7 @@
                                 {{ $comp->keyword_overlap_pct }}%
                             </span>
                         </td>
-                        <td class="text-body-secondary small">
+                        <td class="text-body-secondary">
                             {{ $comp->notes ?: 'Regional competitor' }}
                         </td>
                         <td class="text-end">
@@ -99,7 +99,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h5 class="font-cyber fw-bold text-white mb-0">Keyword Gap Opportunities</h5>
-            <p class="text-body-secondary font-mono small mb-0">Keywords that competitors rank for on Page 1, but {{ $activeProject->name }} does not yet target</p>
+            <p class="text-body-secondary font-mono mb-0">Keywords that competitors rank for on Page 1, but {{ $activeProject->name }} does not yet target</p>
         </div>
         <span class="badge bg-dark text-warning border border-warning border-opacity-50 font-mono">
             <i class="bi bi-lightning-charge-fill me-1"></i> HIGH IMPACT

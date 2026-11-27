@@ -12,11 +12,11 @@
                             <i class="bi bi-key-fill fs-3 text-white"></i>
                         </div>
                         <h3 class="fw-bold mb-2"><span class="text-gradient font-cyber">RESET CIPHER KEY</span></h3>
-                        <p class="text-body-secondary small">Enter your registered email and solve the security challenge to receive recovery instructions.</p>
+                        <p class="text-body-secondary">Enter your registered email and solve the security challenge to receive recovery instructions.</p>
                     </div>
 
                     @if(session('status'))
-                        <div class="alert alert-success border-0 rounded-4 p-3 mb-4 small d-flex align-items-center shadow-xs">
+                        <div class="alert alert-success border-0 rounded-4 p-3 mb-4 d-flex align-items-center shadow-xs">
                             <i class="bi bi-check-circle-fill text-success fs-5 me-2 flex-shrink-0"></i>
                             <div>{{ session('status') }}</div>
                         </div>
@@ -25,13 +25,13 @@
                     <form action="{{ route('password.email') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small" for="resetEmail">Email Address</label>
+                            <label class="form-label fw-semibold" for="resetEmail">Email Address</label>
                             <div class="input-group">
                                 <span class="input-group-text rounded-start-pill ps-3"><i class="bi bi-envelope text-success"></i></span>
                                 <input type="email" name="email" id="resetEmail" class="form-control rounded-end-pill @error('email') is-invalid @enderror" placeholder="name@example.com" value="{{ old('email') }}" required autofocus>
                             </div>
                             @error('email')
-                                <div class="invalid-feedback d-block small ms-2 mt-1">{{ $message }}</div>
+                                <div class="invalid-feedback d-block ms-2 mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -43,7 +43,7 @@
                         </button>
                     </form>
 
-                    <div class="text-center mt-4 pt-3 border-top small text-body-secondary">
+                    <div class="text-center mt-4 pt-3 border-top text-body-secondary">
                         Remember your password? <a href="{{ route('login') }}" class="text-success fw-bold text-decoration-none ms-1"><i class="bi bi-arrow-left me-1"></i> Back to Sign In</a>
                     </div>
                 </div>

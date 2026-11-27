@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small text-muted">URL Slug</label>
+                        <label class="form-label fw-semibold text-muted">URL Slug</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-body-tertiary">{{ url('/blog') }}/</span>
                             <input type="text" name="slug" id="postSlug" class="form-control" value="{{ old('slug', $post->slug) }}">
@@ -61,7 +61,7 @@
                             </button>
                         </div>
                     </div>
-                    <p class="text-body-secondary small mb-3">
+                    <p class="text-body-secondary mb-3">
                         Add Question & Answer pairs. These will be displayed in an interactive accordion on the article and automatically indexed in Google FAQ Schema.
                     </p>
 
@@ -78,12 +78,12 @@
                         </h5>
                         <span class="badge bg-primary-subtle text-primary rounded-pill px-3">SEO Rich Snippets</span>
                     </div>
-                    <p class="text-body-secondary small mb-3">
+                    <p class="text-body-secondary mb-3">
                         Google uses Schema.org JSON-LD to display rich results (breadcrumbs, author, carousels, FAQs).
                     </p>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Schema Type</label>
+                        <label class="form-label fw-semibold">Schema Type</label>
                         <select name="schema_type" id="schemaTypeSelect" class="form-select rounded-pill">
                             <option value="BlogPosting" {{ old('schema_type', $post->schema_type ?? 'BlogPosting') === 'BlogPosting' ? 'selected' : '' }}>BlogPosting (Standard blog post)</option>
                             <option value="Article" {{ old('schema_type', $post->schema_type) === 'Article' ? 'selected' : '' }}>Article (General news or technical article)</option>
@@ -96,14 +96,14 @@
 
                     <div class="mb-0">
                         <div class="d-flex align-items-center justify-content-between mb-1">
-                            <label class="form-label fw-semibold small mb-0">Custom JSON-LD Schema (Optional Override / Additional Schema)</label>
+                            <label class="form-label fw-semibold mb-0">Custom JSON-LD Schema (Optional Override / Additional Schema)</label>
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-outline-secondary btn-sm py-0" onclick="insertFaqTemplate()">+ FAQ Template</button>
                                 <button type="button" class="btn btn-outline-secondary btn-sm py-0" onclick="insertHowToTemplate()">+ HowTo Template</button>
                             </div>
                         </div>
-                        <textarea name="custom_schema" id="customSchemaTextarea" class="form-control font-monospace small rounded-3" rows="6" placeholder="// Leave blank for automatic Google-compliant BlogPosting Schema, or paste custom JSON-LD...">{{ old('custom_schema', $post->custom_schema) }}</textarea>
-                        <small class="text-muted">If left blank, a valid Schema is automatically generated from post data.</small>
+                        <textarea name="custom_schema" id="customSchemaTextarea" class="form-control font-monospace rounded-3" rows="6" placeholder="// Leave blank for automatic Google-compliant BlogPosting Schema, or paste custom JSON-LD...">{{ old('custom_schema', $post->custom_schema) }}</textarea>
+                        <span class="text-muted">If left blank, a valid Schema is automatically generated from post data.</span>
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                     <h5 class="fw-bold mb-3"><i class="bi bi-send me-2 text-primary"></i> Publication</h5>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Status</label>
+                        <label class="form-label fw-semibold">Status</label>
                         <select name="status" class="form-select rounded-pill">
                             <option value="published" {{ old('status', $post->status) === 'published' ? 'selected' : '' }}>Published (Live)</option>
                             <option value="draft" {{ old('status', $post->status) === 'draft' ? 'selected' : '' }}>Draft (Private)</option>
@@ -124,12 +124,12 @@
 
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="isFeaturedCheck" {{ old('is_featured', $post->is_featured) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold small" for="isFeaturedCheck">Mark as Featured (Hero section)</label>
+                        <label class="form-check-label fw-semibold" for="isFeaturedCheck">Mark as Featured (Hero section)</label>
                     </div>
 
                     <div class="form-check form-switch mb-4">
                         <input class="form-check-input" type="checkbox" name="is_trending" value="1" id="isTrendingCheck" {{ old('is_trending', $post->is_trending) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold small" for="isTrendingCheck">Mark as Trending</label>
+                        <label class="form-check-label fw-semibold" for="isTrendingCheck">Mark as Trending</label>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -152,21 +152,21 @@
 
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" name="enable_toc" value="1" id="enableTocCheck" {{ old('enable_toc', $post->enable_toc ?? true) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold small" for="enableTocCheck">
+                        <label class="form-check-label fw-semibold" for="enableTocCheck">
                             Enable Table of Contents (TOC)
                         </label>
                     </div>
-                    <p class="text-body-secondary small mb-3">
+                    <p class="text-body-secondary mb-3">
                         Automatically parses &lt;h2&gt; and &lt;h3&gt; subheadings in your article to build an interactive navigation box with smooth scrolling.
                     </p>
 
                     <!-- Real-time TOC Headings Inspector -->
                     <div class="p-3 bg-body-tertiary rounded-3 border">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="small fw-bold text-body"><i class="bi bi-eye me-1"></i> Detected Headings:</span>
+                            <span class="fw-bold text-body"><i class="bi bi-eye me-1"></i> Detected Headings:</span>
                             <span class="badge bg-primary rounded-pill" id="detectedHeadingsCount">0 found</span>
                         </div>
-                        <ul class="list-unstyled mb-0 small text-body-secondary" id="detectedHeadingsList" style="max-height: 140px; overflow-y: auto;">
+                        <ul class="list-unstyled mb-0 text-body-secondary" id="detectedHeadingsList" style="max-height: 140px; overflow-y: auto;">
                             <li class="fst-italic text-muted">Type &lt;h2&gt; or &lt;h3&gt; in editor to preview headings...</li>
                         </ul>
                     </div>
@@ -190,12 +190,12 @@
                         <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="img-fluid rounded-3 mb-2" style="max-height: 140px; object-fit: cover;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Replace Image File</label>
+                        <label class="form-label fw-semibold">Replace Image File</label>
                         <input type="file" name="featured_image" class="form-control rounded-pill" accept="image/*">
-                        <small class="text-muted">JPG, PNG, WebP (Max 2MB)</small>
+                        <span class="text-muted">JPG, PNG, WebP (Max 2MB)</span>
                     </div>
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Or Image URL</label>
+                        <label class="form-label fw-semibold">Or Image URL</label>
                         <input type="url" name="image_url" class="form-control rounded-pill" placeholder="https://..." value="{{ old('image_url', str_starts_with($post->featured_image ?? '', 'http') ? $post->featured_image : '') }}">
                     </div>
                 </div>
@@ -205,18 +205,18 @@
                     <h5 class="fw-bold mb-3"><i class="bi bi-tags me-2 text-primary"></i> Tags</h5>
                     @php $postTagIds = $post->tags->pluck('id')->toArray(); @endphp
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Select Tags</label>
+                        <label class="form-label fw-semibold">Select Tags</label>
                         <div class="d-flex flex-wrap gap-2" style="max-height: 160px; overflow-y: auto;">
                             @foreach($tags as $t)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $t->id }}" id="tag-{{ $t->id }}" {{ in_array($t->id, old('tags', $postTagIds)) ? 'checked' : '' }}>
-                                    <label class="form-check-label small" for="tag-{{ $t->id }}">{{ $t->name }}</label>
+                                    <label class="form-check-label" for="tag-{{ $t->id }}">{{ $t->name }}</label>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Add New Tags</label>
+                        <label class="form-label fw-semibold">Add New Tags</label>
                         <input type="text" name="new_tags" class="form-control rounded-pill" placeholder="Comma separated">
                     </div>
                 </div>
@@ -294,11 +294,11 @@
                     </button>
                 </div>
                 <div class="mb-2">
-                    <label class="form-label small fw-semibold">Question</label>
+                    <label class="form-label fw-semibold">Question</label>
                     <input type="text" name="faqs[${index}][question]" class="form-control form-control-sm rounded-pill" placeholder="e.g. What are the system requirements?" value="${escapeHtml(question)}" required>
                 </div>
                 <div class="mb-0">
-                    <label class="form-label small fw-semibold">Answer</label>
+                    <label class="form-label fw-semibold">Answer</label>
                     <textarea name="faqs[${index}][answer]" class="form-control form-control-sm rounded-3" rows="2" placeholder="e.g. PHP 8.2 or higher with MySQL 8.0..." required>${escapeHtml(answer)}</textarea>
                 </div>
             `;

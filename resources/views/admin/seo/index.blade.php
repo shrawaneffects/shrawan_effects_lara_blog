@@ -8,7 +8,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">2026 On-Page SEO Management</h4>
-            <p class="text-body-secondary small mb-0">Audit search intent, keyword placement, SERP previews, orphan pages, structured data, and content freshness.</p>
+            <p class="text-body-secondary mb-0">Audit search intent, keyword placement, SERP previews, orphan pages, structured data, and content freshness.</p>
         </div>
             <a href="{{ route('admin.settings.index') }}" class="btn btn-outline-primary rounded-pill px-3">
                 <i class="bi bi-gear-wide-connected me-1"></i> Homepage SEO
@@ -44,7 +44,7 @@
                 <h6 class="fw-bold mb-1 text-danger d-flex align-items-center gap-2">
                     <i class="bi bi-lightning-charge-fill text-warning fs-5"></i> SEO Speed, Performance & Cache Manager
                 </h6>
-                <p class="text-body-secondary small mb-0">Clear compiled views, application queries, route caches, configuration, or re-optimize system for maximum Core Web Vitals score.</p>
+                <p class="text-body-secondary mb-0">Clear compiled views, application queries, route caches, configuration, or re-optimize system for maximum Core Web Vitals score.</p>
             </div>
             <div class="d-flex flex-wrap gap-2">
                 <form action="{{ route('admin.seo.clear-cache') }}" method="POST" class="d-inline">
@@ -70,7 +70,7 @@
                     <input type="hidden" name="type" value="views">
                     <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill w-100 py-1.5 text-start px-3 d-flex align-items-center justify-content-between">
                         <span><i class="bi bi-file-earmark-code me-1 text-primary"></i> Clear Views Cache</span>
-                        <i class="bi bi-chevron-right small text-muted"></i>
+                        <i class="bi bi-chevron-right text-muted"></i>
                     </button>
                 </form>
             </div>
@@ -80,7 +80,7 @@
                     <input type="hidden" name="type" value="routes">
                     <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill w-100 py-1.5 text-start px-3 d-flex align-items-center justify-content-between">
                         <span><i class="bi bi-signpost-2 me-1 text-info"></i> Clear Route Cache</span>
-                        <i class="bi bi-chevron-right small text-muted"></i>
+                        <i class="bi bi-chevron-right text-muted"></i>
                     </button>
                 </form>
             </div>
@@ -90,7 +90,7 @@
                     <input type="hidden" name="type" value="config">
                     <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill w-100 py-1.5 text-start px-3 d-flex align-items-center justify-content-between">
                         <span><i class="bi bi-gear me-1 text-warning"></i> Clear Config Cache</span>
-                        <i class="bi bi-chevron-right small text-muted"></i>
+                        <i class="bi bi-chevron-right text-muted"></i>
                     </button>
                 </form>
             </div>
@@ -100,7 +100,7 @@
                     <input type="hidden" name="type" value="application">
                     <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill w-100 py-1.5 text-start px-3 d-flex align-items-center justify-content-between">
                         <span><i class="bi bi-database me-1 text-success"></i> Clear App Data Cache</span>
-                        <i class="bi bi-chevron-right small text-muted"></i>
+                        <i class="bi bi-chevron-right text-muted"></i>
                     </button>
                 </form>
             </div>
@@ -113,13 +113,13 @@
         <div class="col-6 col-lg-3">
             <div class="card border-0 shadow-sm p-4 rounded-4 bg-body h-100 position-relative overflow-hidden">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="text-body-secondary small fw-semibold">Avg Site SEO Score</span>
+                    <span class="text-body-secondary fw-semibold">Avg Site SEO Score</span>
                     <div class="p-2 rounded-3 bg-{{ $avgScore >= 75 ? 'success' : ($avgScore >= 50 ? 'warning' : 'danger') }}-subtle text-{{ $avgScore >= 75 ? 'success' : ($avgScore >= 50 ? 'warning' : 'danger') }}">
                         <i class="bi bi-graph-up-arrow fs-5"></i>
                     </div>
                 </div>
                 <h2 class="fw-bold mb-1 text-{{ $avgScore >= 75 ? 'success' : ($avgScore >= 50 ? 'warning' : 'danger') }}">{{ $avgScore }}<span class="fs-6 text-muted fw-normal">/100</span></h2>
-                <small class="text-muted">Across {{ $totalPosts }} total articles</small>
+                <span class="text-muted">Across {{ $totalPosts }} total articles</span>
             </div>
         </div>
 
@@ -128,13 +128,13 @@
             <a href="{{ route('admin.seo.index', ['filter' => 'critical']) }}" class="text-decoration-none">
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body h-100 position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Critical SEO Errors</span>
+                        <span class="text-body-secondary fw-semibold">Critical SEO Errors</span>
                         <div class="p-2 rounded-3 bg-danger-subtle text-danger">
                             <i class="bi bi-shield-x fs-5"></i>
                         </div>
                     </div>
                     <h2 class="fw-bold mb-1 text-danger">{{ $criticalCount }}</h2>
-                    <small class="text-danger fw-semibold">Requires immediate attention</small>
+                    <span class="text-danger fw-semibold">Requires immediate attention</span>
                 </div>
             </a>
         </div>
@@ -144,13 +144,13 @@
             <a href="{{ route('admin.seo.index', ['filter' => 'needs_review']) }}" class="text-decoration-none">
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body h-100 position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Recommendations</span>
+                        <span class="text-body-secondary fw-semibold">Recommendations</span>
                         <div class="p-2 rounded-3 bg-warning-subtle text-warning">
                             <i class="bi bi-exclamation-triangle-fill fs-5"></i>
                         </div>
                     </div>
                     <h2 class="fw-bold mb-1 text-warning">{{ $warningCount }}</h2>
-                    <small class="text-muted">Optimization opportunities</small>
+                    <span class="text-muted">Optimization opportunities</span>
                 </div>
             </a>
         </div>
@@ -160,13 +160,13 @@
             <a href="{{ route('admin.seo.index', ['filter' => 'orphan']) }}" class="text-decoration-none">
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body h-100 position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Orphan Articles</span>
+                        <span class="text-body-secondary fw-semibold">Orphan Articles</span>
                         <div class="p-2 rounded-3 bg-info-subtle text-info">
                             <i class="bi bi-link-45deg fs-5"></i>
                         </div>
                     </div>
                     <h2 class="fw-bold mb-1 text-info">{{ $orphanCount }}</h2>
-                    <small class="text-muted">0 incoming internal links</small>
+                    <span class="text-muted">0 incoming internal links</span>
                 </div>
             </a>
         </div>
@@ -274,9 +274,9 @@
                                         {{ $p->title }}
                                     </a>
                                 </div>
-                                <small class="text-body-secondary d-block text-truncate" style="max-width: 320px; font-size: 0.78rem;">
+                                <span class="text-body-secondary d-block text-truncate" style="max-width: 320px; font-size: 1rem;">
                                     {{ $s && $s->seo_title ? $s->seo_title : ($p->meta_title ?: 'No custom SEO title set') }}
-                                </small>
+                                </span>
                             </td>
 
                             <!-- Target Keyword & Search Intent -->
@@ -288,14 +288,14 @@
                                 @else
                                     <span class="badge bg-secondary-subtle text-secondary mb-1">Not set</span>
                                 @endif
-                                <div style="font-size: 0.75rem;" class="text-muted text-capitalize">
+                                <div style="font-size: 1rem;" class="text-muted text-capitalize">
                                     {{ $s->search_intent ?? 'informational' }}
                                 </div>
                             </td>
 
                             <!-- Robots & Sitemap -->
                             <td>
-                                <div class="d-flex flex-column gap-1" style="font-size: 0.78rem;">
+                                <div class="d-flex flex-column gap-1" style="font-size: 1rem;">
                                     <span>
                                         @if(!$s || $s->robots_index)
                                             <i class="bi bi-check-circle-fill text-success me-1"></i>Indexable
@@ -371,7 +371,7 @@
         <!-- Pagination & Records Meta Footer -->
         <div class="card-footer bg-body-tertiary border-top py-3 px-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <div class="small text-body-secondary">
+                <div class="text-body-secondary">
                     @if($posts->total() > 0)
                         Showing <span class="fw-bold text-body">{{ $posts->firstItem() }}</span> to <span class="fw-bold text-body">{{ $posts->lastItem() }}</span> of <span class="fw-bold text-body">{{ number_format($posts->total()) }}</span> articles
                     @else
@@ -390,7 +390,7 @@
                                 <input type="hidden" name="{{ $k }}" value="{{ $v }}">
                             @endif
                         @endforeach
-                        <label for="seoPerPageSelect" class="small text-body-secondary text-nowrap mb-0">Per Page:</label>
+                        <label for="seoPerPageSelect" class="text-body-secondary text-nowrap mb-0">Per Page:</label>
                         <select name="per_page" id="seoPerPageSelect" class="form-select form-select-sm rounded-pill" style="width: 78px;" onchange="this.form.submit()">
                             <option value="5" {{ ($perPage ?? 10) == 5 ? 'selected' : '' }}>5</option>
                             <option value="10" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10</option>

@@ -94,15 +94,15 @@
                                             {{ $post->title }}
                                         </a>
                                     </h5>
-                                    <p class="card-text text-body-secondary small mb-3">
+                                    <p class="card-text text-body-secondary mb-3" style="font-size: 1rem;">
                                         {{ Str::limit($post->excerpt, 110) }}
                                     </p>
                                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" style="width: 32px; height: 32px;">
-                                            <span class="small fw-semibold">{{ $post->author->name }}</span>
+                                            <span class="fw-semibold" style="font-size: 1rem;">{{ $post->author->name }}</span>
                                         </div>
-                                        <div class="small text-body-secondary">
+                                        <div class="text-body-secondary" style="font-size: 1rem;">
                                             <i class="bi bi-clock me-1 text-primary"></i>{{ $post->reading_time }} min
                                         </div>
                                     </div>
@@ -176,7 +176,7 @@
                         <div class="position-relative" style="z-index: 1;">
                             <i class="bi bi-envelope-paper-heart fs-1 mb-2 d-inline-block"></i>
                             <h4 class="fw-bold">Newsletter</h4>
-                            <p class="small opacity-75">Subscribe to get the newest guides and articles right in your inbox.</p>
+                            <p class="opacity-75" style="font-size: 1rem;">Subscribe to get the newest guides and articles right in your inbox.</p>
                             <form action="{{ route('newsletter.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">

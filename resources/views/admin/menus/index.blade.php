@@ -57,7 +57,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Navigation Menu Builder</h4>
-            <p class="text-body-secondary small mb-0">WordPress-style drag-and-drop menu manager. Rearrange top-level links, dropdown menus, and nested sub-dropdowns.</p>
+            <p class="text-body-secondary mb-0">WordPress-style drag-and-drop menu manager. Rearrange top-level links, dropdown menus, and nested sub-dropdowns.</p>
         </div>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-outline-warning rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#resetMenuModal">
@@ -94,7 +94,7 @@
     <!-- Live Toast Alert -->
     <div id="saveToast" class="alert alert-success d-none align-items-center rounded-4 shadow-sm py-2 px-3 mb-4" role="alert">
         <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-        <div id="saveToastText" class="small fw-semibold">Menu arrangement saved successfully!</div>
+        <div id="saveToastText" class="fw-semibold">Menu arrangement saved successfully!</div>
     </div>
 
     <!-- Selection & Bulk Actions Bar -->
@@ -149,7 +149,7 @@
                                     <input type="hidden" name="location" value="{{ $location }}">
 
                                     <div class="mb-3">
-                                        <label class="form-label small fw-semibold text-muted">
+                                        <label class="form-label fw-semibold text-muted">
                                             <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
                                         </label>
                                         <select name="parent_id" class="form-select form-select-sm rounded-pill">
@@ -164,27 +164,27 @@
 
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="home" id="stdHome" checked>
-                                        <label class="form-check-label small" for="stdHome">Home (/)</label>
+                                        <label class="form-check-label" for="stdHome">Home (/)</label>
                                     </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="services" id="stdServices" checked>
-                                        <label class="form-check-label small" for="stdServices">Services (/services)</label>
+                                        <label class="form-check-label" for="stdServices">Services (/services)</label>
                                     </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="openseo" id="stdOpenSeo">
-                                        <label class="form-check-label small" for="stdOpenSeo">OpenSEO Suite (/openseo)</label>
+                                        <label class="form-check-label" for="stdOpenSeo">OpenSEO Suite (/openseo)</label>
                                     </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="articles" id="stdArticles" checked>
-                                        <label class="form-check-label small" for="stdArticles">All Articles (/blog)</label>
+                                        <label class="form-check-label" for="stdArticles">All Articles (/blog)</label>
                                     </div>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="faq" id="stdFaq">
-                                        <label class="form-check-label small" for="stdFaq">FAQ (/faq)</label>
+                                        <label class="form-check-label" for="stdFaq">FAQ (/faq)</label>
                                     </div>
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" name="standards[]" value="contact" id="stdContact">
-                                        <label class="form-check-label small" for="stdContact">Contact Us (/contact)</label>
+                                        <label class="form-check-label" for="stdContact">Contact Us (/contact)</label>
                                     </div>
 
                                     <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill w-100">
@@ -211,7 +211,7 @@
                                         <input type="hidden" name="location" value="{{ $location }}">
 
                                         <div class="mb-3">
-                                            <label class="form-label small fw-semibold text-muted">
+                                            <label class="form-label fw-semibold text-muted">
                                                 <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
                                             </label>
                                             <select name="parent_id" class="form-select form-select-sm rounded-pill">
@@ -228,7 +228,7 @@
                                             @foreach($pages as $page)
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" name="pages[]" value="{{ $page->id }}" id="page-{{ $page->id }}">
-                                                    <label class="form-check-label small text-truncate d-block" for="page-{{ $page->id }}" title="{{ $page->title }}">
+                                                    <label class="form-check-label text-truncate d-block" for="page-{{ $page->id }}" title="{{ $page->title }}">
                                                         {{ $page->title }}
                                                     </label>
                                                 </div>
@@ -240,7 +240,7 @@
                                         </button>
                                     </form>
                                 @else
-                                    <p class="text-muted small mb-2">No pages found.</p>
+                                    <p class="text-muted mb-2">No pages found.</p>
                                     <a href="{{ route('admin.pages.create') }}" class="btn btn-sm btn-link text-decoration-none p-0">+ Create a page</a>
                                 @endif
                             </div>
@@ -263,7 +263,7 @@
                                         <input type="hidden" name="location" value="{{ $location }}">
 
                                         <div class="mb-3">
-                                            <label class="form-label small fw-semibold text-muted">
+                                            <label class="form-label fw-semibold text-muted">
                                                 <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
                                             </label>
                                             <select name="parent_id" class="form-select form-select-sm rounded-pill">
@@ -280,7 +280,7 @@
                                             @foreach($categories as $cat)
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" name="categories[]" value="{{ $cat->id }}" id="cat-{{ $cat->id }}">
-                                                    <label class="form-check-label small text-truncate d-block" for="cat-{{ $cat->id }}">
+                                                    <label class="form-check-label text-truncate d-block" for="cat-{{ $cat->id }}">
                                                         <span class="d-inline-block rounded-circle me-1" style="width: 8px; height: 8px; background-color: {{ $cat->color }};"></span>
                                                         {{ $cat->name }}
                                                     </label>
@@ -293,7 +293,7 @@
                                         </button>
                                     </form>
                                 @else
-                                    <p class="text-muted small mb-0">No categories found.</p>
+                                    <p class="text-muted mb-0">No categories found.</p>
                                 @endif
                             </div>
                         </div>
@@ -314,7 +314,7 @@
                                     <input type="hidden" name="location" value="{{ $location }}">
 
                                     <div class="mb-3">
-                                        <label class="form-label small fw-semibold text-muted">
+                                        <label class="form-label fw-semibold text-muted">
                                             <i class="bi bi-folder-symlink me-1"></i> Add Under Parent (Optional)
                                         </label>
                                         <select name="parent_id" class="form-select form-select-sm rounded-pill">
@@ -328,24 +328,24 @@
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label small fw-semibold">Link Text <span class="text-danger">*</span></label>
+                                        <label class="form-label fw-semibold">Link Text <span class="text-danger">*</span></label>
                                         <input type="text" name="title" class="form-control form-control-sm rounded-pill" placeholder="e.g. Services, Python, Portfolio" required>
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label small fw-semibold">URL Path <span class="text-danger">*</span></label>
+                                        <label class="form-label fw-semibold">URL Path <span class="text-danger">*</span></label>
                                         <input type="text" name="url" class="form-control form-control-sm rounded-pill" placeholder="/services or https://..." required>
-                                        <small class="text-muted d-block mt-1" style="font-size:0.75rem;">Enter clean relative path (e.g. <kbd>/services</kbd>, <kbd>#</kbd>) or full external link.</small>
+                                        <span class="text-muted d-block mt-1" style="font-size:1rem;">Enter clean relative path (e.g. <kbd>/services</kbd>, <kbd>#</kbd>) or full external link.</span>
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label small fw-semibold">Icon Class <span class="text-muted">(optional)</span></label>
+                                        <label class="form-label fw-semibold">Icon Class <span class="text-muted">(optional)</span></label>
                                         <input type="text" name="icon" class="form-control form-control-sm rounded-pill" placeholder="bi bi-star">
                                     </div>
 
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" name="target" value="_blank" id="customTarget">
-                                        <label class="form-check-label small" for="customTarget">Open in new tab (_blank)</label>
+                                        <label class="form-check-label" for="customTarget">Open in new tab (_blank)</label>
                                     </div>
 
                                     <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill w-100">
@@ -366,7 +366,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check mb-0">
                             <input class="form-check-input" type="checkbox" id="selectAllCheckbox" title="Select all menu items">
-                            <label class="form-check-label small fw-semibold text-muted" for="selectAllCheckbox">Select All</label>
+                            <label class="form-check-label fw-semibold text-muted" for="selectAllCheckbox">Select All</label>
                         </div>
                         <div>
                             <h5 class="fw-bold mb-0"><i class="bi bi-diagram-3 text-primary me-2"></i> Menu Structure & Hierarchy</h5>
@@ -387,7 +387,7 @@
                     </div>
                 </div>
 
-                <div class="alert alert-info border-0 rounded-4 py-2 px-3 mb-3 d-flex align-items-center gap-2 small">
+                <div class="alert alert-info border-0 rounded-4 py-2 px-3 mb-3 d-flex align-items-center gap-2">
                     <i class="bi bi-info-circle-fill fs-5 text-info"></i>
                     <div>
                         <strong>WordPress-Style Menu Dragging:</strong> Drag items up/down to sort, drag inside another item or click <strong class="badge bg-secondary"><i class="bi bi-arrow-right"></i></strong> to make it a dropdown or sub-dropdown item, or click <strong class="badge bg-secondary"><i class="bi bi-arrow-left"></i></strong> to move it back up. Changes persist automatically!
@@ -405,7 +405,7 @@
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-diagram-3 fs-1 d-block mb-3 opacity-50"></i>
                         <h6 class="fw-bold">No Menu Items Configured</h6>
-                        <p class="small mb-3">Add links from the left panel or click "Reset to Defaults" to populate the standard layout with multi-level dropdowns.</p>
+                        <p class="mb-3">Add links from the left panel or click "Reset to Defaults" to populate the standard layout with multi-level dropdowns.</p>
                         <button type="button" class="btn btn-primary rounded-pill btn-sm px-4" data-bs-toggle="modal" data-bs-target="#resetMenuModal">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Populate Standard Menu Layout
                         </button>

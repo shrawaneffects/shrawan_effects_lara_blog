@@ -12,7 +12,7 @@
                             <i class="bi bi-shield-check fs-3"></i>
                         </div>
                         <h3 class="fw-bold"><span class="text-gradient">Set New Password</span></h3>
-                        <p class="text-body-secondary small">Please enter your new password to securely access your account.</p>
+                        <p class="text-body-secondary">Please enter your new password to securely access your account.</p>
                     </div>
 
                     <form action="{{ route('password.update') }}" method="POST">
@@ -20,29 +20,29 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">Email Address</label>
+                            <label class="form-label fw-semibold">Email Address</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-body-tertiary rounded-start-pill ps-3"><i class="bi bi-envelope text-primary"></i></span>
                                 <input type="email" name="email" class="form-control rounded-end-pill @error('email') is-invalid @enderror" placeholder="name@example.com" value="{{ old('email', $email) }}" required readonly>
                             </div>
                             @error('email')
-                                <div class="invalid-feedback d-block small ms-2 mt-1">{{ $message }}</div>
+                                <div class="invalid-feedback d-block ms-2 mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">New Password</label>
+                            <label class="form-label fw-semibold">New Password</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-body-tertiary rounded-start-pill ps-3"><i class="bi bi-lock text-primary"></i></span>
                                 <input type="password" name="password" class="form-control rounded-end-pill @error('password') is-invalid @enderror" placeholder="At least 8 characters" required autofocus>
                             </div>
                             @error('password')
-                                <div class="invalid-feedback d-block small ms-2 mt-1">{{ $message }}</div>
+                                <div class="invalid-feedback d-block ms-2 mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-semibold small">Confirm New Password</label>
+                            <label class="form-label fw-semibold">Confirm New Password</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-body-tertiary rounded-start-pill ps-3"><i class="bi bi-lock-fill text-primary"></i></span>
                                 <input type="password" name="password_confirmation" class="form-control rounded-end-pill" placeholder="Repeat your new password" required>
@@ -54,7 +54,7 @@
                         </button>
                     </form>
 
-                    <div class="text-center mt-4 pt-3 border-top small text-body-secondary">
+                    <div class="text-center mt-4 pt-3 border-top text-body-secondary">
                         <a href="{{ route('login') }}" class="text-gradient fw-bold text-decoration-none"><i class="bi bi-arrow-left me-1"></i> Back to Sign In</a>
                     </div>
                 </div>

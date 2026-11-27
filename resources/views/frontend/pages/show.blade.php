@@ -16,7 +16,7 @@
                 </ol>
             </nav>
             <h1 class="fw-bold mb-1 display-5 text-gradient">{{ $page->title }}</h1>
-            <p class="text-body-secondary mb-0 small">
+            <p class="text-body-secondary mb-0">
                 Last updated on {{ $page->updated_at->format('F d, Y') }}
             </p>
         </div>
@@ -40,7 +40,7 @@
                     <hr class="my-5 opacity-25">
 
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                        <div class="small text-muted">
+                        <div class="text-muted">
                             <i class="bi bi-clock-history me-1"></i> Published on {{ $page->created_at->format('M d, Y') }}
                         </div>
                         <div>

@@ -16,7 +16,7 @@
             </div>
             <div>
                 <h5 class="fw-bold mb-0">Search Engine Metadata (Meta Title, Description &amp; Canonical)</h5>
-                <small class="text-body-secondary">Control how Google SERP and search crawlers index and display this article</small>
+                <span class="text-body-secondary">Control how Google SERP and search crawlers index and display this article</span>
             </div>
         </div>
         <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-3 py-1">Google SERP Ready</span>
@@ -25,7 +25,7 @@
     <!-- Meta Title -->
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-1">
-            <label class="form-label fw-bold small mb-0">
+            <label class="form-label fw-bold mb-0">
                 Meta Title <span class="text-muted fw-normal">(Google SERP Headline)</span>
             </label>
             <span class="badge bg-body-tertiary text-body border font-monospace" id="metaTitleCharCounter">0 / 60</span>
@@ -34,15 +34,15 @@
         <div class="progress mt-1.5" style="height: 4px;">
             <div id="metaTitleProgressBar" class="progress-bar bg-success" style="width: 0%;"></div>
         </div>
-        <small class="text-body-secondary d-block mt-1">
+        <span class="text-body-secondary d-block mt-1">
             Recommended: 50–60 characters. If left empty, automatically falls back to Article Title.
-        </small>
+        </span>
     </div>
 
     <!-- Meta Description -->
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-1">
-            <label class="form-label fw-bold small mb-0">
+            <label class="form-label fw-bold mb-0">
                 Meta Description <span class="text-muted fw-normal">(Google Snippet Summary)</span>
             </label>
             <span class="badge bg-body-tertiary text-body border font-monospace" id="metaDescCharCounter">0 / 160</span>
@@ -51,23 +51,23 @@
         <div class="progress mt-1.5" style="height: 4px;">
             <div id="metaDescProgressBar" class="progress-bar bg-success" style="width: 0%;"></div>
         </div>
-        <small class="text-body-secondary d-block mt-1">
+        <span class="text-body-secondary d-block mt-1">
             Recommended: 120–160 characters. If left empty, automatically falls back to the Excerpt.
-        </small>
+        </span>
     </div>
 
     <!-- Canonical Tag / URL -->
     <div class="mb-3">
-        <label class="form-label fw-bold small mb-1">
+        <label class="form-label fw-bold mb-1">
             Canonical URL <span class="text-muted fw-normal">(&lt;link rel="canonical"&gt; Tag)</span>
         </label>
         <div class="input-group">
             <span class="input-group-text bg-body-tertiary"><i class="bi bi-link-45deg text-success fs-5"></i></span>
             <input type="url" name="canonical_url" id="postCanonicalUrl" class="form-control font-monospace" placeholder="https://shrawaneffects.com/blog/article-slug" value="{{ $canonicalVal }}">
         </div>
-        <small class="text-body-secondary d-block mt-1">
+        <span class="text-body-secondary d-block mt-1">
             Specifies the primary canonical version (<code>&lt;link rel="canonical" href="..."&gt;</code>). Leave blank to default to this article's own permanent URL (<code>{{ url('/blog') }}/<span id="canonicalSlugPreview">{{ $slugVal }}</span></code>).
-        </small>
+        </span>
     </div>
 
     <!-- Live Google SERP Mockup Box -->
@@ -75,18 +75,18 @@
         <div class="d-flex align-items-center justify-content-between mb-2">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-google text-primary"></i>
-                <span class="fw-semibold small">Google SERP Live Snippet Preview</span>
+                <span class="fw-semibold">Google SERP Live Snippet Preview</span>
             </div>
-            <span class="badge bg-body text-secondary border font-monospace" style="font-size: 0.7rem;">Search Preview</span>
+            <span class="badge bg-body text-secondary border font-monospace" style="font-size: 1rem;">Search Preview</span>
         </div>
-        <div class="p-3 bg-body rounded-3 border" style="font-family: Arial, sans-serif; max-width: 650px;">
-            <div class="text-truncate mb-1" style="font-size: 0.82rem; color: #202124;">
+        <div class="p-3 bg-body rounded-3 border" style="font-family: var(--font-main); max-width: 650px;">
+            <div class="text-truncate mb-1" style="font-size: 1rem; color: #202124;">
                 <span class="text-secondary">{{ url('/blog') }}/</span><span id="serpLiveSlug" class="fw-semibold">{{ $slugVal }}</span>
             </div>
             <h6 class="fw-normal mb-1 text-truncate" id="serpLiveTitle" style="color: #1a0dab !important; font-size: 1.15rem; line-height: 1.3; cursor: pointer;">
                 {{ $metaTitleVal ?: ($curPost->title ?? 'Article Headline Will Appear Here') }}
             </h6>
-            <p class="mb-0 text-truncate" id="serpLiveDesc" style="color: #4d5156; font-size: 0.88rem; line-height: 1.45;">
+            <p class="mb-0 text-truncate" id="serpLiveDesc" style="color: #4d5156; font-size: 1rem; line-height: 1.45;">
                 {{ $metaDescVal ?: ($curPost->excerpt ?? 'Your meta description will appear here as the Google snippet preview.') }}
             </p>
         </div>

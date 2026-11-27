@@ -50,15 +50,15 @@
                                             {{ $post->title }}
                                         </a>
                                     </h5>
-                                    <p class="card-text text-body-secondary small mb-3">
+                                    <p class="card-text text-body-secondary mb-3" style="font-size: 1rem;">
                                         {{ Str::limit($post->excerpt, 110) }}
                                     </p>
                                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" style="width: 32px; height: 32px;">
-                                            <span class="small fw-semibold">{{ $post->author->name }}</span>
+                                            <span class="fw-semibold" style="font-size: 1rem;">{{ $post->author->name }}</span>
                                         </div>
-                                        <div class="small text-body-secondary">
+                                        <div class="text-body-secondary" style="font-size: 1rem;">
                                             <i class="bi bi-clock me-1 text-primary"></i>{{ $post->reading_time }} min
                                         </div>
                                     </div>
@@ -117,12 +117,12 @@
                                     <div class="d-flex gap-3 align-items-center">
                                         <img src="{{ $popPost->image_url }}" alt="{{ $popPost->title }}" class="rounded-3 object-fit-cover" style="width: 70px; height: 60px;">
                                         <div>
-                                            <h6 class="mb-1 fw-semibold small">
+                                            <h6 class="mb-1 fw-semibold" style="font-size: 1rem;">
                                                 <a href="{{ route('blog.show', $popPost->slug) }}" class="text-decoration-none text-body">
                                                     {{ Str::limit($popPost->title, 45) }}
                                                 </a>
                                             </h6>
-                                            <div class="text-muted small">
+                                            <div class="text-muted" style="font-size: 1rem;">
                                                 <i class="bi bi-eye me-1 text-primary"></i>{{ number_format($popPost->views_count) }} views
                                             </div>
                                         </div>

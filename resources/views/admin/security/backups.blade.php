@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Database Disaster Recovery & Backups</h4>
-            <p class="text-body-secondary small mb-0">Create instant database snapshots, download archives, and restore database tables in disaster recovery events.</p>
+            <p class="text-body-secondary mb-0">Create instant database snapshots, download archives, and restore database tables in disaster recovery events.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.security.index') }}" class="btn btn-outline-secondary rounded-pill px-3">
@@ -28,7 +28,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Backup Snapshots</span>
+                        <span class="text-body-secondary fw-semibold">Total Backup Snapshots</span>
                         <h4 class="fw-bold mb-0 text-gradient mt-1">{{ count($backups) }}</h4>
                     </div>
                     <div class="bg-primary-subtle text-primary p-3 rounded-4">
@@ -42,7 +42,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Last Backup Time</span>
+                        <span class="text-body-secondary fw-semibold">Last Backup Time</span>
                         <h6 class="fw-bold mb-0 text-body mt-2">{{ $healthReport['latest_backup_time'] }}</h6>
                     </div>
                     <div class="bg-success-subtle text-success p-3 rounded-4">
@@ -56,8 +56,8 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Storage Location</span>
-                        <span class="small font-monospace text-muted d-block mt-2">storage/app/backups</span>
+                        <span class="text-body-secondary fw-semibold">Storage Location</span>
+                        <span class="font-monospace text-muted d-block mt-2">storage/app/backups</span>
                     </div>
                     <div class="bg-info-subtle text-info p-3 rounded-4">
                         <i class="bi bi-folder-check fs-4"></i>
@@ -86,13 +86,13 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-file-earmark-code fs-4 text-primary"></i>
                                     <div>
-                                        <span class="fw-bold font-monospace text-body small d-block">{{ $b['filename'] }}</span>
-                                        <span class="text-muted small" style="font-size: 0.75rem;">Full Database Tables & Data JSON Snapshot</span>
+                                        <span class="fw-bold font-monospace text-body d-block">{{ $b['filename'] }}</span>
+                                        <span class="text-muted" style="font-size: 1rem;">Full Database Tables & Data JSON Snapshot</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="small fw-semibold">{{ $b['size'] }}</td>
-                            <td class="small text-muted">{{ $b['created_at'] }}</td>
+                            <td class="fw-semibold">{{ $b['size'] }}</td>
+                            <td class="text-muted">{{ $b['created_at'] }}</td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     <!-- Download Button -->
@@ -123,7 +123,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p class="mb-2">Are you sure you want to restore the database from snapshot <strong>{{ $b['filename'] }}</strong>?</p>
-                                                <div class="alert alert-warning small mb-0 rounded-3">
+                                                <div class="alert alert-warning mb-0 rounded-3">
                                                     <i class="bi bi-info-circle me-1"></i> This will replace current database tables and records with the state saved in this snapshot.
                                                 </div>
                                             </div>
@@ -169,7 +169,7 @@
                             <td colspan="4" class="text-center py-5 text-muted">
                                 <i class="bi bi-database-x fs-1 d-block mb-3 opacity-50"></i>
                                 <h6 class="fw-bold">No Backup Snapshots Created Yet</h6>
-                                <p class="small mb-3">Click "Create Database Backup Now" to generate a full snapshot of all articles, users, comments, settings, and tables.</p>
+                                <p class="mb-3">Click "Create Database Backup Now" to generate a full snapshot of all articles, users, comments, settings, and tables.</p>
                             </td>
                         </tr>
                     @endforelse

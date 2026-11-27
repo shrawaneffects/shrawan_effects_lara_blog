@@ -22,7 +22,7 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h4 class="fw-bold mb-1">Create Custom Page</h4>
-            <p class="text-body-secondary small mb-0">Design content pages like About Us, Privacy Policy, Terms of Service, or custom landing pages.</p>
+            <p class="text-body-secondary mb-0">Design content pages like About Us, Privacy Policy, Terms of Service, or custom landing pages.</p>
         </div>
         <a href="{{ route('admin.pages.index') }}" class="btn btn-outline-secondary rounded-pill px-3">
             <i class="bi bi-arrow-left me-1"></i> Back to Pages
@@ -32,7 +32,7 @@
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
             <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i> Please correct the following errors:</h6>
-            <ul class="mb-0 small">
+            <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -55,7 +55,7 @@
 
                     <!-- Custom URL Slug -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">URL Slug <span class="text-muted">(Leave blank to auto-generate)</span></label>
+                        <label class="form-label fw-semibold">URL Slug <span class="text-muted">(Leave blank to auto-generate)</span></label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-body-tertiary font-monospace">/page/</span>
                             <input type="text" name="slug" id="pageSlug" class="form-control font-monospace @error('slug') is-invalid @enderror" placeholder="about-us" value="{{ old('slug') }}">
@@ -73,15 +73,15 @@
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body">
                     <h5 class="fw-bold mb-3"><i class="bi bi-search me-2 text-primary"></i> SEO Optimization</h5>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Meta Title</label>
+                        <label class="form-label fw-semibold">Meta Title</label>
                         <input type="text" name="meta_title" class="form-control rounded-pill" placeholder="Custom browser tab and search title" value="{{ old('meta_title') }}">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Meta Description</label>
+                        <label class="form-label fw-semibold">Meta Description</label>
                         <textarea name="meta_description" class="form-control rounded-4" rows="2" placeholder="Brief summary for search engine result snippets">{{ old('meta_description') }}</textarea>
                     </div>
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Meta Keywords</label>
+                        <label class="form-label fw-semibold">Meta Keywords</label>
                         <input type="text" name="meta_keywords" class="form-control rounded-pill" placeholder="about, team, mission, privacy" value="{{ old('meta_keywords') }}">
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     <h5 class="fw-bold mb-3"><i class="bi bi-send me-2 text-primary"></i> Publication</h5>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Status</label>
+                        <label class="form-label fw-semibold">Status</label>
                         <select name="status" class="form-select rounded-pill">
                             <option value="published" {{ old('status', 'published') === 'published' ? 'selected' : '' }}>Published (Live immediately)</option>
                             <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Draft (Private save)</option>
@@ -115,20 +115,20 @@
 
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" name="show_in_navbar" value="1" id="showInNavbar" {{ old('show_in_navbar') ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold small" for="showInNavbar">Show in Top Navbar</label>
-                        <div class="text-muted small">Adds link to the public website main header navigation</div>
+                        <label class="form-check-label fw-semibold" for="showInNavbar">Show in Top Navbar</label>
+                        <div class="text-muted">Adds link to the public website main header navigation</div>
                     </div>
 
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" name="show_in_footer" value="1" id="showInFooter" {{ old('show_in_footer', true) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold small" for="showInFooter">Show in Footer</label>
-                        <div class="text-muted small">Displays link in the footer navigation</div>
+                        <label class="form-check-label fw-semibold" for="showInFooter">Show in Footer</label>
+                        <div class="text-muted">Displays link in the footer navigation</div>
                     </div>
 
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Display Order Index</label>
+                        <label class="form-label fw-semibold">Display Order Index</label>
                         <input type="number" name="order" class="form-control rounded-pill" value="{{ old('order', 0) }}" min="0">
-                        <small class="text-muted">Lower numbers appear first in menus.</small>
+                        <span class="text-muted">Lower numbers appear first in menus.</span>
                     </div>
                 </div>
 
@@ -137,14 +137,14 @@
                     <h5 class="fw-bold mb-3"><i class="bi bi-image me-2 text-primary"></i> Header Banner Image</h5>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-semibold">Upload Image</label>
+                        <label class="form-label fw-semibold">Upload Image</label>
                         <input type="file" name="featured_image" class="form-control form-control-sm rounded-pill" accept="image/*">
                     </div>
 
-                    <div class="text-center text-muted small my-2">-- OR --</div>
+                    <div class="text-center text-muted my-2">-- OR --</div>
 
                     <div class="mb-0">
-                        <label class="form-label small fw-semibold">External Image URL</label>
+                        <label class="form-label fw-semibold">External Image URL</label>
                         <input type="url" name="image_url" class="form-control form-control-sm rounded-pill" placeholder="https://images.unsplash.com/..." value="{{ old('image_url') }}">
                     </div>
                 </div>
