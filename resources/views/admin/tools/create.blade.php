@@ -247,28 +247,21 @@
     </div>
 </form>
 
+<!-- Image Alt, Title & Caption Editor + Media Library Asset Inserter Modals -->
+@include('admin.posts.partials.editor_media_modals')
+
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+<script src="{{ asset('js/summernote-media-caption.js') }}"></script>
 <script>
     $(document).ready(function() {
-        $('#summernoteEditor').summernote({
-            placeholder: 'Write comprehensive tool documentation, step-by-step instructions, and architecture breakdown...',
-            tabsize: 2,
-            height: 400,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ],
-            callbacks: {
-                onChange: function(contents) {
-                    updateTocHeadingsPreview(contents);
-                }
-            }
+        // Initialize full-featured Summernote Rich Editor with Media Library integration
+        initSummernoteWithMedia('#summernoteEditor');
+
+        // Hook into Summernote change event for live TOC preview
+        $('#summernoteEditor').on('summernote.change', function() {
+            updateTocHeadingsPreview($(this).summernote('code'));
         });
 
         // Auto-slug generator from title
@@ -293,35 +286,37 @@
         });
 
         // Trigger initial heading scan
-        updateTocHeadingsPreview($('#summernoteEditor').summernote('code'));
+        setTimeout(function() {
+            const initialCode = $('#summernoteEditor').summernote('code') || $('#summernoteEditor').val();
+            updateTocHeadingsPreview(initialCode);
+        }, 300);
     });
 
     // Real-time TOC Headings Inspector
     function updateTocHeadingsPreview(html) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const headings = doc.querySelectorAll('h2, h3');
-        const list = document.getElementById('detectedHeadingsList');
-        const countBadge = document.getElementById('detectedHeadingsCount');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html || '';
+        const headings = tempDiv.querySelectorAll('h2, h3');
+        const list = $('#detectedHeadingsList');
+        const countBadge = $('#detectedHeadingsCount');
 
-        if (!list || !countBadge) return;
+        if (!list.length || !countBadge.length) return;
 
-        countBadge.textContent = headings.length + ' found';
-        list.innerHTML = '';
+        countBadge.text(headings.length + ' found');
 
         if (headings.length === 0) {
-            list.innerHTML = '<li class="fst-italic text-muted">Add &lt;h2&gt; or &lt;h3&gt; headings in the editor to see live TOC preview...</li>';
+            list.html('<li class="fst-italic text-muted">Add &lt;h2&gt; or &lt;h3&gt; headings in the editor to see live TOC preview...</li>');
             return;
         }
 
+        let itemsHtml = '';
         headings.forEach(h => {
-            const li = document.createElement('li');
-            const level = h.tagName.toLowerCase();
-            const text = h.textContent.trim() || 'Untitled Heading';
-            li.className = level === 'h3' ? 'ps-3 text-truncate' : 'fw-semibold text-truncate';
-            li.innerHTML = `<span class="badge bg-secondary-subtle text-body-secondary me-1 py-0 px-1 font-mono">${level.toUpperCase()}</span> ${escapeHtml(text)}`;
-            list.appendChild(li);
+            const tag = h.tagName.toLowerCase();
+            const text = h.innerText?.trim() || h.textContent?.trim() || 'Untitled Heading';
+            const isH3 = tag === 'h3';
+            itemsHtml += `<li class="${isH3 ? 'ps-3 text-truncate' : 'fw-semibold text-truncate'}"><span class="badge bg-secondary-subtle text-body-secondary me-1 py-0 px-1 font-mono">${tag.toUpperCase()}</span> ${escapeHtml(text)}</li>`;
         });
+        list.html(itemsHtml);
     }
 
     // Dynamic FAQ Repeater

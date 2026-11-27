@@ -217,7 +217,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('tools', AdminToolController::class);
     Route::post('/tools/{id}/toggle-status', [AdminToolController::class, 'toggle'])->name('tools.toggle-status');
     Route::post('/tools/toggle', [AdminToolController::class, 'toggle'])->name('tools.toggle');
-    Route::post('/tools/update', [AdminToolController::class, 'update'])->name('tools.update');
+    Route::post('/tools/update-legacy', [AdminToolController::class, 'update'])->name('tools.update-legacy');
 
     // Centralized Media Library (Images, Videos, Audios, Documents)
     Route::post('/media/sync-storage', [AdminMediaController::class, 'syncStorage'])->name('media.sync-storage');
