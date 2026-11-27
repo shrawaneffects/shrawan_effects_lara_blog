@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Company Services Suite</h4>
-            <p class="text-body-secondary small mb-0">Manage services offered by Shrawan Effects in Faridabad (Web Dev, Custom SaaS, E-Commerce, APIs, SEO).</p>
+            <p class="text-body-secondary mb-0">Manage services offered by Shrawan Effects in Faridabad (Web Dev, Custom SaaS, E-Commerce, APIs, SEO).</p>
         </div>
         <a href="{{ route('admin.services.create') }}" class="btn btn-primary rounded-pill px-4">
             <i class="bi bi-plus-circle me-1"></i> Add New Service
@@ -20,7 +20,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Services</span>
+                        <span class="text-body-secondary fw-semibold">Total Services</span>
                         <h4 class="fw-bold mb-0 text-gradient mt-1">{{ number_format($totalServices) }}</h4>
                     </div>
                     <div class="bg-primary-subtle text-primary p-3 rounded-4">
@@ -34,7 +34,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Active & Live</span>
+                        <span class="text-body-secondary fw-semibold">Active & Live</span>
                         <h4 class="fw-bold mb-0 text-success mt-1">{{ number_format($activeServices) }}</h4>
                     </div>
                     <div class="bg-success-subtle text-success p-3 rounded-4">
@@ -48,7 +48,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Featured on Homepage</span>
+                        <span class="text-body-secondary fw-semibold">Featured on Homepage</span>
                         <h4 class="fw-bold mb-0 text-warning mt-1">{{ number_format($featuredServices) }}</h4>
                     </div>
                     <div class="bg-warning-subtle text-warning p-3 rounded-4">
@@ -90,7 +90,7 @@
     <div class="card border-0 shadow-sm rounded-4 bg-body overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="table-light text-uppercase small font-monospace">
+                <thead class="table-light text-uppercase font-monospace">
                     <tr>
                         <th class="ps-4">Service</th>
                         <th>Indicative Pricing</th>
@@ -114,10 +114,10 @@
                                                 {{ $service->title }}
                                             </a>
                                             @if($service->is_featured)
-                                                <span class="badge bg-warning text-dark ms-1 small"><i class="bi bi-star-fill me-0.5"></i> Featured</span>
+                                                <span class="badge bg-warning text-dark ms-1"><i class="bi bi-star-fill me-0.5"></i> Featured</span>
                                             @endif
                                         </h6>
-                                        <small class="text-muted font-monospace">/services/{{ $service->slug }}</small>
+                                        <span class="text-muted font-monospace">/services/{{ $service->slug }}</span>
                                     </div>
                                 </div>
                             </td>
@@ -127,7 +127,7 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="small text-body-secondary text-truncate d-inline-block" style="max-width: 220px;" title="{{ $service->technologies }}">
+                                <span class="text-body-secondary text-truncate d-inline-block" style="max-width: 220px;" title="{{ $service->technologies }}">
                                     {{ $service->technologies ?: 'Modern Web Technologies' }}
                                 </span>
                             </td>
@@ -137,7 +137,7 @@
                             <td>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input service-toggle" type="checkbox" role="switch" data-id="{{ $service->id }}" {{ $service->is_active ? 'checked' : '' }}>
-                                    <label class="form-check-label small text-muted">{{ $service->is_active ? 'Active' : 'Inactive' }}</label>
+                                    <label class="form-check-label text-muted">{{ $service->is_active ? 'Active' : 'Inactive' }}</label>
                                 </div>
                             </td>
                             <td class="text-end pe-4">

@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Comments Moderation</h4>
-            <p class="text-body-secondary small mb-0">Review, approve, and respond to reader discussions.</p>
+            <p class="text-body-secondary mb-0">Review, approve, and respond to reader discussions.</p>
         </div>
     </div>
 
@@ -50,24 +50,24 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <img src="{{ $comment->author_avatar }}" alt="{{ $comment->author_name }}" class="rounded-circle" width="34" height="34">
                                     <div>
-                                        <div class="fw-bold small">{{ $comment->author_name }}</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">{{ $comment->guest_email ?? ($comment->user->email ?? '') }}</div>
+                                        <div class="fw-bold">{{ $comment->author_name }}</div>
+                                        <div class="text-muted" style="font-size: 1rem;">{{ $comment->guest_email ?? ($comment->user->email ?? '') }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p class="mb-0 small text-body">{{ $comment->content }}</p>
+                                <p class="mb-0 text-body">{{ $comment->content }}</p>
                                 @if($comment->parent)
-                                    <small class="text-muted"><i class="bi bi-arrow-return-right me-1"></i> In reply to {{ $comment->parent->author_name }}</small>
+                                    <span class="text-muted"><i class="bi bi-arrow-return-right me-1"></i> In reply to {{ $comment->parent->author_name }}</span>
                                 @endif
                             </td>
                             <td>
                                 @if($comment->post)
-                                    <a href="{{ route('blog.show', $comment->post->slug) }}" target="_blank" class="small fw-semibold text-decoration-none">
+                                    <a href="{{ route('blog.show', $comment->post->slug) }}" target="_blank" class="fw-semibold text-decoration-none">
                                         {{ Str::limit($comment->post->title, 35) }} <i class="bi bi-box-arrow-up-right"></i>
                                     </a>
                                 @else
-                                    <span class="text-muted small">Post deleted</span>
+                                    <span class="text-muted">Post deleted</span>
                                 @endif
                             </td>
                             <td>
@@ -79,7 +79,7 @@
                                     <span class="badge bg-danger-subtle text-danger">Spam</span>
                                 @endif
                             </td>
-                            <td class="small text-muted">{{ $comment->created_at->diffForHumans() }}</td>
+                            <td class="text-muted">{{ $comment->created_at->diffForHumans() }}</td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
                                     @if($comment->status !== 'approved')
@@ -116,11 +116,11 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="p-2 mb-3 bg-light rounded small text-muted">
+                                                    <div class="p-2 mb-3 bg-light rounded text-muted">
                                                         <strong>Original Comment:</strong> "{{ $comment->content }}"
                                                     </div>
                                                     <div class="mb-0">
-                                                        <label class="form-label small fw-semibold">Your Official Reply</label>
+                                                        <label class="form-label fw-semibold">Your Official Reply</label>
                                                         <textarea name="content" class="form-control" rows="3" placeholder="Type your reply as Admin..." required></textarea>
                                                     </div>
                                                 </div>

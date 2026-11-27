@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Security Audit Logs</h4>
-            <p class="text-body-secondary small mb-0">Review user authentications, administrative changes, backup operations, and rate-limiting alerts.</p>
+            <p class="text-body-secondary mb-0">Review user authentications, administrative changes, backup operations, and rate-limiting alerts.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.security.index') }}" class="btn btn-outline-secondary rounded-pill px-3">
@@ -89,14 +89,14 @@
                                 @endif
                             </td>
                             <td>
-                                <span class="font-monospace small fw-bold text-body">
+                                <span class="font-monospace fw-bold text-body">
                                     {{ $log->event }}
                                 </span>
                             </td>
                             <td>
-                                <div class="fw-semibold text-body small">{{ $log->description }}</div>
+                                <div class="fw-semibold text-body">{{ $log->description }}</div>
                                 @if(!empty($log->details))
-                                    <div class="text-muted small font-monospace mt-1" style="font-size: 0.75rem;">
+                                    <div class="text-muted font-monospace mt-1" style="font-size: 1rem;">
                                         {{ json_encode($log->details) }}
                                     </div>
                                 @endif
@@ -105,14 +105,14 @@
                                 @if($log->user)
                                     <div class="d-flex align-items-center gap-2">
                                         <img src="{{ $log->user->avatar_url }}" alt="{{ $log->user->name }}" class="rounded-circle" width="24" height="24">
-                                        <span class="small fw-semibold">{{ $log->user->name }}</span>
+                                        <span class="fw-semibold">{{ $log->user->name }}</span>
                                     </div>
                                 @else
-                                    <span class="text-muted small">Guest / System</span>
+                                    <span class="text-muted">Guest / System</span>
                                 @endif
                             </td>
-                            <td class="small font-monospace text-muted">{{ $log->ip_address ?? '127.0.0.1' }}</td>
-                            <td class="small text-muted">{{ $log->created_at->format('M d, Y H:i:s') }}</td>
+                            <td class="font-monospace text-muted">{{ $log->ip_address ?? '127.0.0.1' }}</td>
+                            <td class="text-muted">{{ $log->created_at->format('M d, Y H:i:s') }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -144,9 +144,9 @@
                 <form action="{{ route('admin.security.audit-logs.clear') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <p class="small text-muted mb-3">Select the retention period for purging old audit records from the database:</p>
+                        <p class="text-muted mb-3">Select the retention period for purging old audit records from the database:</p>
                         <div class="mb-3">
-                            <label class="form-label small fw-semibold">Purge logs older than:</label>
+                            <label class="form-label fw-semibold">Purge logs older than:</label>
                             <select name="days" class="form-select rounded-pill">
                                 <option value="30">30 Days</option>
                                 <option value="60">60 Days</option>

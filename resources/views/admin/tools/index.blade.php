@@ -7,7 +7,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
         <h4 class="fw-bold mb-1">Web Tools & Utilities</h4>
-        <p class="text-body-secondary small mb-0">Manage frontend services, online text utilities, bulk network checkers, and diagnostic tools.</p>
+        <p class="text-body-secondary mb-0" style="font-size: 1rem;">Manage frontend services, online text utilities, bulk network checkers, and diagnostic tools.</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('services.convertcase') }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3">
@@ -39,7 +39,7 @@
         <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-body-secondary small fw-semibold">Total Tools</span>
+                    <span class="text-body-secondary fw-semibold">Total Tools</span>
                     <h4 class="fw-bold mb-0 text-gradient mt-1">{{ number_format($totalTools) }}</h4>
                 </div>
                 <div class="bg-primary-subtle text-primary p-3 rounded-4">
@@ -53,7 +53,7 @@
         <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-body-secondary small fw-semibold">Active & Live</span>
+                    <span class="text-body-secondary fw-semibold">Active & Live</span>
                     <h4 class="fw-bold mb-0 text-success mt-1">{{ number_format($activeTools) }}</h4>
                 </div>
                 <div class="bg-success-subtle text-success p-3 rounded-4">
@@ -67,7 +67,7 @@
         <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-body-secondary small fw-semibold">Public Services</span>
+                    <span class="text-body-secondary fw-semibold">Public Services</span>
                     <h4 class="fw-bold mb-0 text-info mt-1">{{ number_format($frontendTools) }}</h4>
                 </div>
                 <div class="bg-info-subtle text-info p-3 rounded-4">
@@ -81,7 +81,7 @@
         <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift">
             <div class="d-flex align-items-center justify-content-between">
                 <div>
-                    <span class="text-body-secondary small fw-semibold">Admin Suite Tools</span>
+                    <span class="text-body-secondary fw-semibold">Admin Suite Tools</span>
                     <h4 class="fw-bold mb-0 text-warning mt-1">{{ number_format($adminTools) }}</h4>
                 </div>
                 <div class="bg-warning-subtle text-warning p-3 rounded-4">
@@ -155,27 +155,27 @@
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <span class="fw-bold text-body fs-6">{{ $tool['title'] }}</span>
                                 @if(!empty($tool['badge']))
-                                    <span class="badge {{ $tool['badge'] === 'NEW' ? 'bg-success' : ($tool['badge'] === 'POPULAR' ? 'bg-info text-dark' : 'bg-primary') }} rounded-pill" style="font-size: 0.65rem;">
+                                    <span class="badge {{ $tool['badge'] === 'NEW' ? 'bg-success' : ($tool['badge'] === 'POPULAR' ? 'bg-info text-dark' : 'bg-primary') }} rounded-pill" style="font-size: 1rem;">
                                         {{ $tool['badge'] }}
                                     </span>
                                 @endif
-                                <span class="badge bg-secondary-subtle text-secondary rounded-pill" style="font-size: 0.65rem;">
+                                <span class="badge bg-secondary-subtle text-secondary rounded-pill" style="font-size: 1rem;">
                                     {{ strtoupper($tool['type'] ?? 'TOOL') }}
                                 </span>
                             </div>
-                            <p class="text-body-secondary small mb-0" style="max-width: 480px;">
+                            <p class="text-body-secondary mb-0" style="max-width: 480px; font-size: 1rem;">
                                 {{ $tool['description'] }}
                             </p>
                         </td>
                         <td>
-                            <span class="badge bg-body-tertiary text-body border rounded-pill px-2.5 py-1 font-mono" style="font-size: 0.75rem;">
+                            <span class="badge bg-body-tertiary text-body border rounded-pill px-2.5 py-1 font-mono" style="font-size: 1rem;">
                                 {{ $tool['category'] }}
                             </span>
                         </td>
                         <td>
-                            <a href="{{ url($tool['url']) }}" target="_blank" class="font-mono text-decoration-none small text-primary d-inline-flex align-items-center gap-1">
+                            <a href="{{ url($tool['url']) }}" target="_blank" class="font-mono text-decoration-none text-primary d-inline-flex align-items-center gap-1" style="font-size: 1rem;">
                                 {{ $tool['url'] }}
-                                <i class="bi bi-box-arrow-up-right" style="font-size: 0.75rem;"></i>
+                                <i class="bi bi-box-arrow-up-right" style="font-size: 1rem;"></i>
                             </a>
                         </td>
                         <td class="text-center">
@@ -224,25 +224,25 @@
                                             </div>
                                             <div class="modal-body py-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-semibold">Title</label>
+                                                    <label class="form-label fw-semibold">Title</label>
                                                     <input type="text" name="title" class="form-control" value="{{ $tool['title'] }}" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-semibold">Category</label>
+                                                    <label class="form-label fw-semibold">Category</label>
                                                     <input type="text" name="category" class="form-control" value="{{ $tool['category'] }}" required>
                                                 </div>
                                                 <div class="row g-2 mb-3">
                                                     <div class="col-6">
-                                                        <label class="form-label small fw-semibold">Badge (Optional)</label>
+                                                        <label class="form-label fw-semibold">Badge (Optional)</label>
                                                         <input type="text" name="badge" class="form-control" value="{{ $tool['badge'] ?? '' }}" placeholder="e.g. NEW, PRO, POPULAR">
                                                     </div>
                                                     <div class="col-6">
-                                                        <label class="form-label small fw-semibold">Bootstrap Icon</label>
+                                                        <label class="form-label fw-semibold">Bootstrap Icon</label>
                                                         <input type="text" name="icon" class="form-control" value="{{ $tool['icon'] ?? 'bi-tools' }}" placeholder="e.g. bi-type">
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-semibold">Description</label>
+                                                    <label class="form-label fw-semibold">Description</label>
                                                     <textarea name="description" class="form-control" rows="3" required>{{ $tool['description'] }}</textarea>
                                                 </div>
                                             </div>

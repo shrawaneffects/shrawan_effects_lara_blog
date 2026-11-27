@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Articles & Posts</h4>
-            <p class="text-body-secondary small mb-0">Create, edit, and organize publications.</p>
+            <p class="text-body-secondary mb-0">Create, edit, and organize publications.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             @if(auth()->user()->isAdmin())
@@ -31,7 +31,7 @@
                     </div>
                     <div class="modal-body">
                         <p class="mb-2">This will reset <code>views_count</code> to <strong>0</strong> across all articles.</p>
-                        <p class="small text-muted mb-0">You can also adjust individual post counts using the pencil icon next to each post's view count in the table below.</p>
+                        <p class="text-muted mb-0">You can also adjust individual post counts using the pencil icon next to each post's view count in the table below.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -51,7 +51,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Total Articles</span>
+                        <span class="text-body-secondary fw-semibold">Total Articles</span>
                         <h4 class="fw-bold mb-0 text-gradient mt-1">{{ number_format($totalArticlesCount) }}</h4>
                     </div>
                     <div class="bg-primary-subtle text-primary p-3 rounded-4">
@@ -65,7 +65,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Well-Linked Articles</span>
+                        <span class="text-body-secondary fw-semibold">Well-Linked Articles</span>
                         <h4 class="fw-bold mb-0 text-success mt-1">{{ number_format($linkedArticlesCount) }}</h4>
                     </div>
                     <div class="bg-success-subtle text-success p-3 rounded-4">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="mt-2">
-                    <a href="{{ route('admin.posts.index', ['link_status' => 'inlinked']) }}" class="text-decoration-none small text-success fw-semibold">
+                    <a href="{{ route('admin.posts.index', ['link_status' => 'inlinked']) }}" class="text-decoration-none text-success fw-semibold">
                         View inlinked &rarr;
                     </a>
                 </div>
@@ -84,7 +84,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100 {{ $orphanArticlesCount > 0 ? 'border-start border-warning border-4' : '' }}">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">Orphan Articles (0 Inlinks)</span>
+                        <span class="text-body-secondary fw-semibold">Orphan Articles (0 Inlinks)</span>
                         <h4 class="fw-bold mb-0 text-warning mt-1">{{ number_format($orphanArticlesCount) }}</h4>
                     </div>
                     <div class="bg-warning-subtle text-warning p-3 rounded-4">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <div class="mt-2">
-                    <a href="{{ route('admin.posts.index', ['link_status' => 'orphan']) }}" class="text-decoration-none small text-warning fw-semibold">
+                    <a href="{{ route('admin.posts.index', ['link_status' => 'orphan']) }}" class="text-decoration-none text-warning fw-semibold">
                         Filter orphan posts &rarr;
                     </a>
                 </div>
@@ -103,7 +103,7 @@
             <div class="card border-0 shadow-sm p-3 rounded-4 bg-body hover-lift h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-body-secondary small fw-semibold">SEO Link Health</span>
+                        <span class="text-body-secondary fw-semibold">SEO Link Health</span>
                         <h4 class="fw-bold mb-0 text-info mt-1">
                             {{ $totalArticlesCount > 0 ? round(($linkedArticlesCount / $totalArticlesCount) * 100) : 100 }}%
                         </h4>
@@ -191,7 +191,7 @@
                                 <a href="{{ route('admin.posts.edit', $post->id) }}" class="fw-bold text-decoration-none text-body">
                                     {{ Str::limit($post->title, 45) }}
                                 </a>
-                                <div class="text-muted small">
+                                <div class="text-muted">
                                     {{ $post->published_at ? $post->published_at->format('M d, Y') : 'Created ' . $post->created_at->format('M d, Y') }} &bull; {{ $post->reading_time }} min read
                                 </div>
                             </td>
@@ -199,11 +199,11 @@
                                 @if($post->category)
                                     <span class="badge" style="background-color: {{ $post->category->color }};">{{ $post->category->name }}</span>
                                 @else
-                                    <span class="text-muted small">None</span>
+                                    <span class="text-muted">None</span>
                                 @endif
                             </td>
                             <td>
-                                <div class="d-flex align-items-center gap-1 small">
+                                <div class="d-flex align-items-center gap-1">
                                     <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="rounded-circle" width="20" height="20">
                                     <span>{{ $post->author->name }}</span>
                                 </div>
@@ -237,14 +237,14 @@
                                     <!-- Orphan Badge & Link CRUD Action -->
                                     <div class="d-flex align-items-center gap-1">
                                         @if($post->is_orphan)
-                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill small px-2 py-1" title="Orphan Article: No other articles link to this post">
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2 py-1" title="Orphan Article: No other articles link to this post">
                                                 <i class="bi bi-exclamation-triangle me-1"></i>Orphan
                                             </span>
                                             <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1 border-0" data-bs-toggle="modal" data-bs-target="#linkOrphanModal-{{ $post->id }}" title="Create internal inlink to fix orphan">
                                                 <i class="bi bi-plus-circle-fill text-primary"></i> Link
                                             </button>
                                         @else
-                                            <button type="button" class="btn btn-link btn-sm p-0 text-muted small text-decoration-none" data-bs-toggle="modal" data-bs-target="#linkOrphanModal-{{ $post->id }}" title="Add more internal inlinks">
+                                            <button type="button" class="btn btn-link btn-sm p-0 text-muted text-decoration-none" data-bs-toggle="modal" data-bs-target="#linkOrphanModal-{{ $post->id }}" title="Add more internal inlinks">
                                                 <i class="bi bi-link-45deg"></i> +Add Link
                                             </button>
                                         @endif
@@ -263,11 +263,11 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body p-4">
-                                                    <p class="small text-muted mb-3">The following articles link to this post. You can view, edit, or delete any link:</p>
+                                                    <p class="text-muted mb-3">The following articles link to this post. You can view, edit, or delete any link:</p>
                                                     <div class="list-group list-group-flush rounded-3 border">
                                                         @foreach($post->incoming_links as $src)
                                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
-                                                                <span class="small fw-semibold text-truncate me-2" style="max-width: 250px;">{{ $src['title'] }}</span>
+                                                                <span class="fw-semibold text-truncate me-2" style="max-width: 250px;">{{ $src['title'] }}</span>
                                                                 <div class="d-flex align-items-center gap-1">
                                                                     <a href="{{ route('blog.show', $src['slug']) }}" target="_blank" class="btn btn-outline-secondary btn-sm py-0 px-2" title="View"><i class="bi bi-eye"></i></a>
                                                                     <a href="{{ route('admin.posts.edit', $src['id']) }}" class="btn btn-outline-primary btn-sm py-0 px-2" title="Edit Article"><i class="bi bi-pencil"></i></a>
@@ -301,18 +301,18 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body p-4">
-                                                <p class="small text-muted mb-2">Internal links included in this article's content:</p>
+                                                <p class="text-muted mb-2">Internal links included in this article's content:</p>
                                                 @if(!empty($post->outgoing_articles) && count($post->outgoing_articles) > 0)
                                                     <div class="list-group list-group-flush rounded-3 border">
                                                         @foreach($post->outgoing_articles as $targetArt)
                                                             <div class="list-group-item d-flex justify-content-between align-items-center py-2">
-                                                                <span class="small fw-semibold text-truncate me-2" style="max-width: 280px;">{{ $targetArt['title'] }}</span>
+                                                                <span class="fw-semibold text-truncate me-2" style="max-width: 280px;">{{ $targetArt['title'] }}</span>
                                                                 <a href="{{ route('blog.show', $targetArt['slug']) }}" target="_blank" class="btn btn-outline-secondary btn-sm py-0 px-2" title="View"><i class="bi bi-eye"></i></a>
                                                             </div>
                                                         @endforeach
                                                     </div>
                                                 @else
-                                                    <div class="alert alert-light border small text-muted mb-0">No internal article links detected in content.</div>
+                                                    <div class="alert alert-light border text-muted mb-0">No internal article links detected in content.</div>
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
@@ -337,9 +337,9 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body p-4">
-                                                    <p class="small text-muted mb-3">Choose a published article to automatically insert an internal link to this post:</p>
+                                                    <p class="text-muted mb-3">Choose a published article to automatically insert an internal link to this post:</p>
                                                     <div class="mb-3">
-                                                        <label class="form-label small fw-semibold">Source Article (Where link will be added)</label>
+                                                        <label class="form-label fw-semibold">Source Article (Where link will be added)</label>
                                                         <select name="source_post_id" class="form-select form-select-sm" required>
                                                             <option value="">-- Select Source Article --</option>
                                                             @foreach($allPosts as $art)
@@ -350,9 +350,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <label class="form-label small fw-semibold">Anchor / Callout Text (Optional)</label>
+                                                        <label class="form-label fw-semibold">Anchor / Callout Text (Optional)</label>
                                                         <input type="text" name="anchor_text" class="form-control form-control-sm" value="{{ $post->title }}" placeholder="Link anchor text">
-                                                        <small class="text-muted" style="font-size: 0.75rem;">Defaults to target article title.</small>
+                                                        <span class="text-muted" style="font-size: 1rem;">Defaults to target article title.</span>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -387,7 +387,7 @@
                                     </form>
                                 </div>
                             </td>
-                            <td class="small fw-semibold">
+                            <td class="fw-semibold">
                                 <div class="d-flex align-items-center gap-1">
                                     <span>{{ number_format($post->views_count) }}</span>
                                     @if(auth()->user()->isAdmin())
@@ -407,8 +407,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p class="small text-muted mb-2">{{ Str::limit($post->title, 45) }}</p>
-                                                        <label class="form-label small fw-semibold">Total Views</label>
+                                                        <p class="text-muted mb-2">{{ Str::limit($post->title, 45) }}</p>
+                                                        <label class="form-label fw-semibold">Total Views</label>
                                                         <input type="number" name="views_count" class="form-control form-control-sm" min="0" value="{{ $post->views_count }}" required>
                                                     </div>
                                                     <div class="modal-footer py-2">

@@ -8,7 +8,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">Cyber Security & System Health</h4>
-            <p class="text-body-secondary small mb-0">Live monitoring of security posture, attack prevention metrics, and audit history.</p>
+            <p class="text-body-secondary mb-0">Live monitoring of security posture, attack prevention metrics, and audit history.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.security.audit-logs') }}" class="btn btn-outline-primary rounded-pill px-3">
@@ -24,7 +24,7 @@
     <div class="card border-0 shadow-sm rounded-4 bg-body mb-4 p-4">
         <div class="row align-items-center g-4">
             <div class="col-md-3 text-center text-md-start">
-                <span class="text-body-secondary small fw-semibold text-uppercase d-block mb-1">Security Health Score</span>
+                <span class="text-body-secondary fw-semibold text-uppercase d-block mb-1">Security Health Score</span>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
                     <h1 class="display-4 fw-bold mb-0 text-{{ $healthReport['status_color'] }}">{{ $healthReport['score'] }}</h1>
                     <span class="fs-4 text-muted">/ 100</span>
@@ -38,27 +38,27 @@
                 <div class="row g-3">
                     <div class="col-sm-4">
                         <div class="p-3 bg-body-tertiary rounded-4">
-                            <span class="text-muted small d-block mb-1">Failed Logins (24h)</span>
+                            <span class="text-muted d-block mb-1">Failed Logins (24h)</span>
                             <h4 class="fw-bold mb-0 {{ $healthReport['failed_logins_24h'] > 5 ? 'text-danger' : 'text-body' }}">
                                 {{ $healthReport['failed_logins_24h'] }}
                             </h4>
-                            <small class="text-muted">Brute force shielded</small>
+                            <span class="text-muted">Brute force shielded</span>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="p-3 bg-body-tertiary rounded-4">
-                            <span class="text-muted small d-block mb-1">Total Administrators</span>
+                            <span class="text-muted d-block mb-1">Total Administrators</span>
                             <h4 class="fw-bold mb-0 text-primary">{{ $healthReport['total_admins'] }}</h4>
-                            <small class="text-muted">Super-user accounts</small>
+                            <span class="text-muted">Super-user accounts</span>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="p-3 bg-body-tertiary rounded-4">
-                            <span class="text-muted small d-block mb-1">Latest Database Backup</span>
+                            <span class="text-muted d-block mb-1">Latest Database Backup</span>
                             <h6 class="fw-bold mb-0 text-truncate text-body" title="{{ $healthReport['latest_backup_time'] }}">
                                 {{ $healthReport['latest_backup_time'] }}
                             </h6>
-                            <small class="text-success">{{ $healthReport['backup_count'] }} snapshots available</small>
+                            <span class="text-success">{{ $healthReport['backup_count'] }} snapshots available</span>
                         </div>
                     </div>
                 </div>
@@ -82,11 +82,11 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <h6 class="fw-bold mb-0">{{ $check['title'] }}</h6>
-                                    <span class="badge bg-{{ $check['status'] }}-subtle text-{{ $check['status'] }} rounded-pill small">
+                                    <span class="badge bg-{{ $check['status'] }}-subtle text-{{ $check['status'] }} rounded-pill">
                                         {{ ucfirst($check['status']) }}
                                     </span>
                                 </div>
-                                <p class="text-body-secondary small mb-0">{{ $check['message'] }}</p>
+                                <p class="text-body-secondary mb-0">{{ $check['message'] }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -107,7 +107,7 @@
                         @foreach($recentAuditLogs as $log)
                             <div class="list-group-item px-0 py-3 bg-transparent border-bottom">
                                 <div class="d-flex justify-content-between align-items-start mb-1">
-                                    <span class="fw-semibold small d-flex align-items-center gap-1">
+                                    <span class="fw-semibold d-flex align-items-center gap-1">
                                         @if($log->severity === 'danger')
                                             <span class="badge bg-danger-subtle text-danger rounded-pill">Danger</span>
                                         @elseif($log->severity === 'warning')
@@ -117,9 +117,9 @@
                                         @endif
                                         {{ $log->description }}
                                     </span>
-                                    <small class="text-muted" style="font-size: 0.75rem;">{{ $log->created_at->diffForHumans() }}</small>
+                                    <span class="text-muted" style="font-size: 1rem;">{{ $log->created_at->diffForHumans() }}</span>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center small text-muted">
+                                <div class="d-flex justify-content-between align-items-center text-muted">
                                     <span>User: {{ $log->user ? $log->user->name : 'System / Guest' }}</span>
                                     <span class="font-monospace">{{ $log->ip_address ?? 'Local' }}</span>
                                 </div>

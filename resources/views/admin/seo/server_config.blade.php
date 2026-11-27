@@ -8,7 +8,7 @@
 <style>
     .code-editor-area {
         font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-        font-size: 0.9rem;
+        font-size: 1rem;
         line-height: 1.5;
         background-color: #1e1e2e;
         color: #cdd6f4;
@@ -37,7 +37,7 @@
                 <h4 class="fw-bold mb-0">Server Configuration & SEO Files</h4>
                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">Direct Server I/O</span>
             </div>
-            <p class="text-body-secondary small mb-0">Directly modify your search engine crawling instructions (<kbd>robots.txt</kbd>) and Apache web server directives (<kbd>.htaccess</kbd>) with automated backups.</p>
+            <p class="text-body-secondary mb-0">Directly modify your search engine crawling instructions (<kbd>robots.txt</kbd>) and Apache web server directives (<kbd>.htaccess</kbd>) with automated backups.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <form action="{{ route('admin.seo.server-config.storage-link') }}" method="POST" class="d-inline" onsubmit="return confirm('Create / refresh public storage link?');">
@@ -91,7 +91,7 @@
                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">Read Only</span>
                             @endif
                         </div>
-                        <small class="text-body-secondary">Controls crawler access and informs search engines of your XML sitemap URL.</small>
+                        <span class="text-body-secondary">Controls crawler access and informs search engines of your XML sitemap URL.</span>
                     </div>
                     <div class="d-flex gap-1">
                         <a href="{{ url('/robots.txt') }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill" title="View live in browser">
@@ -101,7 +101,7 @@
                 </div>
 
                 <!-- Status Metadata Bar -->
-                <div class="p-2.5 rounded-3 bg-body-tertiary border d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 small">
+                <div class="p-2.5 rounded-3 bg-body-tertiary border d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <div><span class="text-muted">Size:</span> <strong>{{ number_format($robotsSize) }} bytes</strong></div>
                     <div><span class="text-muted">Modified:</span> <strong>{{ $robotsModified }}</strong></div>
                     <div>
@@ -112,7 +112,7 @@
 
                 <!-- Quick Snippets Toolbar -->
                 <div class="mb-3">
-                    <label class="form-label small fw-semibold text-body-secondary d-block mb-1.5"><i class="bi bi-magic me-1"></i> Quick Directives Insertion:</label>
+                    <label class="form-label fw-semibold text-body-secondary d-block mb-1.5"><i class="bi bi-magic me-1"></i> Quick Directives Insertion:</label>
                     <div class="d-flex flex-wrap gap-1.5">
                         <button type="button" class="btn btn-sm btn-outline-primary rounded-pill py-0.5 px-2.5" onclick="insertRobotsDirective('sitemap')">
                             + Sitemap Directive
@@ -165,12 +165,12 @@
                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">Read Only</span>
                             @endif
                         </div>
-                        <small class="text-body-secondary">Apache web server configuration, URL rewrite rules, HTTP redirects, and caching headers.</small>
+                        <span class="text-body-secondary">Apache web server configuration, URL rewrite rules, HTTP redirects, and caching headers.</span>
                     </div>
                 </div>
 
                 <!-- Status Metadata Bar -->
-                <div class="p-2.5 rounded-3 bg-body-tertiary border d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 small">
+                <div class="p-2.5 rounded-3 bg-body-tertiary border d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <div><span class="text-muted">Size:</span> <strong>{{ number_format($htaccessSize) }} bytes</strong></div>
                     <div><span class="text-muted">Modified:</span> <strong>{{ $htaccessModified }}</strong></div>
                     <div>
@@ -181,7 +181,7 @@
 
                 <!-- Quick Snippets Toolbar -->
                 <div class="mb-3">
-                    <label class="form-label small fw-semibold text-body-secondary d-block mb-1.5"><i class="bi bi-magic me-1"></i> Quick Snippets Insertion:</label>
+                    <label class="form-label fw-semibold text-body-secondary d-block mb-1.5"><i class="bi bi-magic me-1"></i> Quick Snippets Insertion:</label>
                     <div class="d-flex flex-wrap gap-1.5">
                         <button type="button" class="btn btn-sm btn-outline-primary rounded-pill py-0.5 px-2.5" onclick="insertHtaccessSnippet('gzip')">
                             + Gzip Compression

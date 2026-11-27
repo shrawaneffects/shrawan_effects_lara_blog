@@ -28,7 +28,7 @@
                     <div class="accordion-item border rounded-4 bg-body shadow-sm overflow-hidden hover-lift">
                         <h2 class="accordion-header" id="gHeading1">
                             <button class="accordion-button fw-bold text-body bg-transparent p-4" type="button" data-bs-toggle="collapse" data-bs-target="#gCollapse1" aria-expanded="true">
-                                <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1 small">Q1</span>
+                                <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1">Q1</span>
                                 How often is new content published?
                             </button>
                         </h2>
@@ -42,7 +42,7 @@
                     <div class="accordion-item border rounded-4 bg-body shadow-sm overflow-hidden hover-lift">
                         <h2 class="accordion-header" id="gHeading2">
                             <button class="accordion-button collapsed fw-bold text-body bg-transparent p-4" type="button" data-bs-toggle="collapse" data-bs-target="#gCollapse2" aria-expanded="false">
-                                <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1 small">Q2</span>
+                                <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1">Q2</span>
                                 Can I bookmark or save articles to read later?
                             </button>
                         </h2>
@@ -62,7 +62,7 @@
                     <div class="accordion-item border rounded-4 bg-body shadow-sm overflow-hidden hover-lift">
                         <h2 class="accordion-header" id="aHeading1">
                             <button class="accordion-button collapsed fw-bold text-body bg-transparent p-4" type="button" data-bs-toggle="collapse" data-bs-target="#aCollapse1" aria-expanded="false">
-                                <span class="badge bg-danger-subtle text-danger rounded-circle me-3 px-2 py-1 small">Q3</span>
+                                <span class="badge bg-danger-subtle text-danger rounded-circle me-3 px-2 py-1">Q3</span>
                                 How do I apply to become a contributing author?
                             </button>
                         </h2>
@@ -76,7 +76,7 @@
                     <div class="accordion-item border rounded-4 bg-body shadow-sm overflow-hidden hover-lift">
                         <h2 class="accordion-header" id="aHeading2">
                             <button class="accordion-button collapsed fw-bold text-body bg-transparent p-4" type="button" data-bs-toggle="collapse" data-bs-target="#aCollapse2" aria-expanded="false">
-                                <span class="badge bg-danger-subtle text-danger rounded-circle me-3 px-2 py-1 small">Q4</span>
+                                <span class="badge bg-danger-subtle text-danger rounded-circle me-3 px-2 py-1">Q4</span>
                                 Does the platform support Schema.org rich snippets and Table of Contents?
                             </button>
                         </h2>

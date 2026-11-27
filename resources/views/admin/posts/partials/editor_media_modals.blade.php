@@ -18,30 +18,30 @@
 
                 <!-- Alt Text -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Alt Text (Image SEO & Accessibility) <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold">Alt Text (Image SEO & Accessibility) <span class="text-danger">*</span></label>
                     <input type="text" id="captionModalAltInput" class="form-control form-control-sm rounded-3" placeholder="Describe this image for Google & screen readers">
                     <div class="d-flex justify-content-between mt-1">
-                        <small class="text-muted" style="font-size: 0.75rem;">Crucial for Google Image Search ranking & accessibility.</small>
-                        <small id="captionModalAltCount" class="text-muted" style="font-size: 0.75rem;">0 / 125</small>
+                        <span class="text-muted" style="font-size: 1rem;">Crucial for Google Image Search ranking & accessibility.</span>
+                        <span id="captionModalAltCount" class="text-muted" style="font-size: 1rem;">0 / 125</span>
                     </div>
                 </div>
 
                 <!-- Image Title / Hover Tooltip -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Image Title (Desktop Tooltip on Hover)</label>
+                    <label class="form-label fw-bold">Image Title (Desktop Tooltip on Hover)</label>
                     <input type="text" id="captionModalTitleInput" class="form-control form-control-sm rounded-3" placeholder="Optional title tooltip">
                 </div>
 
                 <!-- Caption -->
                 <div class="mb-3">
-                    <label class="form-label small fw-bold">Caption (Visible under the image in article)</label>
+                    <label class="form-label fw-bold">Caption (Visible under the image in article)</label>
                     <textarea id="captionModalCaptionInput" rows="2" class="form-control form-control-sm rounded-3" placeholder="e.g. Figure 1: Google Pixel Drop November 2026 features overview"></textarea>
-                    <small class="text-muted" style="font-size: 0.75rem;">Rendered as a semantic &lt;figcaption&gt; below the image.</small>
+                    <span class="text-muted" style="font-size: 1rem;">Rendered as a semantic &lt;figcaption&gt; below the image.</span>
                 </div>
 
                 <!-- Alignment & Display -->
                 <div class="mb-2">
-                    <label class="form-label small fw-bold">Display Layout</label>
+                    <label class="form-label fw-bold">Display Layout</label>
                     <div class="btn-group w-100 btn-group-sm" role="group">
                         <input type="radio" class="btn-check" name="captionModalAlign" id="alignCenter" value="center" checked>
                         <label class="btn btn-outline-secondary" for="alignCenter"><i class="bi bi-text-center me-1"></i> Center</label>
@@ -86,12 +86,12 @@
                 <!-- Nav Tabs -->
                 <ul class="nav nav-tabs px-3 pt-2 bg-body-tertiary border-bottom" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active small fw-semibold" id="tab-library-btn" data-bs-toggle="tab" data-bs-target="#tab-library" type="button" role="tab">
+                        <button class="nav-link active fw-semibold" id="tab-library-btn" data-bs-toggle="tab" data-bs-target="#tab-library" type="button" role="tab">
                             <i class="bi bi-grid-3x3-gap me-1"></i> Browse Library
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link small fw-semibold" id="tab-upload-btn" data-bs-toggle="tab" data-bs-target="#tab-upload" type="button" role="tab">
+                        <button class="nav-link fw-semibold" id="tab-upload-btn" data-bs-toggle="tab" data-bs-target="#tab-upload" type="button" role="tab">
                             <i class="bi bi-cloud-arrow-up-fill me-1 text-primary"></i> Upload New Asset
                         </button>
                     </li>
@@ -133,8 +133,8 @@
                             
                             <!-- Selection Details Sidebar -->
                             <div class="col-lg-4 border-start bg-body-tertiary rounded-3 p-3">
-                                <h6 class="fw-bold small text-muted text-uppercase mb-3"><i class="bi bi-sliders me-1"></i> Asset Details</h6>
-                                <div id="pickerSelectedEmpty" class="text-center py-5 text-muted small">
+                                <h6 class="fw-bold text-muted text-uppercase mb-3"><i class="bi bi-sliders me-1"></i> Asset Details</h6>
+                                <div id="pickerSelectedEmpty" class="text-center py-5 text-muted">
                                     <i class="bi bi-cursor fs-2 d-block mb-2 text-secondary"></i>
                                     Click any asset from the grid to select and insert into your article.
                                 </div>
@@ -143,15 +143,15 @@
                                         <div id="pickerSelectedPreview" style="max-height: 140px; overflow: hidden;" class="d-flex align-items-center justify-content-center"></div>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label small fw-bold mb-1">Title</label>
+                                        <label class="form-label fw-bold mb-1">Title</label>
                                         <input type="text" id="pickerSelectedTitle" class="form-control form-control-sm">
                                     </div>
                                     <div class="mb-2" id="pickerSelectedAltGroup">
-                                        <label class="form-label small fw-bold mb-1">Alt Text (Image SEO)</label>
+                                        <label class="form-label fw-bold mb-1">Alt Text (Image SEO)</label>
                                         <input type="text" id="pickerSelectedAlt" class="form-control form-control-sm">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label small fw-bold mb-1">Caption</label>
+                                        <label class="form-label fw-bold mb-1">Caption</label>
                                         <textarea id="pickerSelectedCaption" rows="2" class="form-control form-control-sm" placeholder="Visible caption under image..."></textarea>
                                     </div>
                                     <button type="button" class="btn btn-primary btn-sm w-100 rounded-pill py-2 fw-semibold" id="btnConfirmPickerInsert">
@@ -167,7 +167,7 @@
                         <div class="text-center p-5 border-2 border-dashed rounded-4 bg-body-tertiary" style="border-color: rgba(99, 102, 241, 0.4) !important;">
                             <i class="bi bi-cloud-arrow-up display-3 text-primary mb-3 d-inline-block"></i>
                             <h5 class="fw-bold mb-2">Drag &amp; Drop Media Files Here</h5>
-                            <p class="text-muted small mb-3">Upload Images (PNG, JPG, WebP), Audio (MP3, WAV), Videos (MP4), or Documents (PDF, DOCX, ZIP).</p>
+                            <p class="text-muted mb-3">Upload Images (PNG, JPG, WebP), Audio (MP3, WAV), Videos (MP4), or Documents (PDF, DOCX, ZIP).</p>
                             <input type="file" id="pickerQuickFileInput" class="d-none" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip">
                             <button type="button" class="btn btn-primary rounded-pill px-4" onclick="document.getElementById('pickerQuickFileInput').click()">
                                 <i class="bi bi-folder2-open me-1"></i> Choose Files to Upload
@@ -175,7 +175,7 @@
                             <div id="pickerUploadProgress" class="progress mt-4 d-none" style="height: 8px;">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"></div>
                             </div>
-                            <div id="pickerUploadStatus" class="small mt-2 text-muted"></div>
+                            <div id="pickerUploadStatus" class="mt-2 text-muted"></div>
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@ figcaption.post-image-caption {
     display: table-caption;
     caption-side: bottom;
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.65);
     font-style: italic;
     margin-top: 0.45rem;

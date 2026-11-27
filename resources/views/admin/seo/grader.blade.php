@@ -27,7 +27,7 @@
                 <h4 class="fw-bold mb-0">On-Page SEO Grader & Link Auditor</h4>
                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">2026 Engine</span>
             </div>
-            <p class="text-body-secondary small mb-0">Grade internal & external linking architecture, follow/nofollow distribution, anchor text diversity, and on-page signals.</p>
+            <p class="text-body-secondary mb-0">Grade internal & external linking architecture, follow/nofollow distribution, anchor text diversity, and on-page signals.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.seo.index') }}" class="btn btn-outline-secondary rounded-pill px-3.5">
@@ -90,7 +90,7 @@
                         <div class="grade-letter-text text-{{ $gradeColor }}">{{ $grade }}</div>
                     </div>
                     <h5 class="fw-bold mb-0 text-{{ $gradeColor }}">{{ $gradeResult['grade_label'] }}</h5>
-                    <small class="text-body-secondary fw-semibold">Overall Quality Score: <strong>{{ $score }}/100</strong></small>
+                    <span class="text-body-secondary fw-semibold">Overall Quality Score: <strong>{{ $score }}/100</strong></span>
                 </div>
 
                 <!-- Fast Summary Cards -->
@@ -114,16 +114,16 @@
                         @foreach($gradeResult['categories'] as $catKey => $cat)
                             <div class="col-6 col-sm-4 col-lg-2">
                                 <div class="p-2.5 rounded-3 bg-body border text-center h-100 shadow-sm">
-                                    <small class="text-body-secondary d-block text-capitalize" style="font-size: 0.75rem;">
+                                    <span class="text-body-secondary d-block text-capitalize" style="font-size: 1rem;">
                                         {{ str_replace('_', ' ', $catKey) }}
-                                    </small>
+                                    </span>
                                     <span class="badge fs-6 my-1 bg-{{ $cat['color'] }}-subtle text-{{ $cat['color'] }} rounded-pill px-2.5">
                                         {{ $cat['grade'] }}
                                     </span>
                                     <div class="progress mt-1" style="height: 3px;">
                                         <div class="progress-bar bg-{{ $cat['color'] }}" style="width: {{ $cat['percentage'] }}%;"></div>
                                     </div>
-                                    <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">{{ $cat['percentage'] }}%</small>
+                                    <span class="text-muted d-block mt-1" style="font-size: 1rem;">{{ $cat['percentage'] }}%</span>
                                 </div>
                             </div>
                         @endforeach
@@ -138,13 +138,13 @@
             <div class="col-6 col-md-3">
                 <div class="card border-0 shadow-sm p-3.5 rounded-4 bg-body h-100 glass-panel">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Internal Links</span>
+                        <span class="text-body-secondary fw-semibold">Internal Links</span>
                         <div class="p-2 rounded-3 bg-primary-subtle text-primary">
                             <i class="bi bi-link-45deg fs-5"></i>
                         </div>
                     </div>
                     <h3 class="fw-bold mb-2 text-primary">{{ $linkGrader['internal']['total'] }}</h3>
-                    <div class="d-flex flex-column gap-1 small">
+                    <div class="d-flex flex-column gap-1">
                         <div class="d-flex justify-content-between">
                             <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Dofollow:</span>
                             <strong class="text-success">{{ $linkGrader['internal']['dofollow'] }}</strong>
@@ -161,13 +161,13 @@
             <div class="col-6 col-md-3">
                 <div class="card border-0 shadow-sm p-3.5 rounded-4 bg-body h-100 glass-panel">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">External Links</span>
+                        <span class="text-body-secondary fw-semibold">External Links</span>
                         <div class="p-2 rounded-3 bg-info-subtle text-info">
                             <i class="bi bi-box-arrow-up-right fs-5"></i>
                         </div>
                     </div>
                     <h3 class="fw-bold mb-2 text-info">{{ $linkGrader['external']['total'] }}</h3>
-                    <div class="d-flex flex-column gap-1 small">
+                    <div class="d-flex flex-column gap-1">
                         <div class="d-flex justify-content-between">
                             <span class="text-success"><i class="bi bi-check2 me-1"></i> Dofollow:</span>
                             <strong>{{ $linkGrader['external']['dofollow'] }}</strong>
@@ -184,15 +184,15 @@
             <div class="col-6 col-md-3">
                 <div class="card border-0 shadow-sm p-3.5 rounded-4 bg-body h-100 glass-panel">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Link Density</span>
+                        <span class="text-body-secondary fw-semibold">Link Density</span>
                         <div class="p-2 rounded-3 bg-success-subtle text-success">
                             <i class="bi bi-speedometer2 fs-5"></i>
                         </div>
                     </div>
                     <h3 class="fw-bold mb-2 text-success">{{ $linkGrader['density'] }} <span class="fs-6 text-muted fw-normal">/100 words</span></h3>
-                    <small class="text-body-secondary d-block" style="font-size: 0.78rem;">
+                    <span class="text-body-secondary d-block" style="font-size: 1rem;">
                         {{ $linkGrader['density'] >= 1.0 && $linkGrader['density'] <= 3.5 ? 'Optimal link distribution' : 'Consider adjusting link frequency' }}
-                    </small>
+                    </span>
                 </div>
             </div>
 
@@ -200,15 +200,15 @@
             <div class="col-6 col-md-3">
                 <div class="card border-0 shadow-sm p-3.5 rounded-4 bg-body h-100 glass-panel">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-body-secondary small fw-semibold">Link Architecture Score</span>
+                        <span class="text-body-secondary fw-semibold">Link Architecture Score</span>
                         <div class="p-2 rounded-3 bg-{{ $linkGrader['link_score'] >= 75 ? 'success' : ($linkGrader['link_score'] >= 50 ? 'warning' : 'danger') }}-subtle text-{{ $linkGrader['link_score'] >= 75 ? 'success' : ($linkGrader['link_score'] >= 50 ? 'warning' : 'danger') }}">
                             <i class="bi bi-shield-check fs-5"></i>
                         </div>
                     </div>
                     <h3 class="fw-bold mb-2 text-{{ $linkGrader['link_score'] >= 75 ? 'success' : ($linkGrader['link_score'] >= 50 ? 'warning' : 'danger') }}">{{ $linkGrader['link_score'] }}<span class="fs-6 text-muted fw-normal">/100</span></h3>
-                    <small class="text-body-secondary d-block" style="font-size: 0.78rem;">
+                    <span class="text-body-secondary d-block" style="font-size: 1rem;">
                         {{ $linkGrader['generic_anchors_count'] }} generic anchors • {{ $linkGrader['security_warnings_count'] }} security flags
-                    </small>
+                    </span>
                 </div>
             </div>
         </div>
@@ -218,7 +218,7 @@
             <div class="p-4 border-bottom bg-body-tertiary d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <div>
                     <h5 class="fw-bold mb-1"><i class="bi bi-table me-2 text-primary"></i> Content Links Inventory & Attribute Inspector</h5>
-                    <small class="text-body-secondary">Examine every hyperlink inside the article content with its anchor text, destination, rel flags, and PageRank flow.</small>
+                    <span class="text-body-secondary">Examine every hyperlink inside the article content with its anchor text, destination, rel flags, and PageRank flow.</span>
                 </div>
 
                 <!-- Filter Pills -->
@@ -262,7 +262,7 @@
                                         {{ $link['anchor'] }}
                                     </div>
                                     @if($link['is_generic'])
-                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle" style="font-size: 0.7rem;">
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle" style="font-size: 1rem;">
                                             Generic Anchor
                                         </span>
                                     @endif
@@ -303,7 +303,7 @@
 
                                 <!-- Target -->
                                 <td>
-                                    <span class="badge bg-body text-body border" style="font-size: 0.75rem;">
+                                    <span class="badge bg-body text-body border" style="font-size: 1rem;">
                                         {{ $link['target'] }}
                                     </span>
                                 </td>
@@ -317,9 +317,9 @@
                                     @else
                                         <div class="d-flex flex-column gap-1">
                                             @foreach($link['issues'] as $iss)
-                                                <small class="text-{{ $iss['severity'] === 'critical' ? 'danger' : ($iss['severity'] === 'warning' ? 'warning' : 'info') }} fw-semibold" style="font-size: 0.76rem;">
+                                                <span class="text-{{ $iss['severity'] === 'critical' ? 'danger' : ($iss['severity'] === 'warning' ? 'warning' : 'info') }} fw-semibold" style="font-size: 1rem;">
                                                     <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ $iss['message'] }}
-                                                </small>
+                                                </span>
                                             @endforeach
                                         </div>
                                     @endif
@@ -352,12 +352,12 @@
                         <i class="bi {{ $icon }} fs-5 flex-shrink-0 mt-0.5"></i>
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="fw-bold mb-1 small">{{ $rule['message'] }}</h6>
+                                <h6 class="fw-bold mb-1">{{ $rule['message'] }}</h6>
                                 @if($rule['deduction'] > 0)
                                     <span class="badge bg-danger-subtle text-danger">-{{ $rule['deduction'] }} pts</span>
                                 @endif
                             </div>
-                            <p class="text-body-secondary mb-0" style="font-size: 0.82rem;">{{ $rule['recommendation'] }}</p>
+                            <p class="text-body-secondary mb-0" style="font-size: 1rem;">{{ $rule['recommendation'] }}</p>
                         </div>
                     </div>
                 @endforeach

@@ -70,7 +70,7 @@
                                     <div class="col-md-6">
                                         <div class="p-3 rounded-3 border d-flex align-items-start gap-2 bg-body-tertiary">
                                             <i class="bi bi-check-circle-fill text-success fs-5 flex-shrink-0 mt-0.5"></i>
-                                            <span class="small fw-semibold">{{ $feature }}</span>
+                                            <span class="fw-semibold">{{ $feature }}</span>
                                         </div>
                                     </div>
                                 @endforeach
@@ -101,11 +101,11 @@
                     <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.2) !important;">
                         <span class="telemetry-tag mb-2"><i class="bi bi-lightning-charge"></i> FAST ENGAGEMENT</span>
                         <h4 class="fw-bold mb-2 font-cyber">Initiate Project Scope</h4>
-                        <p class="text-body-secondary small mb-3">
+                        <p class="text-body-secondary mb-3">
                             Connect directly with our lead architects in Faridabad to plan your software specifications and receive a customized quote.
                         </p>
 
-                        <div class="p-3 rounded-3 mb-3 bg-body-tertiary font-mono small">
+                        <div class="p-3 rounded-3 mb-3 bg-body-tertiary font-mono">
                             <div class="d-flex justify-content-between mb-1">
                                 <span class="text-muted">Service:</span>
                                 <span class="fw-bold text-truncate ms-2">{{ $service->title }}</span>
@@ -124,7 +124,7 @@
                             <i class="bi bi-chat-dots-fill me-1"></i> Discuss This Project
                         </a>
 
-                        <a href="https://wa.me/919555277347?text={{ urlencode('Hello Shrawan Effects, I am interested in ' . $service->title . '.') }}" target="_blank" class="btn btn-outline-success w-100 rounded-pill py-2 font-mono small">
+                        <a href="https://wa.me/919555277347?text={{ urlencode('Hello Shrawan Effects, I am interested in ' . $service->title . '.') }}" target="_blank" class="btn btn-outline-success w-100 rounded-pill py-2 font-mono">
                             <i class="bi bi-whatsapp me-1"></i> WhatsApp: +91 95552 77347
                         </a>
                     </div>
@@ -132,7 +132,7 @@
                     <!-- Faridabad Studio Location Widget -->
                     <div class="card border-0 shadow-sm p-4 rounded-4 bg-body hover-lift">
                         <h5 class="fw-bold mb-2 font-cyber"><i class="bi bi-geo-alt-fill text-success me-2"></i> Local Office</h5>
-                        <p class="text-body-secondary small mb-2 font-mono">
+                        <p class="text-body-secondary mb-2 font-mono">
                             House No. 1049, Jeevan Nagar, Gounchhi,<br>FARIDABAD, Haryana 121004, India
                         </p>
                         <a href="https://maps.google.com/?q=House+No.+1049,+Jeevan+Nagar,+Gounchhi,+FARIDABAD,+Haryana+121004" target="_blank" class="btn btn-sm btn-tactical rounded-pill">
@@ -156,7 +156,7 @@
                                                     {{ $rService->title }}
                                                 </a>
                                             </h6>
-                                            <small class="text-muted font-mono" style="font-size: 0.74rem;">{{ $rService->pricing_starts_at ?: 'Custom' }}</small>
+                                            <span class="text-muted font-mono d-block" style="font-size: 1rem;">{{ $rService->pricing_starts_at ?: 'Custom' }}</span>
                                         </div>
                                     </div>
                                 @endforeach

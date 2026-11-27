@@ -7,37 +7,37 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-xl">
         <div class="openseo-hud-card p-3 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Tracked Keywords</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Tracked Keywords</span>
             <div class="openseo-stat-num">{{ $totalTracked }}</div>
-            <span class="text-body-secondary font-mono small mt-1 d-block">Active monitoring</span>
+            <span class="text-body-secondary font-mono mt-1 d-block">Active monitoring</span>
         </div>
     </div>
     <div class="col-sm-6 col-xl">
         <div class="openseo-hud-card p-3 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">In Top 3 (Podium)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">In Top 3 (Podium)</span>
             <div class="openseo-stat-num text-success">{{ $top3Count }}</div>
-            <span class="text-success font-mono small mt-1 d-block"><i class="bi bi-trophy-fill me-1"></i>High CTR position</span>
+            <span class="text-success font-mono mt-1 d-block"><i class="bi bi-trophy-fill me-1"></i>High CTR position</span>
         </div>
     </div>
     <div class="col-sm-6 col-xl">
         <div class="openseo-hud-card p-3 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">In Top 10 (Page 1)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">In Top 10 (Page 1)</span>
             <div class="openseo-stat-num text-info">{{ $top10Count }}</div>
-            <span class="text-info font-mono small mt-1 d-block"><i class="bi bi-star-fill me-1"></i>First page results</span>
+            <span class="text-info font-mono mt-1 d-block"><i class="bi bi-star-fill me-1"></i>First page results</span>
         </div>
     </div>
     <div class="col-sm-6 col-xl">
         <div class="openseo-hud-card p-3 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Improved (▲)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Improved (▲)</span>
             <div class="openseo-stat-num text-success">{{ $improvedCount }}</div>
-            <span class="text-success font-mono small mt-1 d-block"><i class="bi bi-arrow-up-right me-1"></i>Positive momentum</span>
+            <span class="text-success font-mono mt-1 d-block"><i class="bi bi-arrow-up-right me-1"></i>Positive momentum</span>
         </div>
     </div>
     <div class="col-sm-6 col-xl">
         <div class="openseo-hud-card p-3 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Declined (▼)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Declined (▼)</span>
             <div class="openseo-stat-num text-danger">{{ $declinedCount }}</div>
-            <span class="text-danger font-mono small mt-1 d-block"><i class="bi bi-arrow-down-right me-1"></i>Attention required</span>
+            <span class="text-danger font-mono mt-1 d-block"><i class="bi bi-arrow-down-right me-1"></i>Attention required</span>
         </div>
     </div>
 </div>
@@ -103,7 +103,7 @@
                         <td>
                             <div class="fw-bold text-white fs-6">{{ $kw->keyword }}</div>
                             @if($kw->target_url)
-                                <a href="{{ $kw->target_url }}" target="_blank" class="font-mono text-body-secondary small d-block text-truncate" style="max-width: 300px;">
+                                <a href="{{ $kw->target_url }}" target="_blank" class="font-mono text-body-secondary d-block text-truncate" style="max-width: 300px;">
                                     {{ $kw->target_url }} <i class="bi bi-box-arrow-up-right ms-1"></i>
                                 </a>
                             @endif
@@ -145,16 +145,16 @@
                             @if(!empty($kw->serp_features))
                                 <div class="d-flex gap-1 flex-wrap">
                                     @foreach($kw->serp_features as $feature)
-                                        <span class="badge bg-dark text-info border border-info border-opacity-25 font-mono" style="font-size: 0.65rem;">
+                                        <span class="badge bg-dark text-info border border-info border-opacity-25 font-mono" style="font-size: 1rem;">
                                             {{ $feature }}
                                         </span>
                                     @endforeach
                                 </div>
                             @else
-                                <span class="text-body-secondary small font-mono">Standard SERP</span>
+                                <span class="text-body-secondary font-mono">Standard SERP</span>
                             @endif
                         </td>
-                        <td class="text-end font-mono small text-body-secondary text-nowrap">
+                        <td class="text-end font-mono text-body-secondary text-nowrap">
                             {{ $kw->last_checked_at ? $kw->last_checked_at->diffForHumans() : 'Pending' }}
                         </td>
                         <td class="text-end text-nowrap">

@@ -39,8 +39,8 @@
     }
 
     .openseo-nav-tab {
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         padding: 0.65rem 1.15rem;
@@ -77,12 +77,12 @@
     }
 
     .openseo-table {
-        font-size: 0.88rem;
+        font-size: 1rem;
         font-family: var(--font-main);
     }
     .openseo-table th {
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.8px;
         color: #64748b;
@@ -106,7 +106,7 @@
 
     .badge-intent {
         font-family: var(--font-mono);
-        font-size: 0.68rem;
+        font-size: 1rem;
         padding: 0.25rem 0.6rem;
         border-radius: 6px;
         text-transform: uppercase;
@@ -119,7 +119,7 @@
 
     .rank-change-badge {
         font-family: var(--font-mono);
-        font-size: 0.74rem;
+        font-size: 1rem;
         font-weight: 700;
         padding: 0.2rem 0.5rem;
         border-radius: 6px;
@@ -148,14 +148,14 @@
                             <h2 class="h4 font-cyber fw-bold mb-0 text-gradient">
                                 OpenSEO Engine
                             </h2>
-                            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono text-uppercase" style="font-size: 0.65rem;">
+                            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono text-uppercase" style="font-size: 1rem;">
                                 v0.1.26 • Full Suite
                             </span>
-                            <span class="badge bg-dark text-info border border-info border-opacity-50 font-mono" style="font-size: 0.65rem;">
+                            <span class="badge bg-dark text-info border border-info border-opacity-50 font-mono" style="font-size: 1rem;">
                                 <span class="cyber-beacon me-1"></span>CONNECTED
                             </span>
                         </div>
-                        <p class="text-body-secondary small mb-0 mt-1">
+                        <p class="text-body-secondary mb-0 mt-1">
                             Self-hosted SEO platform powered by DataForSEO algorithms • Active Domain:
                             <span class="text-white fw-bold font-mono">{{ $activeProject->domain ?? 'N/A' }}</span>
                         </p>
@@ -243,7 +243,7 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show border-success border-opacity-50 bg-success bg-opacity-10 text-success font-mono small d-flex align-items-center gap-2 mb-4" role="alert">
+            <div class="alert alert-success alert-dismissible fade show border-success border-opacity-50 bg-success bg-opacity-10 text-success font-mono d-flex align-items-center gap-2 mb-4" role="alert">
                 <i class="bi bi-check-circle-fill fs-5"></i>
                 <div>{{ session('success') }}</div>
                 <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -251,7 +251,7 @@
         @endif
 
         @if(session('info'))
-            <div class="alert alert-info alert-dismissible fade show border-info border-opacity-50 bg-info bg-opacity-10 text-info font-mono small d-flex align-items-center gap-2 mb-4" role="alert">
+            <div class="alert alert-info alert-dismissible fade show border-info border-opacity-50 bg-info bg-opacity-10 text-info font-mono d-flex align-items-center gap-2 mb-4" role="alert">
                 <i class="bi bi-info-circle-fill fs-5"></i>
                 <div>{{ session('info') }}</div>
                 <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>

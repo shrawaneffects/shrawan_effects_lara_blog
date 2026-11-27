@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold mb-1">Add New Service</h4>
-            <p class="text-body-secondary small mb-0">Publish a new engineering or consulting service for Shrawan Effects.</p>
+            <p class="text-body-secondary mb-0">Publish a new engineering or consulting service for Shrawan Effects.</p>
         </div>
         <a href="{{ route('admin.services.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
             <i class="bi bi-arrow-left me-1"></i> Back to Services
@@ -23,33 +23,33 @@
                     <h5 class="fw-bold mb-3 border-bottom pb-2">Service Overview</h5>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Service Title *</label>
+                        <label class="form-label fw-semibold">Service Title *</label>
                         <input type="text" name="title" class="form-control rounded-3" placeholder="e.g. Fullstack Website Development" value="{{ old('title') }}" required>
-                        @error('title') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('title') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Custom URL Slug (Leave blank to auto-generate)</label>
+                        <label class="form-label fw-semibold">Custom URL Slug (Leave blank to auto-generate)</label>
                         <input type="text" name="slug" class="form-control rounded-3 font-monospace" placeholder="e.g. fullstack-website-development" value="{{ old('slug') }}">
-                        @error('slug') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('slug') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Short Summary / Excerpt * (Max 500 chars)</label>
+                        <label class="form-label fw-semibold">Short Summary / Excerpt * (Max 500 chars)</label>
                         <textarea name="short_description" class="form-control rounded-3" rows="3" placeholder="Brief summary displayed on service cards..." required>{{ old('short_description') }}</textarea>
-                        @error('short_description') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('short_description') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Detailed Description & Scope (HTML / Rich details)</label>
+                        <label class="form-label fw-semibold">Detailed Description & Scope (HTML / Rich details)</label>
                         <textarea name="content" class="form-control rounded-3" rows="8" placeholder="In-depth details about what is included, development methodology, and client benefits...">{{ old('content') }}</textarea>
-                        @error('content') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('content') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Key Features & Deliverables (One per line)</label>
+                        <label class="form-label fw-semibold">Key Features & Deliverables (One per line)</label>
                         <textarea name="features" class="form-control rounded-3 font-monospace" rows="5" placeholder="Custom Fullstack Architecture&#10;High-Speed Responsive UI&#10;Database Query Optimization&#10;Production Server Hardening">{{ old('features') }}</textarea>
-                        <small class="text-muted d-block mt-1">Each line will be displayed as a feature bullet point with a checkmark.</small>
+                        <span class="text-muted d-block mt-1">Each line will be displayed as a feature bullet point with a checkmark.</span>
                     </div>
                 </div>
             </div>
@@ -71,32 +71,32 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Display Order</label>
+                        <label class="form-label fw-semibold">Display Order</label>
                         <input type="number" name="order" class="form-control rounded-3 font-monospace" value="{{ old('order', 0) }}" min="0">
-                        <small class="text-muted">Lower numbers appear first.</small>
+                        <span class="text-muted">Lower numbers appear first.</span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Bootstrap Icon Class</label>
+                        <label class="form-label fw-semibold">Bootstrap Icon Class</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-star"></i></span>
                             <input type="text" name="icon" class="form-control font-monospace" placeholder="bi-laptop" value="{{ old('icon', 'bi-laptop') }}">
                         </div>
-                        <small class="text-muted">Options: bi-laptop, bi-cpu, bi-cart3, bi-phone, bi-diagram-3, bi-graph-up-arrow, bi-cloud-check, bi-megaphone</small>
+                        <span class="text-muted">Options: bi-laptop, bi-cpu, bi-cart3, bi-phone, bi-diagram-3, bi-graph-up-arrow, bi-cloud-check, bi-megaphone</span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Indicative Pricing</label>
+                        <label class="form-label fw-semibold">Indicative Pricing</label>
                         <input type="text" name="pricing_starts_at" class="form-control font-monospace" placeholder="e.g. Starting from ₹40,000 / project" value="{{ old('pricing_starts_at') }}">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Tech Stack / Technologies</label>
+                        <label class="form-label fw-semibold">Tech Stack / Technologies</label>
                         <input type="text" name="technologies" class="form-control" placeholder="e.g. Laravel, PHP, React, MySQL, Docker" value="{{ old('technologies') }}">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Service Cover Image</label>
+                        <label class="form-label fw-semibold">Service Cover Image</label>
                         <input type="file" name="image" class="form-control mb-2" accept="image/*">
                         <input type="url" name="image_url" class="form-control form-control-sm font-monospace" placeholder="Or paste external image URL..." value="{{ old('image_url') }}">
                     </div>

@@ -9,17 +9,17 @@
     <div class="col-lg-7">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
             <h5 class="font-cyber fw-bold text-white mb-1">Generate Audit Report</h5>
-            <p class="text-body-secondary font-mono small mb-3">Create an executive client-ready SEO snapshot with public share link</p>
+            <p class="text-body-secondary font-mono mb-3">Create an executive client-ready SEO snapshot with public share link</p>
 
             <form action="{{ route('openseo.reports.generate') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label font-mono small text-body-secondary">Report Title</label>
+                    <label class="form-label font-mono text-body-secondary">Report Title</label>
                     <input type="text" name="title" value="Monthly Executive SEO Audit - {{ $activeProject->name }} ({{ date('F Y') }})" class="form-control bg-dark text-white border-secondary border-opacity-50 font-mono" required>
                 </div>
                 <div class="row g-2 mb-3">
                     <div class="col-6">
-                        <label class="form-label font-mono small text-body-secondary">Report Type</label>
+                        <label class="form-label font-mono text-body-secondary">Report Type</label>
                         <select name="report_type" class="form-select bg-dark text-white border-secondary border-opacity-50 font-mono">
                             <option value="executive_audit">Executive Site Audit</option>
                             <option value="rank_tracking">Rankings & Growth Report</option>
@@ -40,7 +40,7 @@
     <div class="col-lg-5">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
             <h5 class="font-cyber fw-bold text-white mb-1">Instant Data Downloads</h5>
-            <p class="text-body-secondary font-mono small mb-3">Export raw data tables to spreadsheet CSV</p>
+            <p class="text-body-secondary font-mono mb-3">Export raw data tables to spreadsheet CSV</p>
 
             <div class="d-flex flex-column gap-2">
                 <a href="{{ route('openseo.reports.export', 'keywords') }}" class="btn btn-outline-success font-mono text-start d-flex align-items-center justify-content-between p-2.5">
@@ -65,7 +65,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h5 class="font-cyber fw-bold text-white mb-0">Saved Reports Archive</h5>
-            <p class="text-body-secondary font-mono small mb-0">Reports generated for {{ $activeProject->name }}</p>
+            <p class="text-body-secondary font-mono mb-0">Reports generated for {{ $activeProject->name }}</p>
         </div>
     </div>
 
@@ -88,7 +88,7 @@
                     <tr>
                         <td>
                             <div class="fw-bold text-white fs-6">{{ $report->title }}</div>
-                            <span class="text-body-secondary font-mono small">{{ $data['domain'] ?? $activeProject->domain }}</span>
+                            <span class="text-body-secondary font-mono">{{ $data['domain'] ?? $activeProject->domain }}</span>
                         </td>
                         <td>
                             <span class="badge bg-dark text-info border border-info border-opacity-25 font-mono">
@@ -104,7 +104,7 @@
                         <td class="text-center font-mono text-info">
                             {{ number_format($data['organic_traffic'] ?? 0) }}
                         </td>
-                        <td class="text-end font-mono small text-body-secondary text-nowrap">
+                        <td class="text-end font-mono text-body-secondary text-nowrap">
                             {{ $report->created_at->format('M d, Y') }}
                         </td>
                         <td class="text-end text-nowrap">

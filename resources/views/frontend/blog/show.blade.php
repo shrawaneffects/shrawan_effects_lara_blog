@@ -77,27 +77,27 @@
                                         {{ $post->author->name }}
                                     </a>
                                 </h6>
-                                <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
+                                <span class="text-body-secondary d-block" style="font-family: var(--font-main); font-size: 1rem;">
                                     {{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }} &bull;
                                     <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m read &bull;
                                     <i class="bi bi-eye me-1 text-success"></i>{{ number_format($post->views_count) }} views
-                                </small>
+                                </span>
                             </div>
                         </div>
 
                         <!-- Social Share Buttons with Gradient Hover -->
                         <div class="d-flex align-items-center gap-2">
-                            <span class="small text-muted d-none d-sm-inline fw-semibold">Share:</span>
-                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($post->title) }}&url={{ urlencode(request()->fullUrl()) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;" title="Share on X">
+                            <span class="text-muted d-none d-sm-inline fw-semibold" style="font-size: 1rem;">Share:</span>
+                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($post->title) }}&url={{ urlencode(request()->fullUrl()) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;" title="Share on X">
                                 <i class="bi bi-twitter-x"></i>
                             </a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;" title="Share on Facebook">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;" title="Share on Facebook">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(request()->fullUrl()) }}&title={{ urlencode($post->title) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;" title="Share on LinkedIn">
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(request()->fullUrl()) }}&title={{ urlencode($post->title) }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;" title="Share on LinkedIn">
                                 <i class="bi bi-linkedin"></i>
                             </a>
-                            <button class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;" onclick="navigator.clipboard.writeText(window.location.href); alert('Article link copied to clipboard!');" title="Copy Link">
+                            <button class="btn btn-outline-secondary btn-sm rounded-circle p-2 hover-lift" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;" onclick="navigator.clipboard.writeText(window.location.href); alert('Article link copied to clipboard!');" title="Copy Link">
                                 <i class="bi bi-link-45deg fs-5"></i>
                             </button>
                         </div>
@@ -119,16 +119,16 @@
                                     <i class="bi bi-list-nested text-gradient me-2 fs-4"></i>
                                     <span>Table of <span class="text-gradient">Contents</span></span>
                                 </h5>
-                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" type="button">
-                                    <i class="bi bi-chevron-down me-1"></i> <span class="small">Toggle</span>
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" type="button" style="font-size: 1rem;">
+                                    <i class="bi bi-chevron-down me-1"></i> <span>Toggle</span>
                                 </button>
                             </div>
                             <div class="collapse show mt-3" id="tableOfContentsCollapse">
                                 <ul class="list-unstyled mb-0 d-flex flex-column gap-2 border-top pt-3">
                                     @foreach($post->table_of_contents as $item)
                                         <li class="{{ $item['level'] === 3 ? 'ps-4' : '' }}">
-                                            <a href="#{{ $item['id'] }}" class="toc-link text-decoration-none text-body small d-inline-flex align-items-center">
-                                                <i class="bi bi-chevron-right me-2 text-primary" style="font-size: 0.7rem;"></i>
+                                            <a href="#{{ $item['id'] }}" class="toc-link text-decoration-none text-body d-inline-flex align-items-center" style="font-size: 1rem;">
+                                                <i class="bi bi-chevron-right me-2 text-primary" style="font-size: 1rem;"></i>
                                                 <span>{{ $item['title'] }}</span>
                                             </a>
                                         </li>
@@ -174,7 +174,7 @@
                                         <div class="accordion-item border rounded-4 bg-body shadow-sm overflow-hidden hover-lift">
                                             <h2 class="accordion-header" id="faqHeading{{ $index }}">
                                                 <button class="accordion-button {{ $index !== 0 ? 'collapsed' : '' }} fw-bold text-body bg-transparent p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse{{ $index }}" aria-expanded="{{ $index === 0 ? 'true' : 'false' }}" aria-controls="faqCollapse{{ $index }}">
-                                                    <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1 small">Q{{ $index + 1 }}</span>
+                                                    <span class="badge bg-primary-subtle text-primary rounded-circle me-3 px-2 py-1" style="font-size: 1rem;">Q{{ $index + 1 }}</span>
                                                     {{ $faq['question'] }}
                                                 </button>
                                             </h2>
@@ -201,7 +201,7 @@
                                         {{ $post->author->name }}
                                     </a>
                                 </h4>
-                                <p class="text-body-secondary small mb-0">{{ $post->author->bio ?? 'Tech writer and software architect.' }}</p>
+                                <p class="text-body-secondary mb-0" style="font-size: 1rem;">{{ $post->author->bio ?? 'Tech writer and software architect.' }}</p>
                             </div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                         <div class="col-sm-6">
                             @if(isset($previousPost) && $previousPost)
                                 <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
-                                    <small class="text-success font-mono"><i class="bi bi-arrow-left me-1"></i> // PREV TRANSMISSION</small>
+                                    <span class="text-success d-block" style="font-family: var(--font-main); font-size: 1rem;"><i class="bi bi-arrow-left me-1"></i> PREVIOUS ARTICLE</span>
                                     <h6 class="fw-bold mt-1 mb-0">
                                         <a href="{{ route('blog.show', $previousPost->slug) }}" class="text-decoration-none text-body">
                                             {{ Str::limit($previousPost->title, 45) }}
@@ -223,7 +223,7 @@
                         <div class="col-sm-6 text-sm-end">
                             @if(isset($nextPost) && $nextPost)
                                 <div class="card h-100 border-0 shadow-sm p-3 rounded-4 bg-body hover-lift" style="border: 1px solid rgba(0,255,102,0.18) !important;">
-                                    <small class="text-success font-mono">// NEXT TRANSMISSION <i class="bi bi-arrow-right ms-1"></i></small>
+                                    <span class="text-success d-block" style="font-family: var(--font-main); font-size: 1rem;">NEXT ARTICLE <i class="bi bi-arrow-right ms-1"></i></span>
                                     <h6 class="fw-bold mt-1 mb-0">
                                         <a href="{{ route('blog.show', $nextPost->slug) }}" class="text-decoration-none text-body">
                                             {{ Str::limit($nextPost->title, 45) }}
@@ -247,7 +247,7 @@
                                     <i class="bi bi-diagram-3-fill text-primary me-2"></i>
                                     <span>Knowledge Graph & <span class="text-gradient">Connected Guides</span></span>
                                 </h5>
-                                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1.5 small">
+                                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1" style="font-size: 1rem;">
                                     {{ $incomingPosts->count() }} Inbound &bull; {{ $outgoingPosts->count() }} Outbound
                                 </span>
                             </div>
@@ -257,13 +257,13 @@
                                 @if($incomingPosts->count() > 0)
                                     <div class="{{ $outgoingPosts->count() > 0 ? 'col-md-6' : 'col-12' }}">
                                         <div class="p-3 rounded-3 bg-body-tertiary h-100">
-                                            <h6 class="fw-bold small text-muted text-uppercase mb-2">
+                                            <h6 class="fw-bold text-muted text-uppercase mb-2" style="font-size: 1rem;">
                                                 <i class="bi bi-arrow-down-left-square-fill text-success me-1"></i> Articles Linking Here (Inbound)
                                             </h6>
                                             <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                                                 @foreach($incomingPosts as $inPost)
                                                     <li>
-                                                        <a href="{{ route('blog.show', $inPost->slug) }}" class="text-decoration-none text-body small fw-semibold d-flex align-items-center justify-content-between hover-lift">
+                                                        <a href="{{ route('blog.show', $inPost->slug) }}" class="text-decoration-none text-body fw-semibold d-flex align-items-center justify-content-between hover-lift" style="font-size: 1rem;">
                                                             <span class="text-truncate" style="max-width: 85%;">{{ $inPost->title }}</span>
                                                             <i class="bi bi-arrow-right-short text-primary"></i>
                                                         </a>
@@ -278,13 +278,13 @@
                                 @if($outgoingPosts->count() > 0)
                                     <div class="{{ $incomingPosts->count() > 0 ? 'col-md-6' : 'col-12' }}">
                                         <div class="p-3 rounded-3 bg-body-tertiary h-100">
-                                            <h6 class="fw-bold small text-muted text-uppercase mb-2">
+                                            <h6 class="fw-bold text-muted text-uppercase mb-2" style="font-size: 1rem;">
                                                 <i class="bi bi-arrow-up-right-square-fill text-info me-1"></i> Referenced Guides (Outbound)
                                             </h6>
                                             <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
                                                 @foreach($outgoingPosts as $outPost)
                                                     <li>
-                                                        <a href="{{ route('blog.show', $outPost->slug) }}" class="text-decoration-none text-body small fw-semibold d-flex align-items-center justify-content-between hover-lift">
+                                                        <a href="{{ route('blog.show', $outPost->slug) }}" class="text-decoration-none text-body fw-semibold d-flex align-items-center justify-content-between hover-lift" style="font-size: 1rem;">
                                                             <span class="text-truncate" style="max-width: 85%;">{{ $outPost->title }}</span>
                                                             <i class="bi bi-arrow-right-short text-primary"></i>
                                                         </a>
@@ -318,7 +318,7 @@
                                                         {{ Str::limit($rPost->title, 45) }}
                                                     </a>
                                                 </h6>
-                                                <div class="mt-auto small text-muted">
+                                                <div class="mt-auto text-muted" style="font-size: 1rem;">
                                                     <i class="bi bi-clock me-1 text-primary"></i>{{ $rPost->reading_time }} min read
                                                 </div>
                                             </div>
@@ -345,23 +345,23 @@
                                 @guest
                                     <div class="row g-3 mb-3">
                                         <div class="col-md-6">
-                                            <label class="form-label small fw-semibold">Your Name *</label>
+                                            <label class="form-label fw-semibold">Your Name *</label>
                                             <input type="text" name="guest_name" class="form-control" placeholder="Jane Doe" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label small fw-semibold">Your Email *</label>
+                                            <label class="form-label fw-semibold">Your Email *</label>
                                             <input type="email" name="guest_email" class="form-control" placeholder="jane@example.com" required>
                                         </div>
                                     </div>
                                 @else
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="rounded-circle" width="28" height="28">
-                                        <span class="small fw-semibold">Commenting as <strong>{{ auth()->user()->name }}</strong></span>
+                                        <span class="fw-semibold" style="font-size: 1rem;">Commenting as <strong>{{ auth()->user()->name }}</strong></span>
                                     </div>
                                 @endguest
 
                                 <div class="mb-3">
-                                    <label class="form-label small fw-semibold">Comment *</label>
+                                    <label class="form-label fw-semibold">Comment *</label>
                                     <textarea name="content" class="form-control rounded-4 p-3" rows="4" placeholder="Join the discussion... Share your insights or questions" required></textarea>
                                 </div>
 
@@ -380,7 +380,7 @@
                                         <div class="flex-grow-1">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <h6 class="fw-bold mb-0">{{ $comment->author_name }}</h6>
-                                                <small class="text-body-secondary">{{ $comment->created_at->diffForHumans() }}</small>
+                                                <span class="text-body-secondary" style="font-size: 1rem;">{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
                                             <p class="text-body mt-2 mb-2">{{ $comment->content }}</p>
 
@@ -421,10 +421,10 @@
                                                             <img src="{{ $reply->author_avatar }}" alt="{{ $reply->author_name }}" class="rounded-circle" width="32" height="32">
                                                             <div class="flex-grow-1 bg-body-tertiary p-3 rounded-3">
                                                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                                                    <span class="fw-bold small">{{ $reply->author_name }}</span>
-                                                                    <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
+                                                                    <span class="fw-bold" style="font-size: 1rem;">{{ $reply->author_name }}</span>
+                                                                    <span class="text-muted" style="font-size: 1rem;">{{ $reply->created_at->diffForHumans() }}</span>
                                                                 </div>
-                                                                <p class="small mb-0">{{ $reply->content }}</p>
+                                                                <p class="mb-0" style="font-size: 1rem;">{{ $reply->content }}</p>
                                                             </div>
                                                         </div>
                                                     @endforeach

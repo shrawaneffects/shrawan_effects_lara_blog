@@ -20,7 +20,7 @@
                 <form action="{{ route('blog.index') }}" method="GET" class="mb-4">
                     <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
                         <span class="input-group-text border-0 ps-4 nav-search-addon"><i class="bi bi-search"></i></span>
-                        <input type="text" name="search" class="form-control border-0 font-mono nav-search-input" placeholder="Query datastream by keyword..." style="font-size: 0.95rem;">
+                        <input type="text" name="search" class="form-control border-0 font-mono nav-search-input" placeholder="Query datastream by keyword..." style="font-size: 1rem;">
                         <button class="btn btn-gradient px-4" type="submit">SEARCH</button>
                     </div>
                 </form>

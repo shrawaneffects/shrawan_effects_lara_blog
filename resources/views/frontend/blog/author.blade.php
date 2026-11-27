@@ -40,12 +40,12 @@
                                             {{ $post->title }}
                                         </a>
                                     </h5>
-                                    <p class="card-text text-body-secondary small mb-3">
+                                    <p class="card-text text-body-secondary mb-3">
                                         {{ Str::limit($post->excerpt, 110) }}
                                     </p>
                                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                                        <small class="text-body-secondary">{{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }}</small>
-                                        <div class="small text-body-secondary">
+                                        <span class="text-body-secondary">{{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }}</span>
+                                        <div class="text-body-secondary">
                                             <i class="bi bi-clock me-1 text-primary"></i>{{ $post->reading_time }} min
                                         </div>
                                     </div>

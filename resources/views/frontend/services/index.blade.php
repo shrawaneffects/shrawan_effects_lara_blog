@@ -36,7 +36,7 @@
                 <a href="{{ route('contact.index') }}" class="btn btn-tactical rounded-pill px-4 py-2">
                     <i class="bi bi-chat-square-dots me-2"></i> Request Consultation
                 </a>
-                <a href="tel:+919555277347" class="btn btn-outline-secondary rounded-pill px-3 py-2 font-mono small d-none d-sm-inline-flex align-items-center">
+                <a href="tel:+919555277347" class="btn btn-outline-secondary rounded-pill px-3 py-2 font-mono d-none d-sm-inline-flex align-items-center">
                     <i class="bi bi-telephone text-success me-2"></i> +91 95552 77347
                 </a>
             </div>
@@ -55,17 +55,17 @@
                 <div class="col-lg-7">
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                         <span class="telemetry-tag"><i class="bi bi-hdd-network"></i> FREE INFRASTRUCTURE TOOL // 10,000+ DOMAINS</span>
-                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono small">
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono">
                             <span class="cyber-beacon me-1"></span> LIVE ENGINE
                         </span>
                     </div>
                     <h2 class="fw-bold font-cyber mb-2">
                         Bulk Website <span class="text-gradient">IP &amp; Class-C Subnet Checker</span>
                     </h2>
-                    <p class="text-body-secondary small leading-relaxed mb-3">
+                    <p class="text-body-secondary leading-relaxed mb-3">
                         Audit up to 10,000+ domains at once with zero timeouts. Resolve IPv4 &amp; IPv6 addresses, classify CDN/Proxy, Cloud, VPS/Datacenter &amp; Hosting IP types, identify shared <strong>Same-IP</strong> and <strong>Same Class-C (/24)</strong> footprints, and export full CSV or JSON reports.
                     </p>
-                    <div class="d-flex flex-wrap gap-2 mb-4 font-mono small">
+                    <div class="d-flex flex-wrap gap-2 mb-4 font-mono">
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-lightning-charge-fill text-success me-1"></i> Concurrent Batch Queue</span>
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-shield-shaded text-info me-1"></i> CDN / Cloud / Hosting Detection</span>
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-diagram-3-fill text-warning me-1"></i> Same-IP &amp; /24 Clustering</span>
@@ -84,10 +84,10 @@
                 <div class="col-lg-5 position-relative" style="z-index: 3;">
                     <form action="{{ $bulkIpToolUrl }}" method="GET" class="p-3 p-md-4 rounded-4 bg-body-tertiary border border-success border-opacity-25">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label for="quickBulkDomains" class="font-mono small fw-bold text-body mb-0">
+                            <label for="quickBulkDomains" class="font-mono fw-bold text-body mb-0" style="font-size: 1rem;">
                                 <i class="bi bi-terminal text-success me-1"></i> Quick Launch Check
                             </label>
-                            <span class="badge bg-success bg-opacity-10 text-success font-mono" style="font-size: 0.68rem;">NO LOGIN REQUIRED</span>
+                            <span class="badge bg-success bg-opacity-10 text-success font-mono" style="font-size: 1rem;">NO LOGIN REQUIRED</span>
                         </div>
                         <textarea
                             id="quickBulkDomains"
@@ -113,7 +113,7 @@
                 <span class="telemetry-tag mb-1"><i class="bi bi-cpu"></i> CORE CAPABILITIES</span>
                 <h3 class="fw-bold mb-0 font-cyber">Production-Grade <span class="text-gradient">Solutions</span></h3>
             </div>
-            <p class="text-body-secondary small mb-0 font-mono">
+            <p class="text-body-secondary mb-0 font-mono">
                 {{ $services->count() }} SPECIALIZED SERVICES AVAILABLE
             </p>
         </div>
@@ -127,7 +127,7 @@
                                 <i class="bi {{ $service->icon ?: 'bi-briefcase' }} fs-3 text-gradient"></i>
                             </div>
                             @if($service->pricing_starts_at)
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 font-mono small">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 font-mono">
                                     {{ $service->pricing_starts_at }}
                                 </span>
                             @endif
@@ -139,12 +139,12 @@
                             </a>
                         </h4>
 
-                        <p class="text-body-secondary small mb-3 leading-relaxed flex-grow-1">
+                        <p class="text-body-secondary mb-3 leading-relaxed flex-grow-1">
                             {{ $service->short_description }}
                         </p>
 
                         @if(!empty($service->features) && is_array($service->features))
-                            <ul class="list-unstyled small mb-4 text-body-secondary font-mono">
+                            <ul class="list-unstyled mb-4 text-body-secondary font-mono">
                                 @foreach(array_slice($service->features, 0, 3) as $feat)
                                     <li class="mb-1 d-flex align-items-start gap-2">
                                         <i class="bi bi-check2 text-success flex-shrink-0 mt-0.5"></i>
@@ -155,7 +155,7 @@
                         @endif
 
                         <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between position-relative" style="z-index: 2;">
-                            <span class="small font-mono text-muted text-truncate" style="max-width: 180px;">
+                            <span class="font-mono text-muted text-truncate" style="max-width: 180px;">
                                 {{ $service->technologies ?: 'Laravel, PHP, Cloud' }}
                             </span>
                             <a href="{{ route('services.show', $service->slug) }}" class="btn btn-sm btn-tactical rounded-pill px-3">
@@ -175,10 +175,10 @@
                 <div class="col-lg-7">
                     <span class="badge bg-white text-dark font-mono mb-2">LOCAL EXPERTISE // NCR REGION</span>
                     <h2 class="fw-bold font-cyber mb-3">Why Partner With Shrawan Effects in Faridabad?</h2>
-                    <p class="small text-white-75 mb-4 leading-relaxed">
+                    <p class="text-white-75 mb-4 leading-relaxed">
                         We blend high-level full-stack software architecture with local hands-on communication. Operating from Faridabad (Haryana), we work closely with startups, manufacturing industries, e-commerce brands, and global clients to engineer digital products that last.
                     </p>
-                    <div class="row g-3 small font-mono">
+                    <div class="row g-3 font-mono">
                         <div class="col-sm-6 d-flex align-items-center gap-2">
                             <i class="bi bi-shield-check text-success fs-5"></i>
                             <span>100% PSR & Clean Code Standards</span>
@@ -202,7 +202,7 @@
                     <div class="p-4 rounded-4" style="background: rgba(5,8,4,0.4); border: 1px solid rgba(0,255,102,0.3);">
                         <i class="bi bi-geo-alt-fill text-success fs-2 mb-2 d-inline-block"></i>
                         <h5 class="fw-bold font-cyber mb-1">Faridabad Headquarters</h5>
-                        <p class="small text-white-50 mb-3 font-mono">
+                        <p class="text-white-50 mb-3 font-mono">
                             House No. 1049, Jeevan Nagar, Gounchhi,<br>FARIDABAD, Haryana 121004
                         </p>
                         <a href="{{ route('contact.index') }}" class="btn btn-gradient rounded-pill px-4 py-2.5 w-100">

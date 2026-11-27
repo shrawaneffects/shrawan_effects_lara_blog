@@ -85,9 +85,9 @@
                                     <img src="{{ $leadPost->author->avatar_url }}" alt="{{ $leadPost->author->name }}" class="author-avatar me-3" width="40" height="40" loading="lazy" decoding="async">
                                     <div class="d-flex flex-column">
                                         <h6 class="mb-0 fw-semibold">{{ $leadPost->author->name }}</h6>
-                                        <small class="text-body-secondary font-mono" style="font-size: 0.78rem;">
+                                        <span class="text-body-secondary font-mono" style="font-size: 1rem;">
                                             {{ $leadPost->published_at ? $leadPost->published_at->format('M d, Y') : 'Recently' }} &bull; // {{ $leadPost->reading_time }} MIN READ
-                                        </small>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                                 {{ Str::limit($fPost->title, 55) }}
                                             </a>
                                         </h5>
-                                        <div class="d-flex align-items-center mt-auto font-mono text-body-secondary" style="font-size: 0.75rem;">
+                                        <div class="d-flex align-items-center mt-auto font-mono text-body-secondary" style="font-size: 1rem;">
                                             <span>{{ $fPost->published_at ? $fPost->published_at->format('M d') : 'Recent' }}</span>
                                             <span class="mx-2">&bull;</span>
                                             <span class="text-success"><i class="bi bi-clock me-1"></i>{{ $fPost->reading_time }}m</span>
@@ -152,14 +152,14 @@
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center gap-2 mb-1">
                                         <img src="{{ $tPost->author->avatar_url }}" alt="{{ $tPost->author->name }}" class="rounded-circle author-avatar" width="22" height="22" loading="lazy" decoding="async" style="width: 22px; height: 22px;">
-                                        <span class="small fw-semibold">{{ $tPost->author->name }}</span>
+                                        <span class="fw-semibold" style="font-size: 1rem;">{{ $tPost->author->name }}</span>
                                     </div>
                                     <h6 class="fw-bold mb-2">
                                         <a href="{{ route('blog.show', $tPost->slug) }}" class="text-decoration-none text-body">
                                             {{ Str::limit($tPost->title, 65) }}
                                         </a>
                                     </h6>
-                                    <div class="mt-auto font-mono text-body-secondary" style="font-size: 0.75rem;">
+                                    <div class="mt-auto font-mono text-body-secondary" style="font-size: 1rem;">
                                         <span>{{ $tPost->published_at ? $tPost->published_at->format('M d, Y') : 'Recent' }}</span>
                                         <span class="mx-1">&bull;</span>
                                         <span class="text-success"><i class="bi bi-eye me-1"></i>{{ number_format($tPost->views_count) }}</span>
@@ -241,15 +241,15 @@
                                                 {{ $post->title }}
                                             </a>
                                         </h5>
-                                        <p class="card-text text-body-secondary small mb-3">
+                                        <p class="card-text text-body-secondary mb-3" style="font-size: 1rem;">
                                             {{ Str::limit($post->excerpt, 110) }}
                                         </p>
                                         <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <img src="{{ $post->author->avatar_url }}" alt="{{ $post->author->name }}" class="author-avatar me-2" width="32" height="32" loading="lazy" decoding="async" style="width: 32px; height: 32px;">
-                                                <span class="small fw-semibold">{{ $post->author->name }}</span>
+                                                <span class="fw-semibold" style="font-size: 1rem;">{{ $post->author->name }}</span>
                                             </div>
-                                            <div class="font-mono text-body-secondary" style="font-size: 0.75rem;">
+                                            <div class="font-mono text-body-secondary" style="font-size: 1rem;">
                                                 <i class="bi bi-clock me-1 text-success"></i>{{ $post->reading_time }}m
                                             </div>
                                         </div>
@@ -261,7 +261,7 @@
                                 <div class="p-5 text-center rounded-4 empty-state-box">
                                     <i class="bi bi-cpu fs-1 text-success opacity-50"></i>
                                     <h5 class="mt-3 font-cyber">NO DATA PACKETS DETECTED</h5>
-                                    <p class="text-body-secondary font-mono small">Telemetry stream will update once new intel is published.</p>
+                                    <p class="text-body-secondary font-mono" style="font-size: 1rem;">Telemetry stream will update once new intel is published.</p>
                                 </div>
                             </div>
                         @endforelse
@@ -282,7 +282,7 @@
                             <h5 class="fw-bold mb-3 font-cyber"><i class="bi bi-terminal me-2 text-success"></i> DATABASE QUERY</h5>
                             <form action="{{ route('blog.index') }}" method="GET" role="search">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search keywords..." aria-label="Search articles by keywords" style="border-color: rgba(0,255,102,0.25); font-family: var(--font-mono); font-size: 0.85rem;">
+                                    <input type="text" name="search" class="form-control rounded-start-pill ps-3" placeholder="Search keywords..." aria-label="Search articles by keywords" style="border-color: rgba(0,255,102,0.25); font-family: var(--font-main); font-size: 1rem;">
                                     <button class="btn btn-gradient rounded-end-pill px-3" type="submit" aria-label="Search articles"><i class="bi bi-search" aria-hidden="true"></i></button>
                                 </div>
                             </form>
@@ -310,7 +310,7 @@
                             <div class="position-relative" style="z-index: 1;">
                                 <i class="bi bi-broadcast-pin fs-1 mb-2 d-inline-block text-success"></i>
                                 <h4 class="fw-bold font-cyber">CIPHER TRANSMISSION</h4>
-                                <p class="small text-white-50">Receive curated architectural blueprints, zero-day tutorials, and deep engineering intel.</p>
+                                <p class="text-white-50" style="font-size: 1rem;">Receive curated architectural blueprints, zero-day tutorials, and deep engineering intel.</p>
                                 <form action="{{ route('newsletter.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">

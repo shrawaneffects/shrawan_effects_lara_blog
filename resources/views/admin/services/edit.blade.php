@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold mb-1">Edit Service: {{ $service->title }}</h4>
-            <p class="text-body-secondary small mb-0">Update service scope, deliverables, pricing, and visibility.</p>
+            <p class="text-body-secondary mb-0">Update service scope, deliverables, pricing, and visibility.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('services.show', $service->slug) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3">
@@ -29,36 +29,36 @@
                     <h5 class="fw-bold mb-3 border-bottom pb-2">Service Overview</h5>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Service Title *</label>
+                        <label class="form-label fw-semibold">Service Title *</label>
                         <input type="text" name="title" class="form-control rounded-3" value="{{ old('title', $service->title) }}" required>
-                        @error('title') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('title') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">URL Slug</label>
+                        <label class="form-label fw-semibold">URL Slug</label>
                         <input type="text" name="slug" class="form-control rounded-3 font-monospace" value="{{ old('slug', $service->slug) }}">
-                        @error('slug') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('slug') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Short Summary / Excerpt * (Max 500 chars)</label>
+                        <label class="form-label fw-semibold">Short Summary / Excerpt * (Max 500 chars)</label>
                         <textarea name="short_description" class="form-control rounded-3" rows="3" required>{{ old('short_description', $service->short_description) }}</textarea>
-                        @error('short_description') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('short_description') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Detailed Description & Scope (HTML / Rich details)</label>
+                        <label class="form-label fw-semibold">Detailed Description & Scope (HTML / Rich details)</label>
                         <textarea name="content" class="form-control rounded-3" rows="8">{{ old('content', $service->content) }}</textarea>
-                        @error('content') <small class="text-danger">{{ $message }}</small> @enderror
+                        @error('content') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     @php
                         $featuresText = is_array($service->features) ? implode("\n", $service->features) : '';
                     @endphp
                     <div class="mb-0">
-                        <label class="form-label fw-semibold small">Key Features & Deliverables (One per line)</label>
+                        <label class="form-label fw-semibold">Key Features & Deliverables (One per line)</label>
                         <textarea name="features" class="form-control rounded-3 font-monospace" rows="5">{{ old('features', $featuresText) }}</textarea>
-                        <small class="text-muted d-block mt-1">Each line will be displayed as a feature bullet point with a checkmark.</small>
+                        <span class="text-muted d-block mt-1">Each line will be displayed as a feature bullet point with a checkmark.</span>
                     </div>
                 </div>
             </div>
@@ -80,13 +80,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Display Order</label>
+                        <label class="form-label fw-semibold">Display Order</label>
                         <input type="number" name="order" class="form-control rounded-3 font-monospace" value="{{ old('order', $service->order) }}" min="0">
-                        <small class="text-muted">Lower numbers appear first.</small>
+                        <span class="text-muted">Lower numbers appear first.</span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Bootstrap Icon Class</label>
+                        <label class="form-label fw-semibold">Bootstrap Icon Class</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi {{ $service->icon ?: 'bi-briefcase' }}"></i></span>
                             <input type="text" name="icon" class="form-control font-monospace" value="{{ old('icon', $service->icon) }}">
@@ -94,17 +94,17 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Indicative Pricing</label>
+                        <label class="form-label fw-semibold">Indicative Pricing</label>
                         <input type="text" name="pricing_starts_at" class="form-control font-monospace" value="{{ old('pricing_starts_at', $service->pricing_starts_at) }}">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Tech Stack / Technologies</label>
+                        <label class="form-label fw-semibold">Tech Stack / Technologies</label>
                         <input type="text" name="technologies" class="form-control" value="{{ old('technologies', $service->technologies) }}">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Service Cover Image</label>
+                        <label class="form-label fw-semibold">Service Cover Image</label>
                         @if($service->image)
                             <div class="mb-2">
                                 <img src="{{ $service->image_url }}" alt="{{ $service->title }}" class="img-fluid rounded-3" style="max-height: 120px; object-fit: cover;">

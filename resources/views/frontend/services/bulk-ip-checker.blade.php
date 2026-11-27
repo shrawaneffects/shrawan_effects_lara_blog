@@ -70,7 +70,7 @@
         box-shadow: none !important;
         resize: vertical;
         min-height: 220px;
-        font-size: 0.86rem;
+        font-size: 1rem;
         line-height: 1.55;
     }
 
@@ -102,8 +102,8 @@
     }
 
     .bulk-nav-tab {
-        font-family: var(--font-mono);
-        font-size: 0.82rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         padding: 0.65rem 1.2rem;
@@ -143,8 +143,9 @@
         background: rgba(9, 18, 6, 0.5);
         color: #cbd5e1;
         border-radius: 999px;
-        padding: 0.35rem 0.8rem;
-        font-size: 0.78rem;
+        padding: 0.35rem 0.85rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
         transition: all 0.2s ease;
     }
     .bulk-filter-chip:hover {
@@ -169,18 +170,19 @@
     }
 
     .bulk-table {
-        font-size: 0.82rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
     }
     .bulk-table th {
-        font-family: var(--font-mono);
-        font-size: 0.68rem;
+        font-family: var(--font-main);
+        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.4px;
         white-space: nowrap;
         background: rgba(18, 30, 5, 0.85) !important;
         color: #94a3b8;
         border-color: rgba(0, 255, 102, 0.16);
-        padding: 0.65rem 0.48rem;
+        padding: 0.65rem 0.5rem;
         user-select: none;
     }
     .bulk-table th[data-sort] {
@@ -190,7 +192,7 @@
         color: #00ff66;
     }
     .bulk-table td {
-        padding: 0.55rem 0.48rem;
+        padding: 0.55rem 0.5rem;
         vertical-align: middle;
         border-color: rgba(0, 255, 102, 0.1);
     }
@@ -210,13 +212,13 @@
         opacity: 0.82;
     }
     .bulk-subtext {
-        font-size: 0.7rem;
-        max-width: 170px;
+        font-size: 1rem;
+        max-width: 240px;
     }
 
     /* IP Type Badges */
     .bulk-type-badge {
-        font-size: 0.71rem;
+        font-size: 1rem;
         padding: 0.3rem 0.55rem;
         border-radius: 6px;
         white-space: nowrap;
@@ -239,7 +241,7 @@
         background: rgba(245, 158, 11, 0.16);
         color: #fbbf24;
         border: 1px solid rgba(245, 158, 11, 0.45);
-        font-size: 0.72rem;
+        font-size: 1rem;
         padding: 0.22rem 0.55rem;
         border-radius: 6px;
     }
@@ -257,7 +259,7 @@
         background: rgba(0, 240, 255, 0.14);
         color: #00f0ff;
         border: 1px solid rgba(0, 240, 255, 0.4);
-        font-size: 0.72rem;
+        font-size: 1rem;
         padding: 0.2rem 0.5rem;
         border-radius: 6px;
     }
@@ -344,7 +346,7 @@
     <section class="hero-banner py-4 py-md-5 mb-4">
         <div class="container position-relative" style="z-index: 1;">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-2 font-mono small">
+                <ol class="breadcrumb mb-2 font-mono">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('services.index') }}" class="text-decoration-none">Services</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Bulk Website IP Checker</li>
@@ -353,7 +355,7 @@
 
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                 <span class="telemetry-tag"><i class="bi bi-hdd-network"></i> INFRASTRUCTURE INTEL // 10,000+ DOMAINS</span>
-                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono small">
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 font-mono">
                     <span class="cyber-beacon me-1"></span> PARALLEL BATCH ENGINE
                 </span>
             </div>
@@ -368,7 +370,7 @@
                     </p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
-                    <div class="d-inline-flex flex-wrap gap-2 font-mono small">
+                    <div class="d-inline-flex flex-wrap gap-2 font-mono">
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-check2-circle text-success me-1"></i> IPv4 + IPv6</span>
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-diagram-3 text-info me-1"></i> Class-C Clustering</span>
                         <span class="badge bg-body-tertiary text-body border px-2 py-1"><i class="bi bi-filetype-csv text-warning me-1"></i> CSV &amp; JSON</span>
@@ -389,7 +391,7 @@
                     <h2 class="h5 fw-bold font-cyber mb-0">
                         <i class="bi bi-terminal text-success me-2"></i> Target Domains / URLs Input
                     </h2>
-                    <p class="text-body-secondary font-mono small mb-0">
+                    <p class="text-body-secondary font-mono mb-0">
                         Paste up to 10,000+ domains, full URLs, or drop a <code>.txt</code> / <code>.csv</code> file.
                     </p>
                 </div>
@@ -417,7 +419,7 @@
                     spellcheck="false"
                     placeholder="Enter websites, URLs, or domains (one per line, comma-separated, or drop a .txt / .csv file here)...&#10;Example:&#10;shrawaneffects.com&#10;www.shrawaneffects.com&#10;https://cloudflare.com/dns/&#10;google.com&#10;ipv6.google.com"
                 ></textarea>
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2 mt-2 border-top border-secondary border-opacity-25 px-2 font-mono small text-body-secondary">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2 mt-2 border-top border-secondary border-opacity-25 px-2 font-mono text-body-secondary">
                     <span><i class="bi bi-file-earmark-arrow-up text-success me-1"></i> Drag &amp; drop <code>.txt</code> or <code>.csv</code> anywhere in this box</span>
                     <div class="d-flex flex-wrap gap-3">
                         <span>Lines/Tokens: <strong id="statRawLines" class="text-body">0</strong></span>
@@ -433,14 +435,14 @@
                     <div class="d-flex flex-wrap align-items-center gap-3">
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" role="switch" id="deduplicateToggle" checked>
-                            <label class="form-check-label font-mono small" for="deduplicateToggle">Deduplicate hosts</label>
+                            <label class="form-check-label font-mono" for="deduplicateToggle">Deduplicate hosts</label>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" role="switch" id="enrichMetadataToggle" checked>
-                            <label class="form-check-label font-mono small" for="enrichMetadataToggle">Enrich ASN / Org / PTR</label>
+                            <label class="form-check-label font-mono" for="enrichMetadataToggle">Enrich ASN / Org / PTR</label>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <label for="batchSizeSelect" class="font-mono small text-body-secondary mb-0">Batch:</label>
+                            <label for="batchSizeSelect" class="font-mono text-body-secondary mb-0">Batch:</label>
                             <select id="batchSizeSelect" class="form-select form-select-sm font-mono w-auto">
                                 <option value="15">15</option>
                                 <option value="30" {{ $bulkDefaultBatchSize === 30 ? 'selected' : '' }}>30 (Optimal)</option>
@@ -448,7 +450,7 @@
                             </select>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <label for="concurrencySelect" class="font-mono small text-body-secondary mb-0">Workers:</label>
+                            <label for="concurrencySelect" class="font-mono text-body-secondary mb-0">Workers:</label>
                             <select id="concurrencySelect" class="form-select form-select-sm font-mono w-auto">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -486,7 +488,7 @@
 
             <!-- Live Progress Telemetry -->
             <div id="progressSection" class="mt-4 pt-3 border-top border-secondary border-opacity-25 d-none">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 font-mono small">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 font-mono">
                     <div class="d-flex align-items-center gap-2">
                         <span id="workerStatusBadge" class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50">READY</span>
                         <span id="progressText" class="fw-semibold text-body">0 / 0 hosts (0%)</span>
@@ -498,7 +500,7 @@
                     </div>
                 </div>
                 <div class="progress bg-body-tertiary border border-success border-opacity-25" style="height: 18px; border-radius: 10px;">
-                    <div id="progressBar" class="progress-bar bg-success font-mono small fw-bold" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="progressBar" class="progress-bar bg-success font-mono fw-bold" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
         </div>
@@ -507,31 +509,31 @@
         <div id="kpiSection" class="row g-3 mb-4 d-none">
             <div class="col-6 col-lg-3">
                 <div class="bulk-kpi-card p-3 h-100">
-                    <div class="font-mono small text-body-secondary text-uppercase mb-1">Processed Hosts</div>
+                    <div class="font-mono text-body-secondary text-uppercase mb-1">Processed Hosts</div>
                     <div id="kpiProcessed" class="bulk-kpi-num">0</div>
-                    <div id="kpiProcessedSub" class="font-mono small text-body-secondary mt-1">0 resolved</div>
+                    <div id="kpiProcessedSub" class="font-mono text-body-secondary mt-1">0 resolved</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="bulk-kpi-card p-3 h-100">
-                    <div class="font-mono small text-body-secondary text-uppercase mb-1">Unique IPs</div>
+                    <div class="font-mono text-body-secondary text-uppercase mb-1">Unique IPs</div>
                     <div id="kpiUniqueIps" class="bulk-kpi-num">0</div>
-                    <div id="kpiInfraMix" class="font-mono small text-info mt-1">0 / 0</div>
-                    <div id="kpiInfraMixSub" class="font-mono text-body-secondary" style="font-size: 0.72rem;">CDN/Proxy vs Cloud/Hosting</div>
+                    <div id="kpiInfraMix" class="font-mono text-info mt-1">0 / 0</div>
+                    <div id="kpiInfraMixSub" class="font-mono text-body-secondary" style="font-size: 1rem;">CDN/Proxy vs Cloud/Hosting</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="bulk-kpi-card p-3 h-100">
-                    <div class="font-mono small text-body-secondary text-uppercase mb-1">Shared IP Clusters</div>
+                    <div class="font-mono text-body-secondary text-uppercase mb-1">Shared IP Clusters</div>
                     <div id="kpiSharedIps" class="bulk-kpi-num text-warning">0</div>
-                    <div id="kpiSharedIpsSub" class="font-mono small text-body-secondary mt-1">0 websites share an IP</div>
+                    <div id="kpiSharedIpsSub" class="font-mono text-body-secondary mt-1">0 websites share an IP</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="bulk-kpi-card p-3 h-100">
-                    <div class="font-mono small text-body-secondary text-uppercase mb-1">Shared Class C (/24)</div>
+                    <div class="font-mono text-body-secondary text-uppercase mb-1">Shared Class C (/24)</div>
                     <div id="kpiSharedClassC" class="bulk-kpi-num text-info">0</div>
-                    <div id="kpiSharedClassCSub" class="font-mono small text-body-secondary mt-1">0 total /24 subnets</div>
+                    <div id="kpiSharedClassCSub" class="font-mono text-body-secondary mt-1">0 total /24 subnets</div>
                 </div>
             </div>
         </div>
@@ -603,7 +605,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-7 d-flex flex-wrap justify-content-md-end align-items-center gap-2">
-                        <label for="perPageSelect" class="font-mono small text-body-secondary mb-0">Rows/page:</label>
+                        <label for="perPageSelect" class="font-mono text-body-secondary mb-0">Rows/page:</label>
                         <select id="perPageSelect" class="form-select form-select-sm font-mono w-auto">
                             <option value="25">25</option>
                             <option value="50" selected>50</option>
@@ -617,7 +619,7 @@
                 <div id="filterChipsRow" class="d-flex flex-wrap gap-2 mb-3"></div>
 
                 <!-- Active IP / Class C Drilldown Banner -->
-                <div id="activeDrilldownBar" class="alert alert-info py-2 px-3 d-flex justify-content-between align-items-center font-mono small mb-3 d-none">
+                <div id="activeDrilldownBar" class="alert alert-info py-2 px-3 d-flex justify-content-between align-items-center font-mono mb-3 d-none">
                     <span id="activeDrilldownText"></span>
                     <button type="button" id="clearDrilldownBtn" class="btn btn-sm btn-outline-info py-0 px-2 font-mono">
                         <i class="bi bi-x-circle me-1"></i> Clear Filter
@@ -648,12 +650,12 @@
                 <!-- Empty State for Table Filter -->
                 <div id="resultsEmptyState" class="text-center py-5 d-none">
                     <i class="bi bi-search fs-2 text-body-secondary d-block mb-2"></i>
-                    <p class="font-mono small text-body-secondary mb-0">No rows match your current search or filter chip.</p>
+                    <p class="font-mono text-body-secondary mb-0">No rows match your current search or filter chip.</p>
                 </div>
 
                 <!-- Pagination Footer -->
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-3 pt-3 border-top border-secondary border-opacity-25">
-                    <div id="paginationSummary" class="font-mono small text-body-secondary"></div>
+                    <div id="paginationSummary" class="font-mono text-body-secondary"></div>
                     <nav aria-label="Results pagination">
                         <ul id="paginationControls" class="pagination pagination-sm mb-0 flex-wrap"></ul>
                     </nav>
@@ -681,7 +683,7 @@
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" role="switch" id="showUniqueClustersToggle">
-                            <label class="form-check-label font-mono small" for="showUniqueClustersToggle">Show unique (1 site)</label>
+                            <label class="form-check-label font-mono" for="showUniqueClustersToggle">Show unique (1 site)</label>
                         </div>
                     </div>
                 </div>
@@ -689,7 +691,7 @@
                 <div id="clustersContainer"></div>
 
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-3 pt-3 border-top border-secondary border-opacity-25">
-                    <div id="clusterPaginationSummary" class="font-mono small text-body-secondary"></div>
+                    <div id="clusterPaginationSummary" class="font-mono text-body-secondary"></div>
                     <nav aria-label="Clusters pagination">
                         <ul id="clusterPaginationControls" class="pagination pagination-sm mb-0 flex-wrap"></ul>
                     </nav>
@@ -700,7 +702,7 @@
 
     <!-- Floating Action Toast -->
     <div id="actionToast" class="bulk-toast rounded-pill px-4 py-2 shadow-lg d-none" role="status" aria-live="polite">
-        <div class="d-flex align-items-center gap-2 font-mono small">
+        <div class="d-flex align-items-center gap-2 font-mono">
             <i class="bi bi-check-circle-fill text-success"></i>
             <span id="actionToastMsg"></span>
         </div>

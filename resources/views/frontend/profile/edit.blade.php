@@ -29,9 +29,9 @@
                         <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom">
                             <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle shadow-sm" width="84" height="84" style="object-fit: cover;">
                             <div>
-                                <label class="form-label fw-bold small mb-1">Profile Photo</label>
+                                <label class="form-label fw-bold mb-1">Profile Photo</label>
                                 <input type="file" name="avatar" class="form-control form-control-sm rounded-pill" accept="image/*">
-                                <small class="text-muted">JPG, PNG, WebP up to 2MB</small>
+                                <span class="text-muted">JPG, PNG, WebP up to 2MB</span>
                             </div>
                         </div>
 
@@ -40,37 +40,37 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Full Name <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" class="form-control rounded-pill" value="{{ old('name', $user->name) }}" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Email Address <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" name="email" class="form-control rounded-pill" value="{{ old('email', $user->email) }}" required>
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-semibold small">Author Bio</label>
+                            <label class="form-label fw-semibold">Author Bio</label>
                             <textarea name="bio" class="form-control rounded-4" rows="3" placeholder="Tell readers a bit about yourself...">{{ old('bio', $user->bio) }}</textarea>
                         </div>
 
                         <hr class="my-4">
 
                         <!-- Password Change -->
-                        <h5 class="fw-bold mb-3"><i class="bi bi-shield-lock me-2 text-primary"></i> Change Password <small class="text-muted fw-normal fs-6">(Optional)</small></h5>
+                        <h5 class="fw-bold mb-3"><i class="bi bi-shield-lock me-2 text-primary"></i> Change Password <span class="text-muted fw-normal fs-6">(Optional)</span></h5>
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small">Current Password</label>
+                            <label class="form-label fw-semibold">Current Password</label>
                             <input type="password" name="current_password" class="form-control rounded-pill" placeholder="Required only if changing password">
                         </div>
 
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">New Password (8+ characters)</label>
+                                <label class="form-label fw-semibold">New Password (8+ characters)</label>
                                 <input type="password" name="password" class="form-control rounded-pill" placeholder="••••••••">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small">Confirm New Password</label>
+                                <label class="form-label fw-semibold">Confirm New Password</label>
                                 <input type="password" name="password_confirmation" class="form-control rounded-pill" placeholder="••••••••">
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                 <!-- 1. Data Privacy & GDPR Portability -->
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body mb-4">
                     <h5 class="fw-bold mb-2"><i class="bi bi-shield-check text-success me-2"></i> Data Privacy & Portability</h5>
-                    <p class="text-body-secondary small mb-3">
+                    <p class="text-body-secondary mb-3">
                         In compliance with GDPR and privacy standards, you have full ownership of your data. You can download an export of your personal information, articles, comments, and activity logs.
                     </p>
                     <a href="{{ route('profile.export-data') }}" class="btn btn-outline-primary rounded-pill w-100 mb-2">
@@ -98,7 +98,7 @@
                 <!-- 2. Active Session Management -->
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-body mb-4">
                     <h5 class="fw-bold mb-2"><i class="bi bi-laptop text-primary me-2"></i> Session Security</h5>
-                    <p class="text-body-secondary small mb-3">
+                    <p class="text-body-secondary mb-3">
                         If you suspect unauthorized access or lost a device, you can revoke access from all other devices immediately.
                     </p>
                     <button type="button" class="btn btn-outline-warning rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#logoutOtherDevicesModal">
@@ -110,14 +110,14 @@
                 @if(isset($recentAuditLogs) && $recentAuditLogs->count() > 0)
                     <div class="card border-0 shadow-sm p-4 rounded-4 bg-body mb-4">
                         <h6 class="fw-bold mb-3"><i class="bi bi-clock-history text-info me-2"></i> Recent Account Activity</h6>
-                        <ul class="list-group list-group-flush small">
+                        <ul class="list-group list-group-flush">
                             @foreach($recentAuditLogs as $log)
                                 <li class="list-group-item px-0 bg-transparent d-flex justify-content-between align-items-center">
                                     <div>
                                         <span class="fw-semibold d-block">{{ $log->description }}</span>
-                                        <small class="text-muted">IP: {{ $log->ip_address ?? 'Local' }}</small>
+                                        <span class="text-muted">IP: {{ $log->ip_address ?? 'Local' }}</span>
                                     </div>
-                                    <span class="text-muted" style="font-size: 0.75rem;">{{ $log->created_at->diffForHumans() }}</span>
+                                    <span class="text-muted" style="font-size: 1rem;">{{ $log->created_at->diffForHumans() }}</span>
                                 </li>
                             @endforeach
                         </ul>
@@ -127,7 +127,7 @@
                 <!-- 4. Danger Zone: Right to be Forgotten -->
                 <div class="card border-danger border-opacity-25 shadow-sm p-4 rounded-4 bg-danger bg-opacity-10">
                     <h5 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-octagon-fill me-2"></i> Danger Zone</h5>
-                    <p class="small text-body mb-3">
+                    <p class="text-body mb-3">
                         Permanently erase your account and associated personal data under GDPR Right to be Forgotten. This action cannot be undone.
                     </p>
                     <button type="button" class="btn btn-danger rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
@@ -149,9 +149,9 @@
                 <form action="{{ route('profile.logout-other-devices') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <p class="small text-muted mb-3">Please enter your password to confirm logging out from all other browsers and devices.</p>
+                        <p class="text-muted mb-3">Please enter your password to confirm logging out from all other browsers and devices.</p>
                         <div class="mb-3">
-                            <label class="form-label small fw-semibold">Current Password</label>
+                            <label class="form-label fw-semibold">Current Password</label>
                             <input type="password" name="password" class="form-control rounded-pill" placeholder="••••••••" required>
                         </div>
                     </div>
@@ -176,9 +176,9 @@
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">
-                        <p class="small text-muted mb-3">Are you sure you want to permanently delete your account? All your personal information will be wiped immediately.</p>
+                        <p class="text-muted mb-3">Are you sure you want to permanently delete your account? All your personal information will be wiped immediately.</p>
                         <div class="mb-3">
-                            <label class="form-label small fw-semibold">Confirm Password</label>
+                            <label class="form-label fw-semibold">Confirm Password</label>
                             <input type="password" name="confirm_password" class="form-control rounded-pill" placeholder="••••••••" required>
                         </div>
                     </div>

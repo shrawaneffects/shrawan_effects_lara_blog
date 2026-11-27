@@ -39,7 +39,7 @@
                 <h4 class="font-cyber fw-bold text-white mb-0">
                     Keyword: <span class="text-gradient font-mono">"{{ $researchData['seed']['keyword'] }}"</span>
                 </h4>
-                <p class="text-body-secondary font-mono small mb-0">Algorithms analyzed across live SERP indexes</p>
+                <p class="text-body-secondary font-mono mb-0">Algorithms analyzed across live SERP indexes</p>
             </div>
             @if($researchData['seed']['is_tracked'])
                 <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono p-2">
@@ -65,16 +65,16 @@
     <!-- Monthly Volume -->
     <div class="col-sm-6 col-xl-3">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Search Volume</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Search Volume</span>
             <div class="openseo-stat-num">{{ number_format($researchData['seed']['search_volume']) }}</div>
-            <span class="text-body-secondary font-mono small mt-2 d-block">Monthly avg searches</span>
+            <span class="text-body-secondary font-mono mt-2 d-block">Monthly avg searches</span>
         </div>
     </div>
 
     <!-- Keyword Difficulty -->
     <div class="col-sm-6 col-xl-3">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Keyword Difficulty (KD)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Keyword Difficulty (KD)</span>
             <div class="d-flex align-items-baseline gap-2">
                 <div class="openseo-stat-num">{{ $researchData['seed']['keyword_difficulty'] }}%</div>
                 @php
@@ -82,7 +82,7 @@
                     $kdColor = $kd <= 30 ? 'success' : ($kd <= 60 ? 'warning' : 'danger');
                     $kdLabel = $kd <= 15 ? 'Very Easy' : ($kd <= 30 ? 'Easy' : ($kd <= 50 ? 'Possible' : ($kd <= 70 ? 'Hard' : 'Very Hard')));
                 @endphp
-                <span class="badge bg-{{ $kdColor }} bg-opacity-25 text-{{ $kdColor }} border border-{{ $kdColor }} border-opacity-50 font-mono small">
+                <span class="badge bg-{{ $kdColor }} bg-opacity-25 text-{{ $kdColor }} border border-{{ $kdColor }} border-opacity-50 font-mono">
                     {{ $kdLabel }}
                 </span>
             </div>
@@ -95,9 +95,9 @@
     <!-- CPC & Competition -->
     <div class="col-sm-6 col-xl-3">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Cost Per Click (CPC)</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Cost Per Click (CPC)</span>
             <div class="openseo-stat-num">${{ number_format($researchData['seed']['cpc'], 2) }}</div>
-            <span class="text-body-secondary font-mono small mt-2 d-block">
+            <span class="text-body-secondary font-mono mt-2 d-block">
                 Paid Competition: <strong class="text-white">{{ $researchData['seed']['competition'] }}</strong> / 1.00
             </span>
         </div>
@@ -106,13 +106,13 @@
     <!-- Search Intent -->
     <div class="col-sm-6 col-xl-3">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
-            <span class="text-body-secondary font-mono small text-uppercase d-block mb-1">Search Intent</span>
+            <span class="text-body-secondary font-mono text-uppercase d-block mb-1">Search Intent</span>
             <div class="mt-2">
                 <span class="badge-intent badge-intent-{{ $researchData['seed']['search_intent'] }} fs-6 px-3 py-2">
                     {{ $researchData['seed']['search_intent'] }}
                 </span>
             </div>
-            <span class="text-body-secondary font-mono small mt-3 d-block">User purchase / information stage</span>
+            <span class="text-body-secondary font-mono mt-3 d-block">User purchase / information stage</span>
         </div>
     </div>
 </div>
@@ -123,7 +123,7 @@
     <div class="col-lg-7">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
             <h5 class="font-cyber fw-bold text-white mb-1">Keyword Variations & Long-Tail Terms</h5>
-            <p class="text-body-secondary font-mono small mb-3">Targeted queries with intent and competition data</p>
+            <p class="text-body-secondary font-mono mb-3">Targeted queries with intent and competition data</p>
 
             <div class="table-responsive">
                 <table class="table openseo-table table-hover align-middle mb-0">
@@ -188,7 +188,7 @@
     <div class="col-lg-5">
         <div class="openseo-hud-card p-3 p-md-4 h-100">
             <h5 class="font-cyber fw-bold text-white mb-1">Questions ("People Also Ask")</h5>
-            <p class="text-body-secondary font-mono small mb-3">Informational query ideas for blogs & FAQs</p>
+            <p class="text-body-secondary font-mono mb-3">Informational query ideas for blogs & FAQs</p>
 
             <div class="table-responsive">
                 <table class="table openseo-table table-hover align-middle mb-0">
@@ -203,12 +203,12 @@
                         @foreach($researchData['questions'] as $q)
                             <tr>
                                 <td>
-                                    <div class="text-white small fw-semibold">{{ $q['keyword'] }}</div>
-                                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 font-mono" style="font-size: 0.65rem;">
+                                    <div class="text-white fw-semibold">{{ $q['keyword'] }}</div>
+                                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 font-mono" style="font-size: 1rem;">
                                         KD {{ $q['keyword_difficulty'] }}%
                                     </span>
                                 </td>
-                                <td class="text-end font-mono text-info small">
+                                <td class="text-end font-mono text-info">
                                     {{ number_format($q['search_volume']) }}
                                 </td>
                                 <td class="text-center">
@@ -238,7 +238,7 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
             <h5 class="font-cyber fw-bold text-white mb-0">Project Keywords ({{ $savedKeywords->total() }})</h5>
-            <p class="text-body-secondary font-mono small mb-0">Keywords saved and tracked under {{ $activeProject->name }}</p>
+            <p class="text-body-secondary font-mono mb-0">Keywords saved and tracked under {{ $activeProject->name }}</p>
         </div>
         <a href="{{ route('openseo.rank-tracking') }}" class="btn btn-sm btn-gradient font-mono">
             <i class="bi bi-graph-up-arrow me-1"></i> Open Rank Tracker
@@ -265,7 +265,7 @@
                         <td>
                             <span class="fw-bold text-white">{{ $kw->keyword }}</span>
                             @if($kw->target_url)
-                                <a href="{{ $kw->target_url }}" target="_blank" class="font-mono text-body-secondary small d-block text-truncate" style="max-width: 260px;">
+                                <a href="{{ $kw->target_url }}" target="_blank" class="font-mono text-body-secondary d-block text-truncate" style="max-width: 260px;">
                                     {{ $kw->target_url }}
                                 </a>
                             @endif

@@ -8,7 +8,7 @@
     <div class="col-lg-8">
         <div class="openseo-hud-card p-3 p-md-4">
             <h5 class="font-cyber fw-bold text-white mb-1">Your SEO Projects</h5>
-            <p class="text-body-secondary font-mono small mb-4">Domains currently tracked in OpenSEO</p>
+            <p class="text-body-secondary font-mono mb-4">Domains currently tracked in OpenSEO</p>
 
             <div class="row g-3">
                 @foreach($projects as $p)
@@ -18,17 +18,17 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <h6 class="text-white fw-bold font-cyber mb-0 fs-5">{{ $p->name }}</h6>
                                     @if($activeProject && $activeProject->id === $p->id)
-                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono small">
+                                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-mono">
                                             ACTIVE PROJECT
                                         </span>
                                     @endif
                                     @if($p->is_default)
-                                        <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-mono small">
+                                        <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-mono">
                                             DEFAULT
                                         </span>
                                     @endif
                                 </div>
-                                <div class="d-flex align-items-center gap-3 font-mono small text-body-secondary flex-wrap">
+                                <div class="d-flex align-items-center gap-3 font-mono text-body-secondary flex-wrap">
                                     <span class="text-white"><i class="bi bi-globe2 me-1"></i> {{ $p->domain }}</span>
                                     <span><i class="bi bi-geo-alt me-1"></i> {{ $p->target_country }} ({{ $p->target_language }})</span>
                                     <span><i class="bi bi-key me-1"></i> {{ $p->keywords_count }} Keywords</span>
@@ -68,20 +68,20 @@
     <div class="col-lg-4">
         <div class="openseo-hud-card p-3 p-md-4">
             <h5 class="font-cyber fw-bold text-white mb-1">Add New Domain</h5>
-            <p class="text-body-secondary font-mono small mb-3">Track rankings and backlinks for another website</p>
+            <p class="text-body-secondary font-mono mb-3">Track rankings and backlinks for another website</p>
 
             <form action="{{ route('openseo.projects.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label font-mono small text-body-secondary">Project Name</label>
+                    <label class="form-label font-mono text-body-secondary">Project Name</label>
                     <input type="text" name="name" class="form-control bg-dark text-white border-secondary border-opacity-50 font-mono" placeholder="e.g. Acme Corp" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label font-mono small text-body-secondary">Website Domain</label>
+                    <label class="form-label font-mono text-body-secondary">Website Domain</label>
                     <input type="text" name="domain" class="form-control bg-dark text-white border-secondary border-opacity-50 font-mono" placeholder="acme.com" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label font-mono small text-body-secondary">Target Search Country</label>
+                    <label class="form-label font-mono text-body-secondary">Target Search Country</label>
                     <select name="target_country" class="form-select bg-dark text-white border-secondary border-opacity-50 font-mono">
                         <option value="US">United States (US)</option>
                         <option value="IN" selected>India (IN)</option>
@@ -91,7 +91,7 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label font-mono small text-body-secondary">Target Language</label>
+                    <label class="form-label font-mono text-body-secondary">Target Language</label>
                     <select name="target_language" class="form-select bg-dark text-white border-secondary border-opacity-50 font-mono">
                         <option value="en" selected>English (en)</option>
                         <option value="hi">Hindi (hi)</option>

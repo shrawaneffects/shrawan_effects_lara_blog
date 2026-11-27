@@ -12,12 +12,12 @@
                 <form action="{{ route('admin.tags.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Tag Name *</label>
+                        <label class="form-label fw-semibold">Tag Name *</label>
                         <input type="text" name="name" class="form-control" placeholder="e.g. Next.js" required>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold small">Slug (Optional)</label>
+                        <label class="form-label fw-semibold">Slug (Optional)</label>
                         <input type="text" name="slug" class="form-control" placeholder="auto-generated-if-empty">
                     </div>
 
@@ -51,7 +51,7 @@
                                     <td>
                                         <span class="badge bg-primary-subtle text-primary fs-6">#{{ $tag->name }}</span>
                                     </td>
-                                    <td class="small text-muted font-monospace">{{ $tag->slug }}</td>
+                                    <td class="text-muted font-monospace">{{ $tag->slug }}</td>
                                     <td>
                                         <span class="badge bg-secondary-subtle text-secondary">{{ $tag->posts_count }} posts</span>
                                     </td>
@@ -78,11 +78,11 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label class="form-label small fw-semibold">Name *</label>
+                                                                <label class="form-label fw-semibold">Name *</label>
                                                                 <input type="text" name="name" class="form-control" value="{{ $tag->name }}" required>
                                                             </div>
                                                             <div class="mb-0">
-                                                                <label class="form-label small fw-semibold">Slug</label>
+                                                                <label class="form-label fw-semibold">Slug</label>
                                                                 <input type="text" name="slug" class="form-control" value="{{ $tag->slug }}">
                                                             </div>
                                                         </div>

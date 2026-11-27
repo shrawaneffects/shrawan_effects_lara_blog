@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1">User Management</h4>
-            <p class="text-body-secondary small mb-0">Manage roles, author permissions, and user accounts.</p>
+            <p class="text-body-secondary mb-0">Manage roles, author permissions, and user accounts.</p>
         </div>
     </div>
 
@@ -35,12 +35,12 @@
                                     <div>
                                         <div class="fw-bold">{{ $u->name }}</div>
                                         @if($u->id === auth()->id())
-                                            <span class="badge bg-primary-subtle text-primary" style="font-size: 0.65rem;">You</span>
+                                            <span class="badge bg-primary-subtle text-primary" style="font-size: 1rem;">You</span>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td class="small">{{ $u->email }}</td>
+                            <td>{{ $u->email }}</td>
                             <td>
                                 @if($u->id === auth()->id())
                                     <span class="badge bg-danger">{{ ucfirst($u->role) }}</span>
@@ -56,7 +56,7 @@
                                     </form>
                                 @endif
                             </td>
-                            <td class="small">
+                            <td>
                                 <span class="badge bg-light text-dark border">{{ $u->posts_count }} posts</span>
                                 <span class="badge bg-light text-dark border ms-1">{{ $u->comments_count }} comments</span>
                             </td>
@@ -67,7 +67,7 @@
                                     <span class="badge bg-danger-subtle text-danger">Deactivated</span>
                                 @endif
                             </td>
-                            <td class="small text-muted">{{ $u->created_at->format('M d, Y') }}</td>
+                            <td class="text-muted">{{ $u->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
                                 @if($u->id !== auth()->id())
                                     <div class="btn-group btn-group-sm">
@@ -105,7 +105,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-muted small">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
                         </tr>
