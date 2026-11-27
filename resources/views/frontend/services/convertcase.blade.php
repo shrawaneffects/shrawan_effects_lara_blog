@@ -411,6 +411,13 @@
     <span id="ccToastMessage">Copied to clipboard!</span>
 </div>
 
+<!-- Tool In-Depth Article Guide, Table of Contents, FAQs & Related Widgets -->
+@include('frontend.services.partials.tool-guide', [
+    'tool' => $tool ?? null,
+    'relatedTools' => $relatedTools ?? null,
+    'relatedPosts' => $relatedPosts ?? null,
+])
+
 @push('scripts')
 <script>
 (function() {

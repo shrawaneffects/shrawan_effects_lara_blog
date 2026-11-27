@@ -707,6 +707,13 @@
             <span id="actionToastMsg"></span>
         </div>
     </div>
+
+    <!-- Tool In-Depth Article Guide, Table of Contents, FAQs & Related Widgets -->
+    @include('frontend.services.partials.tool-guide', [
+        'tool' => $tool ?? null,
+        'relatedTools' => $relatedTools ?? null,
+        'relatedPosts' => $relatedPosts ?? null,
+    ])
 @endsection
 
 @push('scripts')

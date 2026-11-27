@@ -7,14 +7,17 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
         <h4 class="fw-bold mb-1">Web Tools & Utilities</h4>
-        <p class="text-body-secondary mb-0" style="font-size: 1rem;">Manage frontend services, online text utilities, bulk network checkers, and diagnostic tools.</p>
+        <p class="text-body-secondary mb-0">Manage frontend services, online text utilities, bulk network checkers, guides, and diagnostic tools.</p>
     </div>
     <div class="d-flex gap-2">
+        <a href="{{ route('admin.tools.create') }}" class="btn btn-primary rounded-pill px-3">
+            <i class="bi bi-plus-lg me-1"></i> Add New Tool
+        </a>
         <a href="{{ route('services.convertcase') }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3">
-            <i class="bi bi-type me-1"></i> Open Convert Case
+            <i class="bi bi-type me-1"></i> Convert Case
         </a>
         <a href="{{ route('services.bulk-ip-checker') }}" target="_blank" class="btn btn-outline-info rounded-pill px-3">
-            <i class="bi bi-hdd-network me-1"></i> Open Bulk IP Checker
+            <i class="bi bi-hdd-network me-1"></i> Bulk IP Checker
         </a>
     </div>
 </div>
@@ -98,174 +101,168 @@
         <form method="GET" action="{{ route('admin.tools.index') }}" class="row g-2 align-items-center">
             <div class="col-md-5">
                 <div class="input-group">
-                    <span class="input-group-text bg-body border-end-0"><i class="bi bi-search text-body-secondary"></i></span>
-                    <input type="text" name="search" class="form-control bg-body border-start-0" placeholder="Search tools by title, slug, or description..." value="{{ $search ?? '' }}">
+                    <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search by title, description, slug..." value="{{ $search }}">
                 </div>
             </div>
             <div class="col-md-3">
-                <select name="category" class="form-select bg-body">
+                <select name="category" class="form-select">
                     <option value="">All Categories</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat }}" {{ ($selectedCategory ?? '') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        <option value="{{ $cat }}" {{ $selectedCategory === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="status" class="form-select bg-body">
+                <select name="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="active" {{ ($selectedStatus ?? '') === 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="inactive" {{ ($selectedStatus ?? '') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    <option value="active" {{ $selectedStatus === 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ $selectedStatus === 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-2">
-                <button type="submit" class="btn btn-primary w-100 rounded-3">Filter</button>
-                @if(!empty($search) || !empty($selectedCategory) || !empty($selectedStatus))
-                    <a href="{{ route('admin.tools.index') }}" class="btn btn-outline-secondary rounded-3" title="Clear Filters">
-                        <i class="bi bi-x-lg"></i>
-                    </a>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill">Filter</button>
+                @if($search || $selectedCategory || $selectedStatus)
+                    <a href="{{ route('admin.tools.index') }}" class="btn btn-outline-secondary rounded-pill" title="Reset Filters"><i class="bi bi-x-lg"></i></a>
                 @endif
             </div>
         </form>
     </div>
 </div>
 
-<!-- Tools List Table / Cards -->
+<!-- Tools List Table -->
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th scope="col" style="width: 50px;">Icon</th>
-                    <th scope="col">Tool Name & Info</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Access URL</th>
-                    <th scope="col" class="text-center">Status</th>
-                    <th scope="col" class="text-end" style="width: 140px;">Actions</th>
+                    <th class="ps-4">Tool & URL</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Content & Features</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($tools as $tool)
+                    @php
+                        $isModel = is_object($tool);
+                        $toolId = $isModel ? $tool->id : ($tool['id'] ?? $tool['slug']);
+                        $toolSlug = $isModel ? $tool->slug : ($tool['slug'] ?? $toolId);
+                        $toolTitle = $isModel ? $tool->title : ($tool['title'] ?? '');
+                        $toolCategory = $isModel ? $tool->category : ($tool['category'] ?? 'Utilities');
+                        $toolIcon = $isModel ? ($tool->icon ?? 'bi-tools') : ($tool['icon'] ?? 'bi-tools');
+                        $toolBadge = $isModel ? $tool->badge : ($tool['badge'] ?? '');
+                        $toolType = $isModel ? ($tool->type ?? 'frontend') : ($tool['type'] ?? 'frontend');
+                        $toolActive = $isModel ? $tool->is_active : !empty($tool['is_active']);
+                        $toolSummary = $isModel ? ($tool->summary ?? '') : ($tool['description'] ?? '');
+                        $toolUrl = $isModel ? $tool->live_url : ($tool['url'] ?? '/services/' . $toolSlug);
+                        $hasToc = $isModel ? $tool->enable_toc : true;
+                        $faqCount = $isModel && is_array($tool->faqs) ? count($tool->faqs) : 0;
+                        $hasContent = $isModel && !empty($tool->content);
+                    @endphp
                     <tr>
-                        <td>
-                            <div class="rounded-3 d-flex align-items-center justify-content-center p-2 {{ ($tool['type'] ?? '') === 'frontend' ? 'bg-success-subtle text-success' : 'bg-primary-subtle text-primary' }}" style="width: 42px; height: 42px;">
-                                <i class="bi {{ $tool['icon'] ?? 'bi-tools' }} fs-5"></i>
+                        <td class="ps-4 py-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-primary-subtle text-primary p-2 rounded-3 text-center" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="bi {{ $toolIcon }} fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0 text-body">
+                                            <a href="{{ route('admin.tools.edit', $toolId) }}" class="text-decoration-none text-body hover-gradient">
+                                                {{ $toolTitle }}
+                                            </a>
+                                        </h6>
+                                        @if(!empty($toolBadge))
+                                            <span class="badge bg-danger-subtle text-danger rounded-pill px-2 py-0" style="font-size: 0.75rem;">{{ $toolBadge }}</span>
+                                        @endif
+                                    </div>
+                                    <span class="text-muted small d-block font-mono">{{ $toolUrl }}</span>
+                                </div>
                             </div>
                         </td>
                         <td>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="fw-bold text-body fs-6">{{ $tool['title'] }}</span>
-                                @if(!empty($tool['badge']))
-                                    <span class="badge {{ $tool['badge'] === 'NEW' ? 'bg-success' : ($tool['badge'] === 'POPULAR' ? 'bg-info text-dark' : 'bg-primary') }} rounded-pill" style="font-size: 1rem;">
-                                        {{ $tool['badge'] }}
-                                    </span>
-                                @endif
-                                <span class="badge bg-secondary-subtle text-secondary rounded-pill" style="font-size: 1rem;">
-                                    {{ strtoupper($tool['type'] ?? 'TOOL') }}
-                                </span>
-                            </div>
-                            <p class="text-body-secondary mb-0" style="max-width: 480px; font-size: 1rem;">
-                                {{ $tool['description'] }}
-                            </p>
+                            <span class="badge bg-secondary-subtle text-body-secondary rounded-pill px-3 py-1">{{ $toolCategory }}</span>
                         </td>
                         <td>
-                            <span class="badge bg-body-tertiary text-body border rounded-pill px-2.5 py-1 font-mono" style="font-size: 1rem;">
-                                {{ $tool['category'] }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ url($tool['url']) }}" target="_blank" class="font-mono text-decoration-none text-primary d-inline-flex align-items-center gap-1" style="font-size: 1rem;">
-                                {{ $tool['url'] }}
-                                <i class="bi bi-box-arrow-up-right" style="font-size: 1rem;"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            @if(!empty($tool['is_active']))
-                                <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1">
-                                    <i class="bi bi-dot"></i> Active
-                                </span>
+                            @if($toolType === 'frontend')
+                                <span class="badge bg-info-subtle text-info rounded-pill px-3 py-1"><i class="bi bi-globe me-1"></i> Public Frontend</span>
                             @else
-                                <span class="badge bg-danger-subtle text-danger rounded-pill px-2.5 py-1">
-                                    <i class="bi bi-dot"></i> Inactive
-                                </span>
+                                <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1"><i class="bi bi-sliders me-1"></i> Admin Suite</span>
                             @endif
                         </td>
-                        <td class="text-end">
-                            <div class="d-inline-flex align-items-center gap-1">
-                                <!-- Status Toggle Form -->
-                                <form action="{{ route('admin.tools.toggle') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $tool['id'] }}">
-                                    <button type="submit" class="btn btn-sm btn-icon {{ !empty($tool['is_active']) ? 'btn-outline-warning' : 'btn-outline-success' }}" title="{{ !empty($tool['is_active']) ? 'Deactivate Tool' : 'Activate Tool' }}">
-                                        <i class="bi {{ !empty($tool['is_active']) ? 'bi-pause-circle' : 'bi-play-circle' }}"></i>
-                                    </button>
-                                </form>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                @if($hasContent)
+                                    <span class="badge bg-success-subtle text-success rounded-pill" title="Article content configured">
+                                        <i class="bi bi-file-text me-1"></i> Guide Added
+                                    </span>
+                                @else
+                                    <span class="badge bg-secondary-subtle text-muted rounded-pill" title="No article content yet">
+                                        <i class="bi bi-file-earmark me-1"></i> No Content
+                                    </span>
+                                @endif
 
-                                <!-- Edit Modal Trigger -->
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{ $tool['id'] }}" title="Edit Details">
-                                    <i class="bi bi-pencil"></i>
+                                @if($hasToc)
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill" title="Auto Table of Contents active">
+                                        <i class="bi bi-list-nested me-1"></i> TOC
+                                    </span>
+                                @endif
+
+                                @if($faqCount > 0)
+                                    <span class="badge bg-purple-subtle text-purple rounded-pill" style="background-color: rgba(147, 51, 234, 0.12); color: #9333ea;" title="{{ $faqCount }} FAQs configured">
+                                        <i class="bi bi-question-circle me-1"></i> {{ $faqCount }} FAQs
+                                    </span>
+                                @endif
+                            </div>
+                        </td>
+                        <td>
+                            <form action="{{ route('admin.tools.toggle-status', $toolId) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm rounded-pill px-3 {{ $toolActive ? 'btn-success' : 'btn-outline-secondary' }}" title="Click to toggle status">
+                                    <i class="bi {{ $toolActive ? 'bi-check-circle-fill' : 'bi-x-circle' }} me-1"></i>
+                                    {{ $toolActive ? 'Active' : 'Inactive' }}
                                 </button>
-
-                                <!-- Direct Open Link -->
-                                <a href="{{ url($tool['url']) }}" target="_blank" class="btn btn-sm btn-icon btn-outline-primary" title="Open Tool in New Tab">
+                            </form>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="d-flex justify-content-end gap-1">
+                                <a href="{{ $toolUrl }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-2" title="View Tool Frontend">
                                     <i class="bi bi-box-arrow-up-right"></i>
                                 </a>
-                            </div>
-
-                            <!-- Edit Modal -->
-                            <div class="modal fade text-start" id="editModal{{ $tool['id'] }}" tabindex="-1" aria-labelledby="editModalLabel{{ $tool['id'] }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content rounded-4 border-0 shadow">
-                                        <form action="{{ route('admin.tools.update') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $tool['id'] }}">
-                                            <div class="modal-header border-bottom-0 pb-0">
-                                                <h5 class="modal-title fw-bold" id="editModalLabel{{ $tool['id'] }}">Edit Tool: {{ $tool['title'] }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body py-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Title</label>
-                                                    <input type="text" name="title" class="form-control" value="{{ $tool['title'] }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Category</label>
-                                                    <input type="text" name="category" class="form-control" value="{{ $tool['category'] }}" required>
-                                                </div>
-                                                <div class="row g-2 mb-3">
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-semibold">Badge (Optional)</label>
-                                                        <input type="text" name="badge" class="form-control" value="{{ $tool['badge'] ?? '' }}" placeholder="e.g. NEW, PRO, POPULAR">
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label class="form-label fw-semibold">Bootstrap Icon</label>
-                                                        <input type="text" name="icon" class="form-control" value="{{ $tool['icon'] ?? 'bi-tools' }}" placeholder="e.g. bi-type">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Description</label>
-                                                    <textarea name="description" class="form-control" rows="3" required>{{ $tool['description'] }}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer border-top-0 pt-0">
-                                                <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                <a href="{{ route('admin.tools.edit', $toolId) }}" class="btn btn-sm btn-primary rounded-pill px-3" title="Edit Tool Content & FAQs">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
+                                </a>
+                                @if($isModel && !in_array($tool->slug, ['convertcase', 'bulk-website-ip-checker']))
+                                    <form action="{{ route('admin.tools.destroy', $tool->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this tool?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2" title="Delete Tool">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-body-secondary">
-                            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
-                            <span class="fw-semibold">No tools match your search criteria.</span>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-tools fs-1 d-block mb-2 text-muted"></i>
+                            <p class="mb-0">No tools found matching your search.</p>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
+    @if($tools instanceof \Illuminate\Pagination\LengthAwarePaginator && $tools->hasPages())
+        <div class="card-footer bg-transparent border-0 py-3">
+            {{ $tools->links() }}
+        </div>
+    @endif
 </div>
 @endsection

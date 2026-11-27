@@ -42,6 +42,7 @@ cp -rf "$REPO_DIR/app" "$HOME_DIR/"
 cp -rf "$REPO_DIR/routes" "$HOME_DIR/"
 cp -rf "$REPO_DIR/resources" "$HOME_DIR/"
 mkdir -p "$HOME_DIR/database"
+cp -rf "$REPO_DIR/database/migrations" "$HOME_DIR/database/" 2>/dev/null || true
 if [ -f "$REPO_DIR/database/deploy_updates.php" ]; then
     cp -f "$REPO_DIR/database/deploy_updates.php" "$HOME_DIR/database/"
 fi
@@ -138,6 +139,9 @@ done
 cd "$HOME_DIR"
 
 # 5. Clean up database canonical URLs, internal links, and semantic headings
+if [ -f "artisan" ]; then
+    php artisan migrate --force || true
+fi
 if [ -f "database/deploy_updates.php" ]; then
     echo "Running database updates..."
     php database/deploy_updates.php || true

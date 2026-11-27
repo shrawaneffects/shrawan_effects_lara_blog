@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\Tool;
 use App\Services\BulkIpCheckerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +21,27 @@ class BulkIpCheckerController extends Controller
      */
     public function index(): View
     {
+        $tool = null;
+        $relatedTools = collect();
+        $relatedPosts = collect();
+
+        try {
+            $tool = Tool::where('slug', 'bulk-website-ip-checker')->first();
+            if ($tool) {
+                $relatedTools = $tool->related_tools_list;
+                $relatedPosts = $tool->related_posts_list;
+            } else {
+                $relatedTools = Tool::active()->where('slug', '!=', 'bulk-website-ip-checker')->limit(4)->get();
+                if (class_exists(Post::class)) {
+                    $relatedPosts = Post::published()->latest('published_at')->limit(4)->get();
+                }
+            }
+        } catch (\Throwable $e) {}
+
         return view('frontend.services.bulk-ip-checker', [
+            'tool' => $tool,
+            'relatedTools' => $relatedTools,
+            'relatedPosts' => $relatedPosts,
             'maxBatchSize' => BulkIpCheckerService::MAX_BATCH_SIZE,
             'recommendedBatchSize' => BulkIpCheckerService::RECOMMENDED_BATCH_SIZE,
             'recommendedConcurrency' => BulkIpCheckerService::RECOMMENDED_CONCURRENCY,

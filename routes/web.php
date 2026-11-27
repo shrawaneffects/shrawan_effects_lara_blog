@@ -214,7 +214,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/services/{id}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
 
     // Online Tools Management
-    Route::get('/tools', [AdminToolController::class, 'index'])->name('tools.index');
+    Route::resource('tools', AdminToolController::class);
+    Route::post('/tools/{id}/toggle-status', [AdminToolController::class, 'toggle'])->name('tools.toggle-status');
     Route::post('/tools/toggle', [AdminToolController::class, 'toggle'])->name('tools.toggle');
     Route::post('/tools/update', [AdminToolController::class, 'update'])->name('tools.update');
 
